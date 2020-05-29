@@ -10,7 +10,7 @@ namespace QuickTime
 	{
 		public static readonly string ID = typeof(SubModule).Namespace;
 		public static readonly string Name = "Swift Time";
-		public static readonly string Version = "v0.1.1";
+		public static readonly string Version = "v0.2.0";
 		public static readonly string HarmonyID = "com.zijistark.bannerlord." + ID.ToLower();
 
 		protected override void OnSubModuleLoad()
