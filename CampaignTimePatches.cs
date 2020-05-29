@@ -2,15 +2,16 @@
 using System;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Engine;
 
 namespace QuickTime
 {
     [HarmonyPatch(typeof(CampaignTime))]
-	public class CampaignTimePatches
+	class CampaignTimePatches
 	{
 		/* fundamental campaign time rate multiplier */
-		private const long   TimeMultL = 2L; // integer numerator of time factor
-		private const long   TimeDivL  = 1L; // integer denominator of time factor
+		private const long   TimeMultL = 2L; // integer numerator of time factor, a rational
+		private const long   TimeDivL  = 1L; // integer denominator of time factor, a rational
 		private const double TimeMult  = (double)TimeMultL / (double)TimeDivL;
 		private const float  TimeMultF = (float)TimeMult;
 
@@ -23,15 +24,32 @@ namespace QuickTime
 		private const long WeekPerSeasonL = 3L;
 		private const long SeasonPerYearL = 4L;
 
+		private const long OldDayPerWeekL = 7L; // vanilla
+
 		/* ticks per unit */
 		private const long TickPerMsecL   = 10L;
-		private const long TickPerSecL    = TickPerMsecL * MsecPerSecL;
-		private const long TickPerMinL    = TickPerSecL * SecPerMinL;
-		private const long TickPerHourL   = TickPerMinL * MinPerHourL;
-		private const long TickPerDayL    = TickPerHourL * HourPerDayL;
-		private const long TickPerWeekL   = TickPerDayL * DayPerWeekL;
-		private const long TickPerSeasonL = TickPerWeekL * WeekPerSeasonL;
-		private const long TickPerYearL   = TickPerSeasonL * SeasonPerYearL;
+		private const long TickPerSecL    = TickPerMsecL * MsecPerSecL; // 10000
+		private const long TickPerMinL    = TickPerSecL * SecPerMinL; // 600000
+		private const long TickPerHourL   = TickPerMinL * MinPerHourL; // 36000000
+		private const long TickPerDayL    = TickPerHourL * HourPerDayL; // 864000000
+		private const long TickPerWeekL   = TickPerDayL * DayPerWeekL; // 2592000000
+		private const long TickPerSeasonL = TickPerWeekL * WeekPerSeasonL; // 7776000000
+		private const long TickPerYearL   = TickPerSeasonL * SeasonPerYearL; // 31104000000
+
+		/* floating-point versions of above (pre-casting to reduce complexity of actual Harmony patches) */
+		private const float TickPerMsecF = (float)TickPerMsecL; // 1e1f
+		private const float TickPerSecF = (float)TickPerSecL; // 1e4f
+		private const float TickPerMinF = (float)TickPerMinL; // 6e5f
+		private const float TickPerHourF = (float)TickPerHourL; // 3.6e7f
+		private const float TickPerDayF = (float)TickPerDayL; // 8.64e8f
+		private const float TickPerWeekF = (float)TickPerWeekL; // 2.592e9f
+		private const float TickPerSeasonF = (float)TickPerSeasonL; // 7.776e9f
+		private const float TickPerYearF = (float)TickPerYearL; // 3.1104e10f
+
+		/* old/vanilla floating-point versions, where different */
+		private const float OldTickPerWeekF = (float)OldDayPerWeekL * TickPerDayF;
+		private const float OldTickPerSeasonF = (float)WeekPerSeasonL * OldTickPerWeekF;
+		private const float OldTickPerYearF = (float)SeasonPerYearL * OldTickPerSeasonF;
 
 		/* necessary reflection preliminaries */
 		private static readonly FieldInfo TicksFI = AccessTools.Field(typeof(CampaignTime), "_numTicks");
@@ -73,21 +91,21 @@ namespace QuickTime
 		[HarmonyPatch("ElapsedWeeksUntilNow", MethodType.Getter)]
 		static void ElapsedWeeksUntilNow(ref float __result)
 		{
-			__result *= TimeMultF;
+			__result *= TimeMultF * OldTickPerWeekF / TickPerWeekF;
 		}
 
 		[HarmonyPostfix]
 		[HarmonyPatch("ElapsedSeasonsUntilNow", MethodType.Getter)]
 		static void ElapsedSeasonsUntilNow(ref float __result)
 		{
-			__result *= TimeMultF;
+			__result *= TimeMultF * OldTickPerSeasonF / TickPerSeasonF;
 		}
 
 		[HarmonyPostfix]
 		[HarmonyPatch("ElapsedYearsUntilNow", MethodType.Getter)]
 		static void ElapsedYearsUntilNow(ref float __result)
 		{
-			__result *= TimeMultF;
+			__result *= TimeMultF * OldTickPerYearF / TickPerYearF;
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,21 +143,21 @@ namespace QuickTime
 		[HarmonyPatch("RemainingWeeksFromNow", MethodType.Getter)]
 		static void RemainingWeeksFromNow(ref float __result)
 		{
-			__result *= TimeMultF;
+			__result *= TimeMultF * OldTickPerWeekF / TickPerWeekF;
 		}
 
 		[HarmonyPostfix]
 		[HarmonyPatch("RemainingSeasonsFromNow", MethodType.Getter)]
 		static void RemainingSeasonsFromNow(ref float __result)
 		{
-			__result *= TimeMultF;
+			__result *= TimeMultF * OldTickPerSeasonF / TickPerSeasonF;
 		}
 
 		[HarmonyPostfix]
 		[HarmonyPatch("RemainingYearsFromNow", MethodType.Getter)]
 		static void RemainingYearsFromNow(ref float __result)
 		{
-			__result *= TimeMultF;
+			__result *= TimeMultF * OldTickPerYearF / TickPerYearF;
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,21 +202,21 @@ namespace QuickTime
 		[HarmonyPatch("ToWeeks", MethodType.Getter)]
 		static void ToWeeks(ref double __result)
 		{
-			__result *= TimeMult;
+			__result *= TimeMult * OldTickPerWeekF / TickPerWeekF;
 		}
 
 		[HarmonyPostfix]
 		[HarmonyPatch("ToSeasons", MethodType.Getter)]
 		static void ToSeasons(ref double __result)
 		{
-			__result *= TimeMult;
+			__result *= TimeMult * OldTickPerSeasonF / TickPerSeasonF;
 		}
 
 		[HarmonyPostfix]
 		[HarmonyPatch("ToYears", MethodType.Getter)]
 		static void ToYears(ref double __result)
 		{
-			__result *= TimeMult;
+			__result *= TimeMult * OldTickPerYearF / TickPerYearF;
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,7 +226,7 @@ namespace QuickTime
 		[HarmonyPatch("GetHourOfDay", MethodType.Getter)]
 		static bool GetHourOfDay(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)((long)TicksFI.GetValue(__instance) * TimeMultL / TimeDivL / 36000000L % 24L);
+			__result = (int)((long)TicksFI.GetValue(__instance) / TickPerHourL * TimeMultL / TimeDivL % HourPerDayL);
 			return false;
 		}
 
@@ -216,7 +234,7 @@ namespace QuickTime
 		[HarmonyPatch("GetDayOfWeek", MethodType.Getter)]
 		static bool GetDayOfWeek(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)((long)TicksFI.GetValue(__instance) * TimeMultL / TimeDivL / 864000000L % 7L);
+			__result = (int)((long)TicksFI.GetValue(__instance) / TickPerDayL * TimeMultL / TimeDivL % DayPerWeekL);
 			return false;
 		}
 
@@ -224,7 +242,7 @@ namespace QuickTime
 		[HarmonyPatch("GetDayOfSeason", MethodType.Getter)]
 		static bool GetDayOfSeason(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)((long)TicksFI.GetValue(__instance) * TimeMultL / TimeDivL / 864000000L % 21L);
+			__result = (int)((long)TicksFI.GetValue(__instance) / TickPerDayL * TimeMultL / TimeDivL % (DayPerWeekL * WeekPerSeasonL));
 			return false;
 		}
 
@@ -232,7 +250,7 @@ namespace QuickTime
 		[HarmonyPatch("GetDayOfYear", MethodType.Getter)]
 		static bool GetDayOfYear(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)((long)TicksFI.GetValue(__instance) * TimeMultL / TimeDivL / 864000000L % 84L);
+			__result = (int)((long)TicksFI.GetValue(__instance) / TickPerDayL * TimeMultL / TimeDivL % (DayPerWeekL * WeekPerSeasonL * SeasonPerYearL));
 			return false;
 		}
 
@@ -240,7 +258,7 @@ namespace QuickTime
 		[HarmonyPatch("GetWeekOfSeason", MethodType.Getter)]
 		static bool GetWeekOfSeason(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)((long)TicksFI.GetValue(__instance) * TimeMultL / TimeDivL / 6048000000L % 3L);
+			__result = (int)((long)TicksFI.GetValue(__instance) / TickPerWeekL * TimeMultL / TimeDivL % WeekPerSeasonL);
 			return false;
 		}
 
@@ -248,7 +266,7 @@ namespace QuickTime
 		[HarmonyPatch("GetSeasonOfYear", MethodType.Getter)]
 		static bool GetSeasonOfYear(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)((long)TicksFI.GetValue(__instance) * TimeMultL / TimeDivL / 18144000000L % 4L);
+			__result = (int)((long)TicksFI.GetValue(__instance) / TickPerSeasonL * TimeMultL / TimeDivL % SeasonPerYearL);
 			return false;
 		}
 
@@ -256,7 +274,7 @@ namespace QuickTime
 		[HarmonyPatch("GetYear", MethodType.Getter)]
 		static bool GetYear(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)((long)TicksFI.GetValue(__instance) * TimeMultL / TimeDivL / 72576000000L);
+			__result = (int)((long)TicksFI.GetValue(__instance) / TickPerYearL * TimeMultL / TimeDivL);
 			return false;
 		}
 
@@ -266,7 +284,7 @@ namespace QuickTime
 		[HarmonyPatch("GetDayOfSeasonf", MethodType.Getter)]
 		static bool GetDayOfSeasonf(ref CampaignTime __instance, ref float __result)
 		{
-			__result = (float)Math.IEEERemainder((double)((long)TicksFI.GetValue(__instance) / 864000000L), 21.0);
+			__result = (float)Math.IEEERemainder((double)((long)TicksFI.GetValue(__instance) / TickPerDayL * TimeMultL / TimeDivL), (double)(DayPerWeekL * WeekPerSeasonL));
 			return false;
 		}
 
@@ -274,7 +292,7 @@ namespace QuickTime
 		[HarmonyPatch("GetSeasonOfYearf", MethodType.Getter)]
 		static bool GetSeasonOfYearf(ref CampaignTime __instance, ref float __result)
 		{
-			__result = (float)Math.IEEERemainder((double)((long)TicksFI.GetValue(__instance) / 18144000000L), 4.0);
+			__result = (float)Math.IEEERemainder((double)((long)TicksFI.GetValue(__instance) / TickPerSeasonL * TimeMultL / TimeDivL), (double)SeasonPerYearL);
 			return false;
 		}
 
@@ -285,7 +303,7 @@ namespace QuickTime
 		[HarmonyPatch("Milliseconds")]
 		static bool Milliseconds(long valueInMilliseconds, ref CampaignTime __result)
 		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[] { valueInMilliseconds * TimeDivL / TimeMultL * 10L });
+			__result = (CampaignTime)CtorCI.Invoke(new object[] { valueInMilliseconds * TickPerMsecL * TimeDivL / TimeMultL });
 			return false;
 		}
 
@@ -293,7 +311,7 @@ namespace QuickTime
 		[HarmonyPatch("Seconds")]
 		static bool Seconds(long valueInSeconds, ref CampaignTime __result)
 		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[] { valueInSeconds * TimeDivL / TimeMultL * 10000L });
+			__result = (CampaignTime)CtorCI.Invoke(new object[] { valueInSeconds * TickPerSecL * TimeDivL / TimeMultL });
 			return false;
 		}
 
@@ -301,7 +319,7 @@ namespace QuickTime
 		[HarmonyPatch("Minutes")]
 		static bool Minutes(long valueInMinutes, ref CampaignTime __result)
 		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[] { valueInMinutes * TimeDivL / TimeMultL * 600000L });
+			__result = (CampaignTime)CtorCI.Invoke(new object[] { valueInMinutes * TickPerMinL * TimeDivL / TimeMultL });
 			return false;
 		}
 
@@ -309,7 +327,7 @@ namespace QuickTime
 		[HarmonyPatch("Hours")]
 		static bool Hours(float valueInHours, ref CampaignTime __result)
 		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(valueInHours / TimeMultF * 3.6E+07f) });
+			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(valueInHours * TickPerHourF / TimeMultF) });
 			return false;
 		}
 
@@ -317,7 +335,7 @@ namespace QuickTime
 		[HarmonyPatch("Days")]
 		static bool Days(float valueInDays, ref CampaignTime __result)
 		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(valueInDays / TimeMultF * 8.64E+08f) });
+			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(valueInDays * TickPerDayF / TimeMultF) });
 			return false;
 		}
 
@@ -325,7 +343,7 @@ namespace QuickTime
 		[HarmonyPatch("Weeks")]
 		static bool Weeks(float valueInWeeeks, ref CampaignTime __result)
 		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(valueInWeeeks / TimeMultF * 6.048E+09f) });
+			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(valueInWeeeks * TickPerWeekF / TimeMultF) });
 			return false;
 		}
 
@@ -333,7 +351,7 @@ namespace QuickTime
 		[HarmonyPatch("Seasons")]
 		static bool Seasons(float valueInSeasons, ref CampaignTime __result)
 		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(valueInSeasons / TimeMultF * 1.8144E+10f) });
+			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(valueInSeasons * TickPerSeasonF / TimeMultF) });
 			return false;
 		}
 
@@ -341,7 +359,7 @@ namespace QuickTime
 		[HarmonyPatch("Years")]
 		static bool Years(float valueInYears, ref CampaignTime __result)
 		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(valueInYears / TimeMultF * 7.2576E+10f) });
+			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(valueInYears * TickPerYearF / TimeMultF) });
 			return false;
 		}
 
@@ -354,7 +372,7 @@ namespace QuickTime
 		{
 			__result = (CampaignTime)CtorCI.Invoke(new object[]
 			{
-				(long)CurrentTicksMI.Invoke(null, null) + valueInMilliseconds * TimeDivL / TimeMultL * 10L
+				(long)CurrentTicksMI.Invoke(null, null) + valueInMilliseconds * TickPerMsecL * TimeDivL / TimeMultL
 			});
 			return false;
 		}
@@ -365,7 +383,7 @@ namespace QuickTime
 		{
 			__result = (CampaignTime)CtorCI.Invoke(new object[]
 			{
-				(long)CurrentTicksMI.Invoke(null, null) + valueInSeconds * TimeDivL / TimeMultL * 10000L
+				(long)CurrentTicksMI.Invoke(null, null) + valueInSeconds * TickPerSecL * TimeDivL / TimeMultL
 			});
 			return false;
 		}
@@ -376,7 +394,7 @@ namespace QuickTime
 		{
 			__result = (CampaignTime)CtorCI.Invoke(new object[]
 			{
-				(long)CurrentTicksMI.Invoke(null, null) + valueInMinutes * TimeDivL / TimeMultL * 600000L
+				(long)CurrentTicksMI.Invoke(null, null) + valueInMinutes * TickPerMinL * TimeDivL / TimeMultL
 			});
 			return false;
 		}
@@ -387,7 +405,7 @@ namespace QuickTime
 		{
 			__result = (CampaignTime)CtorCI.Invoke(new object[]
 			{
-				(long)CurrentTicksMI.Invoke(null, null) + (long)(valueInHours / TimeMultF * 3.6E+07f)
+				(long)CurrentTicksMI.Invoke(null, null) + (long)(valueInHours * TickPerHourF / TimeMultF)
 			});
 			return false;
 		}
@@ -398,7 +416,7 @@ namespace QuickTime
 		{
 			__result = (CampaignTime)CtorCI.Invoke(new object[]
 			{
-				(long)CurrentTicksMI.Invoke(null, null) + (long)(valueInDays / TimeMultF * 8.64E+08f)
+				(long)CurrentTicksMI.Invoke(null, null) + (long)(valueInDays * TickPerDayF / TimeMultF)
 			});
 			return false;
 		}
@@ -409,7 +427,7 @@ namespace QuickTime
 		{
 			__result = (CampaignTime)CtorCI.Invoke(new object[]
 			{
-				(long)CurrentTicksMI.Invoke(null, null) + (long)(valueInWeeks / TimeMultF * 6.048E+09f)
+				(long)CurrentTicksMI.Invoke(null, null) + (long)(valueInWeeks * TickPerWeekF / TimeMultF)
 			});
 			return false;
 		}
@@ -420,7 +438,7 @@ namespace QuickTime
 		{
 			__result = (CampaignTime)CtorCI.Invoke(new object[]
 			{
-				(long)CurrentTicksMI.Invoke(null, null) + (long)(valueInYears / TimeMultF * 7.2576E+10f)
+				(long)CurrentTicksMI.Invoke(null, null) + (long)(valueInYears * TickPerYearF / TimeMultF)
 			});
 			return false;
 		}
