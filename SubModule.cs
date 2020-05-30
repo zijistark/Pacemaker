@@ -1,22 +1,26 @@
 ﻿using HarmonyLib;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace QuickTime
+namespace CampaignPacer
 {
 	public class SubModule : MBSubModuleBase
 	{
-		public static readonly string ID = typeof(SubModule).Namespace;
-		public static readonly string Name = "Swift Time";
-		public static readonly string Version = "v0.2.0";
-		public static readonly string HarmonyID = "com.zijistark.bannerlord." + ID.ToLower();
+		/* Semantic Versioning (https://semver.org): */
+		public const int SemVerMajor = 0;
+		public const int SemVerMinor = 3;
+		public const int SemVerPatch = 0;
+		public const string SemVerSpecial = null; // valid would be "alpha2" or "beta7" or "rc1", e.g.
+		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{((SemVerSpecial != null) ? $"-{SemVerSpecial}" : "")}";
+		
+		public static readonly string Name = typeof(SubModule).Namespace; // used for both Id and human-readable Name of this module
+		public static readonly string HarmonyDomain = "com.zijistark.bannerlord." + Name.ToLower();
 
 		protected override void OnSubModuleLoad()
 		{
 			base.OnSubModuleLoad();
-			var harmony = new Harmony(HarmonyID);
+			var harmony = new Harmony(HarmonyDomain);
 			harmony.PatchAll();
 		}
 
@@ -24,7 +28,7 @@ namespace QuickTime
 		{
 			if (!_loaded)
 			{
-				InformationManager.DisplayMessage(new InformationMessage($"~ Loaded {Name} {Version}", Color.FromUint(0x00007CD7)));
+				InformationManager.DisplayMessage(new InformationMessage($"Loaded {Name} v{Version}!", Color.FromUint(0x00F16D26)));
 				_loaded = true;
 			}
 		}

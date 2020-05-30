@@ -1,7 +1,7 @@
 ﻿<Module>
-  <Name value="Swift Time"/>
-  <Id value="QuickTime"/>
-  <Version value="v0.1.0"/>
+  <Name value="Campaign Pacer"/>
+  <Id value="CampaignPacer"/>
+  <Version value="v0.3.0"/>
   <SingleplayerModule value="true"/>
   <MultiplayerModule value="false"/>
   <DependedModules>
@@ -12,9 +12,9 @@
   </DependedModules>
   <SubModules>
     <SubModule>
-      <Name value="QuickTime"/>
-      <DLLName value="QuickTime.dll"/>
-      <SubModuleClassType value="QuickTime.SubModule"/>
+      <Name value="CampaignPacer"/>
+      <DLLName value="CampaignPacer.dll"/>
+      <SubModuleClassType value="CampaignPacer.SubModule"/>
       <Tags>
         <Tag key="DedicatedServerType" value="none" />
         <Tag key="IsNoRenderModeElement" value="false" />

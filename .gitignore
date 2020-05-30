@@ -1,3 +1,5 @@
+*.csproj.user
+
 # Compiled Object files
 *.slo
 *.lo
