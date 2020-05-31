@@ -1,5 +1,8 @@
-﻿
-using System.Runtime.CompilerServices;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using TaleWorlds.Library;
 
 namespace CampaignPacer
 {
@@ -109,10 +112,10 @@ namespace CampaignPacer
 
 		public TimeParams(Settings cfg)
 		{
-			/* independent variables from our config */
+			/* independent variables from settings */
+			TickPerMsecL = cfg.TicksPerMillisecond;
 			DayPerWeekL = cfg.DaysPerWeek;
 			WeekPerSeasonL = cfg.WeeksPerSeason;
-			TickPerMsecL = cfg.TicksPerMillisecond;
 
 			/* special units */
 			DayPerSeasonL = DayPerWeekL * WeekPerSeasonL;
@@ -128,24 +131,24 @@ namespace CampaignPacer
 			TickPerYearL = TickPerSeasonL * SeasonPerYearL;
 
 			/* ticks per unit, double-precision floating point */
-			TickPerMsec = (double)TickPerMsecL;
-			TickPerSec = (double)TickPerSecL;
-			TickPerMin = (double)TickPerMinL;
-			TickPerHour = (double)TickPerHourL;
-			TickPerDay = (double)TickPerDayL;
-			TickPerWeek = (double)TickPerWeekL;
-			TickPerSeason = (double)TickPerSeasonL;
-			TickPerYear = (double)TickPerYearL;
+			TickPerMsec = TickPerMsecL;
+			TickPerSec = TickPerSecL;
+			TickPerMin = TickPerMinL;
+			TickPerHour = TickPerHourL;
+			TickPerDay = TickPerDayL;
+			TickPerWeek = TickPerWeekL;
+			TickPerSeason = TickPerSeasonL;
+			TickPerYear = TickPerYearL;
 
 			/* ticks per unit, single-precision floating point */
-			TickPerMsecF = (float)TickPerMsecL;
-			TickPerSecF = (float)TickPerSecL;
-			TickPerMinF = (float)TickPerMinL;
-			TickPerHourF = (float)TickPerHourL;
-			TickPerDayF = (float)TickPerDayL;
-			TickPerWeekF = (float)TickPerWeekL;
-			TickPerSeasonF = (float)TickPerSeasonL;
-			TickPerYearF = (float)TickPerYearL;
+			TickPerMsecF = TickPerMsecL;
+			TickPerSecF = TickPerSecL;
+			TickPerMinF = TickPerMinL;
+			TickPerHourF = TickPerHourL;
+			TickPerDayF = TickPerDayL;
+			TickPerWeekF = TickPerWeekL;
+			TickPerSeasonF = TickPerSeasonL;
+			TickPerYearF = TickPerYearL;
 
 			/* ratios of vanilla units to new units, double-precision floating-point */
 			TickRatioMsec = OldTickPerMsec / TickPerMsec;
@@ -166,6 +169,117 @@ namespace CampaignPacer
 			TickRatioWeekF = (float)TickRatioWeek;
 			TickRatioSeasonF = (float)TickRatioSeason;
 			TickRatioYearF = (float)TickRatioYear;
+		}
+
+		private List<string> Indent(string unit, uint level, List<string> lines)
+		{
+			if (unit == null || level == 0) return lines;
+
+			var indent = String.Empty;
+			for (uint i = 0; i < level; ++i)
+				indent += unit;
+
+			List<string> results = new List<string>();
+
+			foreach (var line in lines)
+				results.Add(indent + line);
+
+			return results;
+		}
+
+		private List<string> Indent(string unit, uint level, string line)
+		{
+			if (unit == null || level == 0) return new List<string> { line };
+
+			var indent = String.Empty;
+			for (uint i = 0; i < level; ++i)
+				indent += unit;
+
+			return new List<string> { indent + line };
+		}
+
+		public List<string> ToStringLines(uint indentSize = 0)
+		{
+			var indent = String.Empty;
+
+			if (indentSize > 0)
+				for (int i = 0; i < indentSize; ++i)
+					indent += " ";
+
+			uint level = 0;
+			var lines = new List<string> { "Time Parameters:" };
+
+			lines.AddRange(Indent(indent, ++level, "Units:"));
+
+			lines.AddRange(Indent(indent, ++level, new List<string>
+			{
+				$"MsecPerSecL    = {MsecPerSecL}",
+				$"SecPerMinL     = {SecPerMinL}",
+				$"MinPerHourL    = {MinPerHourL}",
+				$"HourPerDayL    = {HourPerDayL}",
+				$"DayPerWeekL    = {DayPerWeekL}",
+				$"WeekPerSeasonL = {WeekPerSeasonL}",
+				$"SeasonPerYearL = {SeasonPerYearL}",
+				$"DayPerSeasonL  = {DayPerSeasonL}",
+				$"DayPerYearL    = {DayPerYearL}",
+			}));
+
+			lines.AddRange(Indent(indent, --level, "Ticks per Unit:"));
+
+			lines.AddRange(Indent(indent, ++level, new List<string>
+			{
+				$"TickPerMsecL   = {TickPerMsecL}",
+				$"TickPerSecL    = {TickPerSecL}",
+				$"TickPerMinL    = {TickPerMinL}",
+				$"TickPerHourL   = {TickPerHourL}",
+				$"TickPerDayL    = {TickPerDayL}",
+				$"TickPerWeekL   = {TickPerWeekL}",
+				$"TickPerSeasonL = {TickPerSeasonL}",
+				$"TickPerYearL   = {TickPerYearL}",
+			}));
+
+			lines.AddRange(Indent(indent, --level, "Units (vanilla):"));
+
+			lines.AddRange(Indent(indent, ++level, new List<string>
+			{
+				$"OldMsecPerSecL    = {OldMsecPerSecL}",
+				$"OldSecPerMinL     = {OldSecPerMinL}",
+				$"OldMinPerHourL    = {OldMinPerHourL}",
+				$"OldHourPerDayL    = {OldHourPerDayL}",
+				$"OldDayPerWeekL    = {OldDayPerWeekL}",
+				$"OldWeekPerSeasonL = {OldWeekPerSeasonL}",
+				$"OldSeasonPerYearL = {OldSeasonPerYearL}",
+			}));
+
+			lines.AddRange(Indent(indent, --level, "Ticks per Unit (vanilla):"));
+
+			lines.AddRange(Indent(indent, ++level, new List<string>
+			{
+				$"OldTickPerMsecL   = {OldTickPerMsecL}",
+				$"OldTickPerSecL    = {OldTickPerSecL}",
+				$"OldTickPerMinL    = {OldTickPerMinL}",
+				$"OldTickPerHourL   = {OldTickPerHourL}",
+				$"OldTickPerDayL    = {OldTickPerDayL}",
+				$"OldTickPerWeekL   = {OldTickPerWeekL}",
+				$"OldTickPerSeasonL = {OldTickPerSeasonL}",
+				$"OldTickPerYearL   = {OldTickPerYearL}",
+			}));
+
+			lines.AddRange(Indent(indent, --level, "Ticks per Unit Ratio (Vanilla / Us):"));
+
+			lines.AddRange(Indent(indent, ++level, new List<string>
+			{
+				$"TickRatioMsec   = {TickRatioMsec}",
+				$"TickRatioSec    = {TickRatioSec}",
+				$"TickRatioMin    = {TickRatioMin}",
+				$"TickRatioHour   = {TickRatioHour}",
+				$"TickRatioDay    = {TickRatioDay}",
+				$"TickRatioWeek   = {TickRatioWeek}",
+				$"TickRatioSeason = {TickRatioSeason}",
+				$"TickRatioYear   = {TickRatioYear}",
+			}));
+
+			return lines;
 		}
 	}
 }

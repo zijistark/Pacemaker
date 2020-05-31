@@ -63,16 +63,22 @@ namespace CampaignPacer
 					});
 				}
 
-				var stString = st.ToString();
+				var stStr = st.ToString();
 
-				if (_stackTraceMap.TryAdd(stString, true))
+				if (stStr.Length > 2)
 				{
-					msg.AddRange(new List<string>
+					// ensure we're using Unix-style EOLs in the stack trace & remove extra newline at end
+					stStr = stStr.Replace("\r\n", "\n").Remove(stStr.Length - 1, 1);
+
+					if (_stackTraceMap.TryAdd(stStr, true))
 					{
-						String.Empty,
-						"Stack Trace:",
-						stString,
-					});
+						msg.AddRange(new List<string>
+						{
+							String.Empty,
+							"Stack Trace:",
+							stStr,
+						});
+					}
 				}
 
 				if (extraInfo != null && extraInfo.Count > 0)

@@ -1,9 +1,10 @@
 ﻿<Module>
   <Name value="Campaign Pacer"/>
   <Id value="CampaignPacer"/>
-  <Version value="v0.3.0"/>
+  <Version value="v0.4.1"/>
   <SingleplayerModule value="true"/>
   <MultiplayerModule value="false"/>
+  <Official value="false"/>
   <DependedModules>
     <DependedModule Id="Native"/>
     <DependedModule Id="SandBoxCore"/>

@@ -12,7 +12,7 @@ namespace CampaignPacer
 		/* Semantic Versioning (https://semver.org): */
 		public const int SemVerMajor = 0;
 		public const int SemVerMinor = 4;
-		public const int SemVerPatch = 0;
+		public const int SemVerPatch = 1;
 		public const string SemVerSpecial = null; // valid would be "alpha2" or "beta7" or "rc1", e.g.
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{((SemVerSpecial != null) ? $"-{SemVerSpecial}" : "")}";
 		
@@ -35,15 +35,26 @@ namespace CampaignPacer
 
 			if (!_loaded)
 			{
-				trace.Add("Module had not yet fully loaded.");
+				trace.Add("Module is loading for the first time...");
 
-                if (Settings.Instance == null)
-                    trace.Add("Settings.Instance was NULL!");
+				if (Settings.Instance == null)
+				{
+					Config = new Settings(); // use defaults
+					trace.Add("Settings.Instance was NULL! Using default configuration instead.");
+				}
+				else
+	                Config = Settings.Instance;
 
-                Config = Settings.Instance;
+				trace.AddRange(new List<string>
+				{
+					string.Empty,
+					"Settings:",
+				});
 
                 // now that the Settings are available, initialize TimeParams right before we apply our Harmony patches to CampaignTime:
                 CampaignTimePatches.TP = new TimeParams(Config);
+				trace.AddRange(CampaignTimePatches.TP.ToStringLines(indentSize: 2));
+
 				var harmony = new Harmony(HarmonyDomain);
 				harmony.PatchAll();
 
@@ -51,9 +62,12 @@ namespace CampaignPacer
 				_loaded = true;
 			}
 			else
-				trace.Add("Module already fully loaded.");
+				trace.Add("Module was already fully loaded.");
 
-			Util.EventTracer.Trace(trace);
+			if (Util.EnableTracer)
+				Util.EventTracer.Trace(trace);
+			else
+				Util.Log.ToFile(trace);
 		}
 
 		protected override void OnGameStart(Game game, IGameStarter starterObject)
