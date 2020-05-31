@@ -3,17 +3,17 @@ using System;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 
-namespace CampaignPacer
+namespace CampaignPacer.Patches
 {
     [HarmonyPatch(typeof(CampaignTime))]
-	class CampaignTimePatches
+	class CampaignTimePatch
 	{
 		public static TimeParams TP;
 
 		/* necessary reflection info for the largely-internal class CampaignTime */
-		private static readonly FieldInfo TicksFI = AccessTools.Field(typeof(CampaignTime), "_numTicks");
-		private static readonly ConstructorInfo CtorCI = AccessTools.Constructor(typeof(CampaignTime), new[] { typeof(long) });
-		private static readonly MethodInfo CurrentTicksMI = AccessTools.PropertyGetter(typeof(CampaignTime), "CurrentTicks");
+		public static readonly FieldInfo TicksFI = AccessTools.Field(typeof(CampaignTime), "_numTicks");
+		public static readonly ConstructorInfo CtorCI = AccessTools.Constructor(typeof(CampaignTime), new[] { typeof(long) });
+		public static readonly MethodInfo CurrentTicksMI = AccessTools.PropertyGetter(typeof(CampaignTime), "CurrentTicks");
 
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* Elapsed[UNIT]sUntilNow */

@@ -25,7 +25,7 @@ namespace CampaignPacer
 		[SettingPropertyGroup(groupName: "Campaign Time and Calendar")]
 		public int DaysPerWeek { get; set; } = 3;
  
-		[SettingPropertyInteger("Weeks per Season", 1, 12, Order = 2, RequireRestart = true, HintText = "Alters the length of a season. Vanilla uses 3 weeks. CAUTION: Values other than the default seem to offset the start date by a few days. [ Default: 3 ]")]
+		[SettingPropertyInteger("Weeks per Season", 1, 12, Order = 2, RequireRestart = true, HintText = "Alters the length of a season. Vanilla uses 3 weeks. [ Default: 3 ]")]
 		[SettingPropertyGroup(groupName: "Campaign Time and Calendar")]
 		public int WeeksPerSeason { get; set; } = 3;
 
@@ -35,9 +35,9 @@ namespace CampaignPacer
 
 			return new List<string>
 			{
-				$"{prefix}{nameof(TicksPerMillisecond)} = {TicksPerMillisecond}",
-				$"{prefix}{nameof(DaysPerWeek)} = {DaysPerWeek}",
-				$"{prefix}{nameof(WeeksPerSeason)} = {WeeksPerSeason}",
+				$"{prefix}TicksPerMsec   = {TicksPerMillisecond}",
+				$"{prefix}DaysPerWeek    = {DaysPerWeek}",
+				$"{prefix}WeeksPerSeason = {WeeksPerSeason}",
 			};
 		}
 	}

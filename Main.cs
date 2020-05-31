@@ -11,8 +11,8 @@ namespace CampaignPacer
 	{
 		/* Semantic Versioning (https://semver.org): */
 		public const int SemVerMajor = 0;
-		public const int SemVerMinor = 4;
-		public const int SemVerPatch = 1;
+		public const int SemVerMinor = 5;
+		public const int SemVerPatch = 0;
 		public const string SemVerSpecial = null; // valid would be "alpha2" or "beta7" or "rc1", e.g.
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{((SemVerSpecial != null) ? $"-{SemVerSpecial}" : "")}";
 		
@@ -51,9 +51,14 @@ namespace CampaignPacer
 					"Settings:",
 				});
 
+                trace.AddRange(Config.ToStringLines(indent: "  "));
+
                 // now that the Settings are available, initialize TimeParams right before we apply our Harmony patches to CampaignTime:
-                CampaignTimePatches.TP = new TimeParams(Config);
-				trace.AddRange(CampaignTimePatches.TP.ToStringLines(indentSize: 2));
+                Patches.CampaignTimePatch.TP = new TimeParams(Config);
+
+                // also trace our main time parameters:
+                trace.Add(string.Empty);
+                trace.AddRange(Patches.CampaignTimePatch.TP.ToStringLines(indentSize: 2));
 
 				var harmony = new Harmony(HarmonyDomain);
 				harmony.PatchAll();

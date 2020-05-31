@@ -68,9 +68,10 @@ namespace CampaignPacer
 				if (stStr.Length > 2)
 				{
 					// ensure we're using Unix-style EOLs in the stack trace & remove extra newline at end
-					stStr = stStr.Replace("\r\n", "\n").Remove(stStr.Length - 1, 1);
+					stStr = stStr.Replace("\r\n", "\n");
+                    stStr = stStr.Remove(stStr.Length - 1, 1);
 
-					if (_stackTraceMap.TryAdd(stStr, true))
+                    if (_stackTraceMap.TryAdd(stStr, true))
 					{
 						msg.AddRange(new List<string>
 						{

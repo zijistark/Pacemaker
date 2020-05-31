@@ -79,7 +79,8 @@
   </ItemGroup>
   <!-- Files & Classes -->
   <ItemGroup>
-    <Compile Include="CampaignTimePatches.cs" />
+    <Compile Include="Patches\CampaignPatch.cs" />
+    <Compile Include="Patches\CampaignTimePatch.cs" />
     <Compile Include="GameLog.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Main.cs" />
