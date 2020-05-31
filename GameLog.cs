@@ -9,7 +9,27 @@ using TaleWorlds.Library;
 
 namespace CampaignPacer
 {
-	public class GameLog
+	public class GameLogBase
+	{
+		public virtual void Info(string s) { }
+		public virtual void Info(List<string> l) { }
+		public virtual void Debug(string s) { }
+		public virtual void Debug(List<string> l) { }
+		public virtual void NotifyBad(string s) { }
+		public virtual void NotifyBad(List<string> l) { }
+		public virtual void NotifyNeutral(string s) { }
+		public virtual void NotifyNeutral(List<string> l) { }
+		public virtual void NotifyGood(string s) { }
+		public virtual void NotifyGood(List<string> l) { }
+
+		public virtual void Print(string text, Color color, bool isDebug = false, bool onlyDisplay = false) { }
+		public virtual void Print(List<string> lines, Color color, bool isDebug = false, bool onlyDisplay = false) { }
+
+		public virtual void ToFile(string line, bool isDebug = false) { }
+		public virtual void ToFile(List<string> lines, bool isDebug = false) { }
+	}
+
+	public class GameLog : GameLogBase
 	{
 		private const string BeginMultiLine      = @"=======================================================================================================================\";
 		private const string BeginMultiLineDebug = @"===================================================   D E B U G   =====================================================\";
@@ -37,18 +57,18 @@ namespace CampaignPacer
 		public static Color ColorSkyBlue => colorSkyBlue;
 		public static Color ColorForestGreen => colorForestGreen;
 
-		public void Info(string text)                { Print(text, ColorWhite); }
-		public void Info(List<string> text)          { Print(text, ColorWhite); }
-		public void Debug(string text)               { Print(text, ColorMagenta, true); }
-		public void Debug(List<string> text)         { Print(text, ColorMagenta, true); }
-		public void NotifyBad(string text)           { Print(text, ColorRed); }
-		public void NotifyBad(List<string> text)     { Print(text, ColorRed); }
-		public void NotifyNeutral(string text)       { Print(text, ColorSkyBlue); }
-		public void NotifyNeutral(List<string> text) { Print(text, ColorSkyBlue); }
-		public void NotifyGood(string text)          { Print(text, ColorForestGreen); }
-		public void NotifyGood(List<string> text)    { Print(text, ColorForestGreen); }
+		public override void Info(string text)                { Print(text, ColorWhite); }
+		public override void Info(List<string> text)          { Print(text, ColorWhite); }
+		public override void Debug(string text)               { Print(text, ColorMagenta, true); }
+		public override void Debug(List<string> text)         { Print(text, ColorMagenta, true); }
+		public override void NotifyBad(string text)           { Print(text, ColorRed); }
+		public override void NotifyBad(List<string> text)     { Print(text, ColorRed); }
+		public override void NotifyNeutral(string text)       { Print(text, ColorSkyBlue); }
+		public override void NotifyNeutral(List<string> text) { Print(text, ColorSkyBlue); }
+		public override void NotifyGood(string text)          { Print(text, ColorForestGreen); }
+		public override void NotifyGood(List<string> text)    { Print(text, ColorForestGreen); }
 
-		public void Print(string text, Color color, bool isDebug = false, bool onlyDisplay = false)
+		public override void Print(string text, Color color, bool isDebug = false, bool onlyDisplay = false)
 		{
 			InformationManager.DisplayMessage( new InformationMessage(text, color) );
 
@@ -56,7 +76,7 @@ namespace CampaignPacer
 				ToFile(text, isDebug);
 		}
 
-		public void Print(List<string> lines, Color color, bool isDebug = false, bool onlyDisplay = false)
+		public override void Print(List<string> lines, Color color, bool isDebug = false, bool onlyDisplay = false)
 		{
 			foreach (string text in lines)
 				InformationManager.DisplayMessage( new InformationMessage(text, color) );
@@ -65,7 +85,7 @@ namespace CampaignPacer
 				ToFile(lines, isDebug);
 		}
 
-		public async void ToFile(string line, bool isDebug = false)
+		public override async void ToFile(string line, bool isDebug = false)
 		{
 			if (Writer == null) return;
 
@@ -74,7 +94,7 @@ namespace CampaignPacer
 			await Writer.FlushAsync();
 		}
 
-		public async void ToFile(List<string> lines, bool isDebug = false)
+		public override async void ToFile(List<string> lines, bool isDebug = false)
 		{
 			if (Writer == null || lines.Count == 0) return;
 

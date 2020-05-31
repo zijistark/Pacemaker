@@ -14,16 +14,16 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
+  <!-- NOTE: An easy way to get many a BL VS/Rider project 100% working on your machine is to set the environment
+             variable MOUNT_AND_BLADE_DIR equal to the path of your installed Bannerlord game folder.
+
+             An easier way for just this project is to simply enter it within the following property tag. For example:
+               
+             <GameDir>Z:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord</GameDir>
+
+             Note that &amp; (HTML entity code for &) is required instead of the direct ampersand symbol.
+  -->
   <PropertyGroup>
-    <!-- NOTE: An easy way to get many a BL VS/Rider project 100% working on your machine is to set the environment
-               variable MOUNT_AND_BLADE_DIR equal to the path of your installed Bannerlord game folder.
-
-               An easier way for just this project is to simply enter it within the following property tag. For example:
-                 
-               <GameDir>Z:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord</GameDir>
-
-               Note that &amp; (HTML entity code for &) is required instead of the direct ampersand symbol.
-    -->
     <GameDir>$(MOUNT_AND_BLADE_DIR)</GameDir>
     <ModDir>$(GameDir)\Modules\$(RootNamespace)</ModDir>
   </PropertyGroup>
@@ -81,12 +81,18 @@
   <ItemGroup>
     <Compile Include="CampaignTimePatches.cs" />
     <Compile Include="GameLog.cs" />
-    <Compile Include="SubModule.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TickTraceBehavior.cs" />
+    <Compile Include="TimeParams.cs" />
     <Compile Include="Util.cs" />
     <Content Include="SubModule.xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Bannerlord.MCM.Integrated">
+      <Version>3.1.4</Version>
+    </PackageReference>
     <PackageReference Include="Lib.Harmony">
       <Version>2.0.1</Version>
     </PackageReference>
