@@ -26,7 +26,7 @@ namespace CampaignPacer
 		public const long TickPerSecL = TickPerMsecL * MsecPerSecL;
 		public const long TickPerMinL = TickPerSecL * SecPerMinL;
 		public const long TickPerHourL = TickPerMinL * MinPerHourL;
-		public const long TickPerDayL = TickPerMinL * HourPerDayL;
+		public const long TickPerDayL = TickPerHourL * HourPerDayL;
 		public readonly long TickPerWeekL;
 		public readonly long TickPerSeasonL;
 		public readonly long TickPerYearL;

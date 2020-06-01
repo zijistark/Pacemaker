@@ -12,7 +12,7 @@ namespace CampaignPacer
 		/* Semantic Versioning (https://semver.org): */
 		public const int SemVerMajor = 0;
 		public const int SemVerMinor = 6;
-		public const int SemVerPatch = 0;
+		public const int SemVerPatch = 1;
 		public const string SemVerSpecial = null; // valid would be "alpha2" or "beta7" or "rc1", e.g.
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{((SemVerSpecial != null) ? $"-{SemVerSpecial}" : "")}";
 
