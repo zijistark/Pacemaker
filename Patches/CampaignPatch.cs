@@ -8,11 +8,11 @@ namespace CampaignPacer.Patches
 	[HarmonyPatch(typeof(Campaign))]
 	class CampaignPatch
 	{
-        public static readonly MethodInfo GetMapTimeTrackerMI = AccessTools.PropertyGetter(typeof(Campaign), "MapTimeTracker");
-        public static readonly MethodInfo SetMapTimeTrackerMI = AccessTools.PropertySetter(typeof(Campaign), "MapTimeTracker");
+        public static readonly MethodInfo MapTimeTrackerGetMI = AccessTools.PropertyGetter(typeof(Campaign), "MapTimeTracker");
+        public static readonly MethodInfo MapTimeTrackerSetMI = AccessTools.PropertySetter(typeof(Campaign), "MapTimeTracker");
         public static readonly MethodInfo SetCampaignStartTimeMI = AccessTools.PropertySetter(typeof(Campaign), "CampaignStartTime");
-        public static readonly Type MapTimeTrackerType = GetMapTimeTrackerMI.ReturnType;
-        public static readonly ConstructorInfo MapTimeTrackerCtorCI = AccessTools.Constructor(MapTimeTrackerType, new[] { typeof(CampaignTime) });
+        public static readonly Type MapTimeTrackerT = MapTimeTrackerGetMI.ReturnType;
+        public static readonly ConstructorInfo MapTimeTrackerCtorCI = AccessTools.Constructor(MapTimeTrackerT, new[] { typeof(CampaignTime) });
 
         [HarmonyPostfix]
 		[HarmonyPatch(MethodType.Constructor, new[] { typeof(CampaignGameMode) })]
@@ -20,7 +20,7 @@ namespace CampaignPacer.Patches
 		{
             var startTime = CampaignTime.Years(1084f) + CampaignTime.Seasons(1f) + CampaignTime.Hours(9f);
             var mapTimeTracker = MapTimeTrackerCtorCI.Invoke(new object[] { startTime });
-            SetMapTimeTrackerMI.Invoke(__instance, new object[] { mapTimeTracker });
+            MapTimeTrackerSetMI.Invoke(__instance, new object[] { mapTimeTracker });
             SetCampaignStartTimeMI.Invoke(__instance, new object[] { startTime });
 		}
 	}

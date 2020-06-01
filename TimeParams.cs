@@ -22,31 +22,31 @@ namespace CampaignPacer
 		public readonly long DayPerYearL;
 
 		/* ticks per unit */
-		public readonly long TickPerMsecL; // configurable
-		public readonly long TickPerSecL;
-		public readonly long TickPerMinL;
-		public readonly long TickPerHourL;
-		public readonly long TickPerDayL;
+		public const long TickPerMsecL = 10L;
+		public const long TickPerSecL = TickPerMsecL * MsecPerSecL;
+		public const long TickPerMinL = TickPerSecL * SecPerMinL;
+		public const long TickPerHourL = TickPerMinL * MinPerHourL;
+		public const long TickPerDayL = TickPerMinL * HourPerDayL;
 		public readonly long TickPerWeekL;
 		public readonly long TickPerSeasonL;
 		public readonly long TickPerYearL;
 
 		/* double-precision floating-point ticks per unit */
-		public readonly double TickPerMsec;
-		public readonly double TickPerSec;
-		public readonly double TickPerMin;
-		public readonly double TickPerHour;
-		public readonly double TickPerDay;
+		public const double TickPerMsec = TickPerMsecL;
+		public const double TickPerSec = TickPerSecL;
+		public const double TickPerMin = TickPerMinL;
+		public const double TickPerHour = TickPerHourL;
+		public const double TickPerDay = TickPerDayL;
 		public readonly double TickPerWeek;
 		public readonly double TickPerSeason;
 		public readonly double TickPerYear;
 
 		/* single-precision floating-point ticks per unit */
-		public readonly float TickPerMsecF;
-		public readonly float TickPerSecF;
-		public readonly float TickPerMinF;
-		public readonly float TickPerHourF;
-		public readonly float TickPerDayF;
+		public const float TickPerMsecF = TickPerMsecL;
+		public const float TickPerSecF = TickPerSecL;
+		public const float TickPerMinF = TickPerMinL;
+		public const float TickPerHourF = TickPerHourL;
+		public const float TickPerDayF = TickPerDayL;
 		public readonly float TickPerWeekF;
 		public readonly float TickPerSeasonF;
 		public readonly float TickPerYearF;
@@ -71,41 +71,31 @@ namespace CampaignPacer
 		public const long OldTickPerYearL = SeasonPerYearL * OldTickPerSeasonL;
 
 		/* double-precision floating-point ticks per unit (vanilla) */
-		public const double OldTickPerMsec = (double)OldTickPerMsecL;
-		public const double OldTickPerSec = (double)OldTickPerSecL;
-		public const double OldTickPerMin = (double)OldTickPerMinL;
-		public const double OldTickPerHour = (double)OldTickPerHourL;
-		public const double OldTickPerDay = (double)OldTickPerDayL;
-		public const double OldTickPerWeek = (double)OldTickPerWeekL;
-		public const double OldTickPerSeason = (double)OldTickPerSeasonL;
-		public const double OldTickPerYear = (double)OldTickPerYearL;
+		public const double OldTickPerMsec = OldTickPerMsecL;
+		public const double OldTickPerSec = OldTickPerSecL;
+		public const double OldTickPerMin = OldTickPerMinL;
+		public const double OldTickPerHour = OldTickPerHourL;
+		public const double OldTickPerDay = OldTickPerDayL;
+		public const double OldTickPerWeek = OldTickPerWeekL;
+		public const double OldTickPerSeason = OldTickPerSeasonL;
+		public const double OldTickPerYear = OldTickPerYearL;
 
 		/* single-precision floating-point ticks per unit (vanilla) */
-		public const float OldTickPerMsecF = (float)OldTickPerMsecL;
-		public const float OldTickPerSecF = (float)OldTickPerSecL;
-		public const float OldTickPerMinF = (float)OldTickPerMinL;
-		public const float OldTickPerHourF = (float)OldTickPerHourL;
-		public const float OldTickPerDayF = (float)OldTickPerDayL;
-		public const float OldTickPerWeekF = (float)OldTickPerWeekL;
-		public const float OldTickPerSeasonF = (float)OldTickPerSeasonL;
-		public const float OldTickPerYearF = (float)OldTickPerYearL;
+		public const float OldTickPerMsecF = OldTickPerMsecL;
+		public const float OldTickPerSecF = OldTickPerSecL;
+		public const float OldTickPerMinF = OldTickPerMinL;
+		public const float OldTickPerHourF = OldTickPerHourL;
+		public const float OldTickPerDayF = OldTickPerDayL;
+		public const float OldTickPerWeekF = OldTickPerWeekL;
+		public const float OldTickPerSeasonF = OldTickPerSeasonL;
+		public const float OldTickPerYearF = OldTickPerYearL;
 
 		/* ratios of old/vanilla to our ticks per unit (double-precision) */
-		public readonly double TickRatioMsec;
-		public readonly double TickRatioSec;
-		public readonly double TickRatioMin;
-		public readonly double TickRatioHour;
-		public readonly double TickRatioDay;
 		public readonly double TickRatioWeek;
 		public readonly double TickRatioSeason;
 		public readonly double TickRatioYear;
 
 		/* ratios of old/vanilla to our ticks per unit (single-precision) */
-		public readonly float TickRatioMsecF;
-		public readonly float TickRatioSecF;
-		public readonly float TickRatioMinF;
-		public readonly float TickRatioHourF;
-		public readonly float TickRatioDayF;
 		public readonly float TickRatioWeekF;
 		public readonly float TickRatioSeasonF;
 		public readonly float TickRatioYearF;
@@ -113,7 +103,7 @@ namespace CampaignPacer
 		public TimeParams(Settings cfg)
 		{
 			/* independent variables from settings */
-			TickPerMsecL = cfg.TicksPerMillisecond;
+			// TickPerMsecL = cfg.TicksPerMillisecond;
 			DayPerWeekL = cfg.DaysPerWeek;
 			WeekPerSeasonL = cfg.WeeksPerSeason;
 
@@ -121,51 +111,27 @@ namespace CampaignPacer
 			DayPerSeasonL = DayPerWeekL * WeekPerSeasonL;
 			DayPerYearL = DayPerSeasonL * SeasonPerYearL;
 
-			/* ticks per unit */
-			TickPerSecL = TickPerMsecL * MsecPerSecL;
-			TickPerMinL = TickPerSecL * SecPerMinL;
-			TickPerHourL = TickPerMinL * MinPerHourL;
-			TickPerDayL = TickPerHourL * HourPerDayL;
+            /* ticks per unit */
 			TickPerWeekL = TickPerDayL * DayPerWeekL;
 			TickPerSeasonL = TickPerWeekL * WeekPerSeasonL;
 			TickPerYearL = TickPerSeasonL * SeasonPerYearL;
 
 			/* ticks per unit, double-precision floating point */
-			TickPerMsec = TickPerMsecL;
-			TickPerSec = TickPerSecL;
-			TickPerMin = TickPerMinL;
-			TickPerHour = TickPerHourL;
-			TickPerDay = TickPerDayL;
 			TickPerWeek = TickPerWeekL;
 			TickPerSeason = TickPerSeasonL;
 			TickPerYear = TickPerYearL;
 
 			/* ticks per unit, single-precision floating point */
-			TickPerMsecF = TickPerMsecL;
-			TickPerSecF = TickPerSecL;
-			TickPerMinF = TickPerMinL;
-			TickPerHourF = TickPerHourL;
-			TickPerDayF = TickPerDayL;
 			TickPerWeekF = TickPerWeekL;
 			TickPerSeasonF = TickPerSeasonL;
 			TickPerYearF = TickPerYearL;
 
 			/* ratios of vanilla units to new units, double-precision floating-point */
-			TickRatioMsec = OldTickPerMsec / TickPerMsec;
-			TickRatioSec = OldTickPerSec / TickPerSec;
-			TickRatioMin = OldTickPerMin / TickPerMin;
-			TickRatioHour = OldTickPerHour / TickPerHour;
-			TickRatioDay = OldTickPerDay / TickPerDay;
 			TickRatioWeek = OldTickPerWeek / TickPerWeek;
 			TickRatioSeason = OldTickPerSeason / TickPerSeason;
 			TickRatioYear = OldTickPerYear / TickPerYear;
 
 			/* ratios of vanilla units to new units, single-precision floating-point */
-			TickRatioMsecF = (float)TickRatioMsec;
-			TickRatioSecF = (float)TickRatioSec;
-			TickRatioMinF = (float)TickRatioMin;
-			TickRatioHourF = (float)TickRatioHour;
-			TickRatioDayF = (float)TickRatioDay;
 			TickRatioWeekF = (float)TickRatioWeek;
 			TickRatioSeasonF = (float)TickRatioSeason;
 			TickRatioYearF = (float)TickRatioYear;
@@ -269,11 +235,6 @@ namespace CampaignPacer
 
 			lines.AddRange(Indent(indent, ++level, new List<string>
 			{
-				$"TickRatioMsec   = {TickRatioMsec}",
-				$"TickRatioSec    = {TickRatioSec}",
-				$"TickRatioMin    = {TickRatioMin}",
-				$"TickRatioHour   = {TickRatioHour}",
-				$"TickRatioDay    = {TickRatioDay}",
 				$"TickRatioWeek   = {TickRatioWeek}",
 				$"TickRatioSeason = {TickRatioSeason}",
 				$"TickRatioYear   = {TickRatioYear}",

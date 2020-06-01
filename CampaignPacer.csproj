@@ -82,6 +82,7 @@
     <Compile Include="Patches\CampaignPatch.cs" />
     <Compile Include="Patches\CampaignTimePatch.cs" />
     <Compile Include="GameLog.cs" />
+    <Compile Include="Patches\MapTimeTrackerTickPatch.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

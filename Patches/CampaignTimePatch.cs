@@ -18,6 +18,7 @@ namespace CampaignPacer.Patches
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* Elapsed[UNIT]sUntilNow */
 
+        /*
 		[HarmonyPostfix]
 		[HarmonyPatch("ElapsedMillisecondsUntilNow", MethodType.Getter)]
 		static void ElapsedMillisecondsUntilNow(ref float __result)
@@ -45,6 +46,7 @@ namespace CampaignPacer.Patches
 		{
 			__result *= TP.TickRatioDayF;
 		}
+        */
 
 		[HarmonyPostfix]
 		[HarmonyPatch("ElapsedWeeksUntilNow", MethodType.Getter)]
@@ -70,6 +72,7 @@ namespace CampaignPacer.Patches
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* Remaining[UNIT]sFromNow */
 
+        /*
 		[HarmonyPostfix]
 		[HarmonyPatch("RemainingMillisecondsFromNow", MethodType.Getter)]
 		static void RemainingMillisecondsFromNow(ref float __result)
@@ -97,6 +100,7 @@ namespace CampaignPacer.Patches
 		{
 			__result *= TP.TickRatioDayF;
 		}
+        */
 
 		[HarmonyPostfix]
 		[HarmonyPatch("RemainingWeeksFromNow", MethodType.Getter)]
@@ -122,6 +126,7 @@ namespace CampaignPacer.Patches
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* To[UNIT]s */
 
+        /*
 		[HarmonyPostfix]
 		[HarmonyPatch("ToMilliseconds", MethodType.Getter)]
 		static void ToMilliseconds(ref double __result)
@@ -156,6 +161,7 @@ namespace CampaignPacer.Patches
 		{
 			__result *= TP.TickRatioDay;
 		}
+        */
 
 		[HarmonyPostfix]
 		[HarmonyPatch("ToWeeks", MethodType.Getter)]
@@ -181,19 +187,21 @@ namespace CampaignPacer.Patches
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* Get[UNIT]Of[UNIT] */
 
+        /*
 		[HarmonyPrefix]
 		[HarmonyPatch("GetHourOfDay", MethodType.Getter)]
 		static bool GetHourOfDay(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)(((long)TicksFI.GetValue(__instance) / TP.TickPerHourL) % TimeParams.HourPerDayL);
+			__result = (int)(((long)TicksFI.GetValue(__instance) / TimeParams.TickPerHourL) % TimeParams.HourPerDayL);
 			return false;
 		}
+        */
 
 		[HarmonyPrefix]
 		[HarmonyPatch("GetDayOfWeek", MethodType.Getter)]
 		static bool GetDayOfWeek(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)(((long)TicksFI.GetValue(__instance) / TP.TickPerDayL) % TP.DayPerWeekL);
+			__result = (int)(((long)TicksFI.GetValue(__instance) / TimeParams.TickPerDayL) % TP.DayPerWeekL);
 			return false;
 		}
 
@@ -201,7 +209,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("GetDayOfSeason", MethodType.Getter)]
 		static bool GetDayOfSeason(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)(((long)TicksFI.GetValue(__instance) / TP.TickPerDayL) % TP.DayPerSeasonL);
+			__result = (int)(((long)TicksFI.GetValue(__instance) / TimeParams.TickPerDayL) % TP.DayPerSeasonL);
 			return false;
 		}
 
@@ -209,7 +217,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("GetDayOfYear", MethodType.Getter)]
 		static bool GetDayOfYear(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)(((long)TicksFI.GetValue(__instance) / TP.TickPerDayL) % TP.DayPerYearL);
+			__result = (int)(((long)TicksFI.GetValue(__instance) / TimeParams.TickPerDayL) % TP.DayPerYearL);
 			return false;
 		}
 
@@ -244,7 +252,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("GetDayOfSeasonf", MethodType.Getter)]
 		static bool GetDayOfSeasonf(ref CampaignTime __instance, ref float __result)
 		{
-			__result = (float)Math.IEEERemainder((double)((long)TicksFI.GetValue(__instance) / TP.TickPerDayL), (double)TP.DayPerSeasonL);
+			__result = (float)Math.IEEERemainder((double)((long)TicksFI.GetValue(__instance) / TimeParams.TickPerDayL), (double)TP.DayPerSeasonL);
 			return false;
 		}
 
@@ -259,6 +267,7 @@ namespace CampaignPacer.Patches
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* [UNIT]s (factory methods) */
 
+        /*
 		[HarmonyPrefix]
 		[HarmonyPatch("Milliseconds")]
 		static bool Milliseconds(long valueInMilliseconds, ref CampaignTime __result)
@@ -298,6 +307,7 @@ namespace CampaignPacer.Patches
 			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(TP.TickPerDay * valueInDays) });
 			return false;
 		}
+        */
 
 		[HarmonyPrefix]
 		[HarmonyPatch("Weeks")]
@@ -326,6 +336,7 @@ namespace CampaignPacer.Patches
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* [UNIT]sFromNow (factory methods) */
 
+        /*
 		[HarmonyPrefix]
 		[HarmonyPatch("MillisecondsFromNow")]
 		static bool MillisecondsFromNow(long valueInMilliseconds, ref CampaignTime __result)
@@ -380,6 +391,7 @@ namespace CampaignPacer.Patches
 			});
 			return false;
 		}
+        */
 
 		[HarmonyPrefix]
 		[HarmonyPatch("WeeksFromNow")]
