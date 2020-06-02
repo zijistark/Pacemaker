@@ -11,9 +11,9 @@ namespace CampaignPacer
 	{
 		/* Semantic Versioning (https://semver.org): */
 		public const int SemVerMajor = 0;
-		public const int SemVerMinor = 6;
-		public const int SemVerPatch = 1;
-		public const string SemVerSpecial = null; // valid would be "alpha2" or "beta7" or "rc1", e.g.
+		public const int SemVerMinor = 7;
+		public const int SemVerPatch = 0;
+		public const string SemVerSpecial = "alpha1"; // valid would be "alpha2" or "beta7" or "rc1", e.g.
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{((SemVerSpecial != null) ? $"-{SemVerSpecial}" : "")}";
 
 		public static readonly string Name = typeof(Main).Namespace;
@@ -21,6 +21,7 @@ namespace CampaignPacer
 		public static readonly string HarmonyDomain = "com.zijistark.bannerlord." + Name.ToLower();
 
 		public static Settings Config = null;
+        internal static TimeParams TimeParam;
 
 		protected override void OnSubModuleLoad()
 		{
@@ -54,12 +55,11 @@ namespace CampaignPacer
                 trace.AddRange(Config.ToStringLines(indent: "  "));
 
                 // now that the Settings are available, initialize TimeParams right before we apply our Harmony patches:
-				var timeParams = new TimeParams(Config);
-                Patches.CampaignTimePatch.TP = timeParams;
+				TimeParam = new TimeParams(Config);
 
                 // also trace our main TimeParams:
                 trace.Add(string.Empty);
-                trace.AddRange(timeParams.ToStringLines(indentSize: 2));
+                trace.AddRange(TimeParam.ToStringLines(indentSize: 2));
 
 				var harmony = new Harmony(HarmonyDomain);
 				harmony.PatchAll();

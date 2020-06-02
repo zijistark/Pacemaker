@@ -8,7 +8,6 @@ namespace CampaignPacer
 		{
 			CampaignEvents.WeeklyTickEvent.AddNonSerializedListener(this, OnWeeklyTick);
 			CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
-			CampaignEvents.HourlyTickEvent.AddNonSerializedListener(this, OnHourlyTick);
 		}
 
 		public override void SyncData(IDataStore dataStore)	{ }
@@ -19,11 +18,6 @@ namespace CampaignPacer
 		}
 
 		public void OnDailyTick()
-		{
-			Util.EventTracer.Trace();
-		}
-
-		public void OnHourlyTick()
 		{
 			Util.EventTracer.Trace();
 		}

@@ -79,13 +79,16 @@
   </ItemGroup>
   <!-- Files & Classes -->
   <ItemGroup>
+    <Compile Include="CustomSaveableTypeDefiner.cs" />
     <Compile Include="Patches\CampaignPatch.cs" />
     <Compile Include="Patches\CampaignTimePatch.cs" />
     <Compile Include="GameLog.cs" />
     <Compile Include="Patches\MapTimeTrackerTickPatch.cs" />
+    <Compile Include="SaveBehavior.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleTime.cs" />
     <Compile Include="TickTraceBehavior.cs" />
     <Compile Include="TimeParams.cs" />
     <Compile Include="Util.cs" />
