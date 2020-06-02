@@ -53,10 +53,10 @@ namespace CampaignPacer
 					msg.AddRange(new List<string>
 					{
 						$"Campaign Time:      {CampaignTime.Now}",
-						$"  In Seasons:       {CampaignTime.Now.ElapsedSeasonsUntilNow}",
-						$"  In Weeks:         {CampaignTime.Now.ElapsedWeeksUntilNow}",
-						$"  In Days:          {CampaignTime.Now.ElapsedDaysUntilNow}",
-						$"  In Hours:         {CampaignTime.Now.ElapsedHoursUntilNow}",
+						$"  In Seasons:       {Campaign.Current.CampaignStartTime.ElapsedSeasonsUntilNow:F2}",
+						$"  In Weeks:         {Campaign.Current.CampaignStartTime.ElapsedWeeksUntilNow:F1}",
+						$"  In Days:          {Campaign.Current.CampaignStartTime.ElapsedDaysUntilNow:F1}",
+						$"  In Hours:         {Campaign.Current.CampaignStartTime.ElapsedHoursUntilNow:F1}",
 						$"  Week of Season:   {CampaignTime.Now.GetWeekOfSeason}",
 						$"  Day of Week:      {CampaignTime.Now.GetDayOfWeek}",
 						$"  Hour of Day:      {CampaignTime.Now.GetHourOfDay}",
@@ -69,9 +69,9 @@ namespace CampaignPacer
 				{
 					// ensure we're using Unix-style EOLs in the stack trace & remove extra newline at end
 					stStr = stStr.Replace("\r\n", "\n");
-                    stStr = stStr.Remove(stStr.Length - 1, 1);
+					stStr = stStr.Remove(stStr.Length - 1, 1);
 
-                    if (_stackTraceMap.TryAdd(stStr, true))
+					if (_stackTraceMap.TryAdd(stStr, true))
 					{
 						msg.AddRange(new List<string>
 						{
