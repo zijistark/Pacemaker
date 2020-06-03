@@ -13,7 +13,7 @@ namespace CampaignPacer
 		public const int SemVerMajor = 0;
 		public const int SemVerMinor = 7;
 		public const int SemVerPatch = 0;
-		public const string SemVerSpecial = "alpha1"; // valid would be "alpha2" or "beta7" or "rc1", e.g.
+		public const string SemVerSpecial = "alpha2"; // valid would be "alpha2" or "beta7" or "rc1", e.g.
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{((SemVerSpecial != null) ? $"-{SemVerSpecial}" : "")}";
 
 		public static readonly string Name = typeof(Main).Namespace;
@@ -21,7 +21,7 @@ namespace CampaignPacer
 		public static readonly string HarmonyDomain = "com.zijistark.bannerlord." + Name.ToLower();
 
 		public static Settings Config = null;
-        internal static TimeParams TimeParam;
+		internal static TimeParams TimeParam;
 
 		protected override void OnSubModuleLoad()
 		{
@@ -44,7 +44,7 @@ namespace CampaignPacer
 					trace.Add("Settings.Instance was NULL! Using default configuration instead.");
 				}
 				else
-	                Config = Settings.Instance;
+					Config = Settings.Instance;
 
 				trace.AddRange(new List<string>
 				{
@@ -52,19 +52,19 @@ namespace CampaignPacer
 					"Settings:",
 				});
 
-                trace.AddRange(Config.ToStringLines(indent: "  "));
+				trace.AddRange(Config.ToStringLines(indent: "  "));
 
-                // now that the Settings are available, initialize TimeParams right before we apply our Harmony patches:
+				// now that the Settings are available, initialize TimeParams right before we apply our Harmony patches:
 				TimeParam = new TimeParams(Config);
 
-                // also trace our main TimeParams:
-                trace.Add(string.Empty);
-                trace.AddRange(TimeParam.ToStringLines(indentSize: 2));
+				// also trace our main TimeParams:
+				trace.Add(string.Empty);
+				trace.AddRange(TimeParam.ToStringLines(indentSize: 2));
 
 				var harmony = new Harmony(HarmonyDomain);
 				harmony.PatchAll();
 
-				InformationManager.DisplayMessage(new InformationMessage($"Loaded {DisplayName} v{Version}", Color.FromUint(0x00F16D26)));
+				InformationManager.DisplayMessage(new InformationMessage($"Loaded {DisplayName} v{Version} (e0.6.1.2)", Color.FromUint(0x00F16D26)));
 				_loaded = true;
 			}
 			else
@@ -92,6 +92,9 @@ namespace CampaignPacer
 
 		protected void AddBehaviors(CampaignGameStarter gameInitializer, List<string> trace)
 		{
+			gameInitializer.AddBehavior(new SaveBehavior());
+			trace.Add($"Behavior added: {typeof(SaveBehavior).FullName}");
+
 			if (Util.EnableTracer && Util.EnableLog)
 			{
 				gameInitializer.AddBehavior(new TickTraceBehavior());
