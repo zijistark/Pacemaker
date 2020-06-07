@@ -13,7 +13,7 @@ namespace CampaignPacer
 		public const int SemVerMajor = 0;
 		public const int SemVerMinor = 7;
 		public const int SemVerPatch = 0;
-		public const string SemVerSpecial = "alpha3";
+		public const string SemVerSpecial = "alpha4";
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{((SemVerSpecial != null) ? $"-{SemVerSpecial}" : "")}";
 
 		public static readonly string Name = typeof(Main).Namespace;

@@ -1,18 +1,21 @@
-﻿using System;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.Library;
+﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.SaveSystem;
 
 namespace CampaignPacer
 {
+	[SaveableClass(1)]
 	public class SimpleTime
 	{
+		[SaveableProperty(1)]
 		public int Year { get; set; }
 
+		[SaveableProperty(2)]
 		public int Season { get; set; }
 
+		[SaveableProperty(3)]
 		public int Day { get; set; }
 
+		[SaveableProperty(4)]
 		public float FractionalDay { get; set; }
 
 		public SimpleTime()

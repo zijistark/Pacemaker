@@ -58,8 +58,8 @@ namespace CampaignPacer
 						$"  Elapsed Weeks:    {Campaign.Current.CampaignStartTime.ElapsedWeeksUntilNow:F2}",
 						$"  Elapsed Days:     {Campaign.Current.CampaignStartTime.ElapsedDaysUntilNow:F2}",
 						$"  Elapsed Hours:    {Campaign.Current.CampaignStartTime.ElapsedHoursUntilNow:F2}",
-						$"  Week of Season:   {CampaignTime.Now.GetWeekOfSeason}",
-						$"  Day of Week:      {CampaignTime.Now.GetDayOfWeek}",
+						$"  Week of Season:   {CampaignTime.Now.GetWeekOfSeason + 1}",
+						$"  Day of Week:      {CampaignTime.Now.GetDayOfWeek + 1}",
 						$"  Hour of Day:      {CampaignTime.Now.GetHourOfDay}",
 					});
 				}

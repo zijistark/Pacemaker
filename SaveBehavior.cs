@@ -28,12 +28,12 @@ namespace CampaignPacer
 					trace.Add("Loading data from save...");
 				else
 				{
-					trace.Add("Saving data to save...");
+					trace.Add("Saving data...");
 					isLoad = false;
 					_savedTime = new SimpleTime(CampaignTime.Now);
 				}
 
-				dataStore.SyncData<SimpleTime>("CampaignPacer.CalendarTime", ref _savedTime);
+				dataStore.SyncData<SimpleTime>("cpSavedTime", ref _savedTime);
 
 				trace.AddRange(new List<string>
 				{
@@ -92,6 +92,7 @@ namespace CampaignPacer
 		protected void OnNewGameCreated(CampaignGameStarter starter)
 		{
 			_isNewGame = true;
+			Util.EventTracer.Trace();
 		}
 
 		private bool _isNewGame;
