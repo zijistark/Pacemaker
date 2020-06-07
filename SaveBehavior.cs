@@ -18,36 +18,28 @@ namespace CampaignPacer
 		}
 
 		public override void SyncData(IDataStore dataStore) {
-			var trace = new List<string>();
+			bool isLoad = _savedTime == null && !_isNewGame;
 
-			if (Campaign.Current != null)
+			if (!isLoad)
 			{
-				bool isLoad = true;
+				//trace.Add("Saving data...");
+				_savedTime = new SimpleTime(CampaignTime.Now);
+			}
 
-				if (_savedTime == null && !_isNewGame)
-					trace.Add("Loading data from save...");
-				else
+			dataStore.SyncData<SimpleTime>($"{Main.Name}SavedTime", ref _savedTime);
+
+
+			if (isLoad)
+			{
+				var trace = new List<string>
 				{
-					trace.Add("Saving data...");
-					isLoad = false;
-					_savedTime = new SimpleTime(CampaignTime.Now);
-				}
-
-				dataStore.SyncData<SimpleTime>("cpSavedTime", ref _savedTime);
-
-				trace.AddRange(new List<string>
-				{
+					"Loading data...",
 					$"Campaign tick date:   {CampaignTime.Now}",
 					$"Stored calendar date: {_savedTime}",
-				});
-
-				if (isLoad)
-					AdjustTimeOnLoad(trace);
+				};
+				AdjustTimeOnLoad(trace);
+				Util.EventTracer.Trace(trace);
 			}
-			else
-				trace.Add("Campaign.Current is null, so skipped synchronization.");
-
-			Util.EventTracer.Trace(trace);
 		}
 
 		private void AdjustTimeOnLoad(List<string> trace)

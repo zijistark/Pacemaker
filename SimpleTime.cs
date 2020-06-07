@@ -3,7 +3,7 @@ using TaleWorlds.SaveSystem;
 
 namespace CampaignPacer
 {
-	[SaveableClass(1)]
+	//[SaveableClass(1)]
 	public class SimpleTime
 	{
 		[SaveableProperty(1)]
