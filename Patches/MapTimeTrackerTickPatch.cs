@@ -8,22 +8,21 @@ namespace CampaignPacer.Patches
 	[HarmonyPatch]
 	class MapTimeTrackerTickPatch
 	{
-		public static readonly Type MapTimeTrackerT = AccessTools.PropertyGetter(typeof(Campaign), "MapTimeTracker").ReturnType;
-		public static readonly FieldInfo TicksFI = AccessTools.Field(MapTimeTrackerT, "_numTicks");
-		public static readonly FieldInfo DeltaTicksFI = AccessTools.Field(MapTimeTrackerT, "_deltaTimeInTicks");
+		public static readonly MethodInfo TargetMI = AccessTools.Method(AccessTools.PropertyGetter(typeof(Campaign), "MapTimeTracker").ReturnType, "Tick");
 
 		static MethodBase TargetMethod()
 		{
-			return AccessTools.Method(MapTimeTrackerT, "Tick");
+			return TargetMI;
 		}
 
-		static void Prefix(ref object __instance, float seconds)
+		static void Prefix(ref float seconds)
 		{
-			var dTicks = (long)(seconds * Main.Config.TimeMultiplier * TimeParams.TickPerSecF);
-			var nTicks = (long)TicksFI.GetValue(__instance);
-			nTicks += dTicks;
-			DeltaTicksFI.SetValue(__instance, dTicks);
-			TicksFI.SetValue(__instance, nTicks);
+			seconds *= Main.Config.TimeMultiplier;
+		}
+
+		static bool Prepare()
+		{
+			return Main.Config.UsesTimeMultiplier;
 		}
 	}
 }

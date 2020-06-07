@@ -1,5 +1,5 @@
-﻿using HarmonyLib;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -13,7 +13,7 @@ namespace CampaignPacer
 		public const int SemVerMajor = 0;
 		public const int SemVerMinor = 7;
 		public const int SemVerPatch = 0;
-		public const string SemVerSpecial = "alpha2"; // valid would be "alpha2" or "beta7" or "rc1", e.g.
+		public const string SemVerSpecial = "alpha3";
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{((SemVerSpecial != null) ? $"-{SemVerSpecial}" : "")}";
 
 		public static readonly string Name = typeof(Main).Namespace;
@@ -22,12 +22,14 @@ namespace CampaignPacer
 
 		public static Settings Config = null;
 		internal static TimeParams TimeParam;
+		internal static Harmony Harmony = null;
 
 		protected override void OnSubModuleLoad()
 		{
 			base.OnSubModuleLoad();
 			Util.EnableLog = true; // enable various debug logging
 			Util.EnableTracer = true; // enable code event tracing (requires enabled logging to actually go anywhere)
+			Harmony = new Harmony(HarmonyDomain);
 		}
 
 		protected override void OnBeforeInitialModuleScreenSetAsRoot()
@@ -61,10 +63,9 @@ namespace CampaignPacer
 				trace.Add(string.Empty);
 				trace.AddRange(TimeParam.ToStringLines(indentSize: 2));
 
-				var harmony = new Harmony(HarmonyDomain);
-				harmony.PatchAll();
+				Harmony.PatchAll();
 
-				InformationManager.DisplayMessage(new InformationMessage($"Loaded {DisplayName} v{Version} (e0.6.1.2)", Color.FromUint(0x00F16D26)));
+				InformationManager.DisplayMessage(new InformationMessage($"Loaded {DisplayName} v{Version}", Color.FromUint(0x00F16D26)));
 				_loaded = true;
 			}
 			else

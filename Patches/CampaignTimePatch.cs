@@ -3,9 +3,9 @@ using System;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 
-namespace CampaignPacer
+namespace CampaignPacer.Patches
 {
-    [HarmonyPatch(typeof(CampaignTime))]
+	[HarmonyPatch(typeof(CampaignTime))]
 	class CampaignTimePatch
 	{
 		/* necessary reflection info for the largely-internal class CampaignTime */
@@ -16,7 +16,7 @@ namespace CampaignPacer
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* Elapsed[UNIT]sUntilNow */
 
-        /*
+		/*
 		[HarmonyPostfix]
 		[HarmonyPatch("ElapsedMillisecondsUntilNow", MethodType.Getter)]
 		static void ElapsedMillisecondsUntilNow(ref float __result)
@@ -44,7 +44,7 @@ namespace CampaignPacer
 		{
 			__result *= Main.TimeParam.TickRatioDayF;
 		}
-        */
+		*/
 
 		[HarmonyPostfix]
 		[HarmonyPatch("ElapsedWeeksUntilNow", MethodType.Getter)]
@@ -70,7 +70,7 @@ namespace CampaignPacer
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* Remaining[UNIT]sFromNow */
 
-        /*
+		/*
 		[HarmonyPostfix]
 		[HarmonyPatch("RemainingMillisecondsFromNow", MethodType.Getter)]
 		static void RemainingMillisecondsFromNow(ref float __result)
@@ -98,7 +98,7 @@ namespace CampaignPacer
 		{
 			__result *= Main.TimeParam.TickRatioDayF;
 		}
-        */
+		*/
 
 		[HarmonyPostfix]
 		[HarmonyPatch("RemainingWeeksFromNow", MethodType.Getter)]
@@ -124,7 +124,7 @@ namespace CampaignPacer
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* To[UNIT]s */
 
-        /*
+		/*
 		[HarmonyPostfix]
 		[HarmonyPatch("ToMilliseconds", MethodType.Getter)]
 		static void ToMilliseconds(ref double __result)
@@ -159,7 +159,7 @@ namespace CampaignPacer
 		{
 			__result *= Main.TimeParam.TickRatioDay;
 		}
-        */
+		*/
 
 		[HarmonyPostfix]
 		[HarmonyPatch("ToWeeks", MethodType.Getter)]
@@ -185,7 +185,7 @@ namespace CampaignPacer
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* Get[UNIT]Of[UNIT] */
 
-        /*
+		/*
 		[HarmonyPrefix]
 		[HarmonyPatch("GetHourOfDay", MethodType.Getter)]
 		static bool GetHourOfDay(ref CampaignTime __instance, ref int __result)
@@ -193,7 +193,7 @@ namespace CampaignPacer
 			__result = (int)(((long)TicksFI.GetValue(__instance) / TimeParams.TickPerHourL) % TimeParams.HourPerDayL);
 			return false;
 		}
-        */
+		*/
 
 		[HarmonyPrefix]
 		[HarmonyPatch("GetDayOfWeek", MethodType.Getter)]
@@ -265,7 +265,7 @@ namespace CampaignPacer
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* [UNIT]s (factory methods) */
 
-        /*
+		/*
 		[HarmonyPrefix]
 		[HarmonyPatch("Milliseconds")]
 		static bool Milliseconds(long valueInMilliseconds, ref CampaignTime __result)
@@ -305,7 +305,7 @@ namespace CampaignPacer
 			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(Main.TimeParam.TickPerDay * valueInDays) });
 			return false;
 		}
-        */
+		*/
 
 		[HarmonyPrefix]
 		[HarmonyPatch("Weeks")]
@@ -334,7 +334,7 @@ namespace CampaignPacer
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* [UNIT]sFromNow (factory methods) */
 
-        /*
+		/*
 		[HarmonyPrefix]
 		[HarmonyPatch("MillisecondsFromNow")]
 		static bool MillisecondsFromNow(long valueInMilliseconds, ref CampaignTime __result)
@@ -389,7 +389,7 @@ namespace CampaignPacer
 			});
 			return false;
 		}
-        */
+		*/
 
 		[HarmonyPrefix]
 		[HarmonyPatch("WeeksFromNow")]

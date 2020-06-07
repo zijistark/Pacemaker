@@ -34,6 +34,14 @@ namespace CampaignPacer
 		[SettingPropertyGroup(groupName: "Campaign Time and Calendar")]
 		public int WeeksPerSeason { get; set; } = 3;
 
+		public bool UsesTimeMultiplier
+		{
+			get
+			{
+				return TimeMultiplier > 1.001f || TimeMultiplier < 0.999f;
+			}
+		}
+
 		public List<string> ToStringLines(string indent = null)
 		{
 			var prefix = (indent != null) ? indent : String.Empty;

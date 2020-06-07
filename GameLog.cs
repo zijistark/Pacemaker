@@ -85,16 +85,17 @@ namespace CampaignPacer
 				ToFile(lines, isDebug);
 		}
 
-		public override async void ToFile(string line, bool isDebug = false)
+		public override /* async */ void ToFile(string line, bool isDebug = false)
 		{
 			if (Writer == null) return;
 
 			_lastMsgWasMultiLine = false;
 			Writer.WriteLine(isDebug ? $">> {line}" : line);
-			await Writer.FlushAsync();
+			//await Writer.FlushAsync();
+			Writer.Flush();
 		}
 
-		public override async void ToFile(List<string> lines, bool isDebug = false)
+		public override /* async */ void ToFile(List<string> lines, bool isDebug = false)
 		{
 			if (Writer == null || lines.Count == 0) return;
 
@@ -113,7 +114,8 @@ namespace CampaignPacer
 				Writer.WriteLine(line);
 
 			Writer.WriteLine(EndMultiLine);
-			await Writer.FlushAsync();
+			// await Writer.FlushAsync();
+			Writer.Flush();
 		}
 
 		public GameLog(string moduleName, bool truncate = false, string logName = null)
@@ -170,6 +172,18 @@ namespace CampaignPacer
 			}
 
 			ToFile(msg, true);
+		}
+
+		~GameLog()
+		{
+			try
+			{
+				Writer.Dispose();
+			}
+			catch (Exception)
+			{
+				// at least we tried.
+			}
 		}
 	}
 }

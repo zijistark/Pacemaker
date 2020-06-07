@@ -80,12 +80,10 @@
   <!-- Files & Classes -->
   <ItemGroup>
     <Compile Include="CustomSaveableTypeDefiner.cs" />
-    <Compile Include="Patches\CampaignEventsPatch.cs" />
     <Compile Include="Patches\CampaignPatch.cs" />
     <Compile Include="Patches\CampaignTimePatch.cs" />
     <Compile Include="GameLog.cs" />
     <Compile Include="Patches\MapTimeTrackerTickPatch.cs" />
-    <Compile Include="Patches\PeriodicTickerPatch.cs" />
     <Compile Include="SaveBehavior.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Main.cs" />
@@ -107,6 +105,10 @@
   <!-- Post-Build -->
   <PropertyGroup>
     <PostBuildEvent>xcopy /d /y "$(MSBuildProjectDirectory)\SubModule.xml" "$(ModDir)"</PostBuildEvent>
+    <!--
+    <PostBuildEvent>xcopy /d /y "$(MSBuildProjectDirectory)\SubModule.xml" "$(ModDir)"</PostBuildEvent>
+    <PostBuildEvent>xcopy /d /y "$(MSBuildProjectDirectory)\ModuleData"\special_items.xml "$(ModDir)\ModuleData\"</PostBuildEvent>
+    -->
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
