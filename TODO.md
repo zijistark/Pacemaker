@@ -1,32 +1,45 @@
 ## TODO
 
-We need to address these issues / features / tests for CampaignPacer (CP) in the relatively near future:
+We should address these issues / features / tests for CampaignPacer (CP) in the relatively near future:
 
 
-### Coded but not tested at all:
-- Ability to add CP to an existing savegame (without warping the current date)
-  - Needs savegame serialization of calendar time instead of just ticks
-- Ability to change the CP calendar settings mid-playthrough (without warping the current date)
-  - Needs savegame serialization of calendar of time
+### Fix Now:
+
+- Ability to add CP to an existing savegame without warping the current date
 
 
-### Not yet started
+### Do Now:
 
+- Restore the proper campaign start time upon loading saves, in case calendar settings changed or loading a vanilla save
+
+
+### In the Future:
 
 #### High Priority
 
-- Synchronize daily tick -- and ideally weekly tick, except keep the multiplier of 7 to the daily tick instead of using custom days/week -- to CP's scaled map time
+- Migrate from Bannerlord e1.4.0 to e1.4.1
+
+- When time/calendar settings change, do not require restarting the game
+  - Need MCM to notify us when a settings save triggers so that we can recalculate our 'runtime constants'
+
+- Simplify the *Days Per Week* and *Weeks Per Season* settings into one *Days Per Season* setting
 
 
 #### Normal Priority
 
+- Add setting *Prepare to Remove Campaign Pacer*
+  - If enabled, on the next save it will convert the current time to vanilla units (and clear our data from the savegame)
+
+- Like Community Patch, add acceptable hashes of our Harmony patch target method bodies so that we can recognize when there may be a problem caused by patching (hash mismatch).
+
 - Auto-adjust pregnancy duration to `0.75 * DaysInYear`
   - Dynamically target Harmony patch upon whatever pregnancy model is present at OnGameStart
+  - Auto-adjust due dates of already in-progress pregnancies
 
-- Auto-adjust party healing rate if testing shows that it's faster with time multiplier > 1.
+- Auto-adjust hero & troop/party healing rate if testing shows that it's faster with time multiplier > 1.
 
 
-#### Lower Priority
+#### Low Priority
 
 - Allow the user to configure a custom start date (my code already adjusts the start date due to a TW bug for alternative calendars)
 
@@ -34,20 +47,15 @@ We need to address these issues / features / tests for CampaignPacer (CP) in the
 
 - Auto-marry nobles over a certain age, as even at vanilla time paces, they have trouble marrying, and it'll be far worse with years that are much shorter
 
-- Consider alternative calendar mode wherein a year is actually only 2 seasons (cycling between warm years and cool years but configurable where the line is drawn)
-  - Not as lore-friendly but totally believable. Automatically gives another natural 2x year rate increase.
-  - Requires special mode to code (currently the code assumes that seasonal units must be fully-contained within a year), but it'd be pretty easy
-  - Could also have a 3-season/year or 1-season/year mode (former seems kind of confusing, latter actually makes sense to me)
-  - An optional, non-default setting, of course
-
 
 ### Necessary Testing
+
 - Test whether aging works correctly with time speed factors >= 1.5 and factors <= 0.667
   - FaceGen / aesthetic aging
   - Actual aging which can cause old age death probability to rise
     - Determine whether death due to old age even currently works in Bannerlord; if not, implement it.
+
 - Test whether health regeneration rate is sped up by the time multiplier and adjust accordingly
-- Test using values of `DaysPerWeek = 1` and/or `WeeksPerSeason = 1`, as using `WeeksPerSeason = 1` in particular could provide a very flexible way to specify your season length (e.g., you want a prime number of days/season like 7 or 5)
 
 ---
 
