@@ -8,7 +8,8 @@ namespace CampaignPacer.Patches
 	[HarmonyPatch]
 	class MapTimeTrackerTickPatch
 	{
-		public static readonly MethodInfo TargetMI = AccessTools.Method(AccessTools.PropertyGetter(typeof(Campaign), "MapTimeTracker").ReturnType, "Tick");
+		internal static readonly Type MapTimeTrackerT = AccessTools.PropertyGetter(typeof(Campaign), "MapTimeTracker").ReturnType;
+		internal static readonly MethodInfo TargetMI = AccessTools.Method(MapTimeTrackerT, "Tick");
 
 		static MethodBase TargetMethod()
 		{
@@ -18,11 +19,6 @@ namespace CampaignPacer.Patches
 		static void Prefix(ref float seconds)
 		{
 			seconds *= Main.Config.TimeMultiplier;
-		}
-
-		static bool Prepare()
-		{
-			return Main.Config.UsesTimeMultiplier;
 		}
 	}
 }

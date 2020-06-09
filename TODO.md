@@ -3,26 +3,23 @@
 We should address these issues / features / tests for CampaignPacer (CP) in the relatively near future:
 
 
-### Fix Now:
-
-- Ability to add CP to an existing savegame without warping the current date
-
-
 ### Do Now:
 
-- Restore the proper campaign start time upon loading saves, in case calendar settings changed or loading a vanilla save
+- Simplify the *Days Per Week* and *Weeks Per Season* settings into one *Days Per Season* setting
+
+- Store days per season configuration in savegames so that, if settings haven't changed since last save, we skip restoring the saved time. Unconditionally restoring it could theoretically introduce unnecessary [minor] floating-point precision errors.
+
+- Convert `TimeParams` from a struct to an object
+
+- Migrate from Bannerlord e1.4.0 to e1.4.1
 
 
 ### In the Future:
 
 #### High Priority
 
-- Migrate from Bannerlord e1.4.0 to e1.4.1
-
 - When time/calendar settings change, do not require restarting the game
   - Need MCM to notify us when a settings save triggers so that we can recalculate our 'runtime constants'
-
-- Simplify the *Days Per Week* and *Weeks Per Season* settings into one *Days Per Season* setting
 
 
 #### Normal Priority
