@@ -1,6 +1,12 @@
-## Changelog
+## CampaignPacer: Changelog
 
-### v0.8.0-alpha0
+### v0.8.0
+
+#### v0.8.0-alpha1
+
+- Fixed a minor issue upon loading an older CP-enabled savegame with different configured days/season wherein it could fail to restore the campaign time due to lack of saved configuration data
+
+#### v0.8.0-alpha0
 
 - Migrated from Bannerlord e1.4.0 to e1.4.1
 
@@ -10,7 +16,7 @@
 
 - Altering time/calendar settings via the in-game menu should no longer require restarting the game to take effect.
 
-- Calendar settings (days/season) are now also stored in savegames so that, if settings haven't changed since the last save, the saved calendar time doesn't need to be restored.
+- Calendar settings (days/season) are now also stored in savegames so that, if the setting hasn't changed since the last save, the saved calendar time doesn't need to be restored.
   - This was done because there can be a slight amount of floating-point precision error when restoring the calendar time, and this avoids it 99.99% of the time.
 
 - When converting from a vanilla save, the converted time can never be earlier than the campaign start time (would be due to floating-point error).
