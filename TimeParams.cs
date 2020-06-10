@@ -1,24 +1,21 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using TaleWorlds.Library;
 
 namespace CampaignPacer
 {
-	public struct TimeParams
+	public class TimeParams
 	{
 		/* units */
 		public const long MsecPerSecL = 1000L;
 		public const long SecPerMinL = 60L;
 		public const long MinPerHourL = 60L;
 		public const long HourPerDayL = 24L;
-		public readonly long DayPerWeekL; // configurable
-		public readonly long WeekPerSeasonL; // configurable
+		public readonly long DayPerWeekL; // depends upon DayPerSeasonL
+		public readonly long WeekPerSeasonL; // depends upon DayPerSeasonL
 		public const long SeasonPerYearL = 4L;
 
-		/* dependent special units */
-		public readonly long DayPerSeasonL;
+		/* special units */
+		public readonly long DayPerSeasonL; // independent configurable variable
 		public readonly long DayPerYearL;
 
 		/* ticks per unit */
@@ -100,18 +97,43 @@ namespace CampaignPacer
 		public readonly float TickRatioSeasonF;
 		public readonly float TickRatioYearF;
 
-		public TimeParams(Settings cfg)
+		public TimeParams(int daysPerSeason, List<string> trace = null)
 		{
-			/* independent variables from settings */
-			// TickPerMsecL = cfg.TicksPerMillisecond;
-			DayPerWeekL = cfg.DaysPerWeek;
-			WeekPerSeasonL = cfg.WeeksPerSeason;
+			// set appropriate days/week and weeks/season to match requested days/season
+			DayPerWeekL = daysPerSeason;
+			WeekPerSeasonL = 1;
+
+			// we COULD just leave weeks per season == 1, but if the days per season can be evenly divided
+			// into multiple weeks of any of these sizes, we will use the first days per week value that
+			// qualifies in this list. Note that maximum days/season settable via MCM settings is 30.
+			int[] tryDaysPerWeek = new[]
+			{
+				5,
+				6,
+				7,
+				8,
+				9,
+				11,
+				13,
+			};
+
+			foreach (int dpw in tryDaysPerWeek)
+			{
+				if (daysPerSeason > dpw && daysPerSeason % dpw == 0)
+				{
+					DayPerWeekL = dpw;
+					WeekPerSeasonL = daysPerSeason / dpw;
+					break;
+				}
+			}
+
+			trace?.Add($"{nameof(TimeParams)}: Given {daysPerSeason} days/season, chose {DayPerWeekL} days/week and {WeekPerSeasonL} weeks/season");
 
 			/* special units */
 			DayPerSeasonL = DayPerWeekL * WeekPerSeasonL;
 			DayPerYearL = DayPerSeasonL * SeasonPerYearL;
 
-            /* ticks per unit */
+			/* ticks per unit */
 			TickPerWeekL = TickPerDayL * DayPerWeekL;
 			TickPerSeasonL = TickPerWeekL * WeekPerSeasonL;
 			TickPerYearL = TickPerSeasonL * SeasonPerYearL;

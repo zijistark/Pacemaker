@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 
 namespace CampaignPacer
 {
@@ -67,6 +68,10 @@ namespace CampaignPacer
 
 		private void AdjustTimeOnLoad(List<string> trace)
 		{
+			// Unconditionally (re)set the campaign start time, as this is harmless in most cases
+			// and vital in cases where the time configuration has changed:
+			Patches.CampaignPatch.ResetCampaignStartTime(Campaign.Current);
+
 			var adjustedTime = CampaignTime.Zero;
 
 			if (_savedTime == null)
@@ -75,22 +80,38 @@ namespace CampaignPacer
 				// Convert "current" campaign time back to what it would have been under the vanilla calendar.
 
 				trace.Add("Loading a vanilla save...");
-				trace.Add($"Apparent campaign start time: {Campaign.Current.CampaignStartTime}");
+
 				var now = CampaignTime.Now;
 				trace.Add($"Apparent years: {now.ToYears:F4}");
+
 				double adjustedYears = (double)now.ToYears / Main.TimeParam.TickRatioYear;
 				trace.Add($"Adjusted years: {adjustedYears:F4}");
+
 				adjustedTime = CampaignTime.Years((float)adjustedYears);
+
+				if (adjustedTime < Campaign.Current.CampaignStartTime)
+				{
+					var daysBeforeStart = Campaign.Current.CampaignStartTime.ToDays - adjustedTime.ToDays;
+					trace.Add($"Adjusted time was {daysBeforeStart:F3} days before the start date, so clamping.");
+					adjustedTime = Campaign.Current.CampaignStartTime;
+				}
+
 				_savedTime = new SimpleTime(adjustedTime); // become non-null
 			}
 			else if (_savedTime.IsValid)
 			{
 				// Normal load of prior CP-enabled savegame.
-				// Simply restore saved calendar date as-is.
-				// This allows switching calendar parameters mid-playthrough, but it doesn't need to track the settings.
+				// Simply restore saved calendar date as-is if the configured days/season has changed.
+				// If the configuration hasn't changed, do nothing at all.
+				// This allows switching calendar parameters mid-playthrough.
 
 				trace.Add($"Loading a save that had {Main.Name} enabled...");
-				adjustedTime = _savedTime.ToCampaignTime();
+
+				if (_savedTime.DaysPerSeason != Main.TimeParam.DayPerSeasonL && _savedTime.DaysPerSeason > 0)
+				{
+					trace.Add($"Configured days/season changed from {_savedTime.DaysPerSeason} to {Main.TimeParam.DayPerSeasonL}.");
+					adjustedTime = _savedTime.ToCampaignTime();
+				}
 			}
 			else
 			{
@@ -99,10 +120,7 @@ namespace CampaignPacer
 			}
 
 			if (adjustedTime != CampaignTime.Zero)
-			{
-				Patches.CampaignPatch.ResetCampaignStartTime(Campaign.Current);
 				Patches.CampaignPatch.SetMapTimeTracker(Campaign.Current, adjustedTime);
-			}
 		}
 
 		private bool _isNewGame = false;

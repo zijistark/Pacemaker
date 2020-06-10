@@ -18,7 +18,6 @@ namespace CampaignPacer.Patches
 		internal static readonly ConstructorInfo MapTimeTrackerCtorCI = AccessTools.Constructor(MapTimeTrackerT, new[] { typeof(CampaignTime) });
 		internal static readonly MethodInfo CampaignStartTimeSetMI = AccessTools.PropertySetter(typeof(Campaign), "CampaignStartTime");
 
-
 		// HELPERS
 		//////////////////////////////////////////////////////////////////////////////////////////
 
@@ -36,7 +35,6 @@ namespace CampaignPacer.Patches
 		{
 			CampaignStartTimeSetMI.Invoke(campaign, new object[] { StandardCampaignStartTime });
 		}
-
 
 		// PATCHES
 		//////////////////////////////////////////////////////////////////////////////////////////

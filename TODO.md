@@ -2,36 +2,24 @@
 
 We should address these issues / features / tests for CampaignPacer (CP) in the relatively near future:
 
-
-### Do Now:
-
-- Simplify the *Days Per Week* and *Weeks Per Season* settings into one *Days Per Season* setting
-
-- Store days per season configuration in savegames so that, if settings haven't changed since last save, we skip restoring the saved time. Unconditionally restoring it could theoretically introduce unnecessary [minor] floating-point precision errors.
-
-- Convert `TimeParams` from a struct to an object
-
-- Migrate from Bannerlord e1.4.0 to e1.4.1
-
-
-### In the Future:
+### Future:
 
 #### High Priority
 
-- When time/calendar settings change, do not require restarting the game
-  - Need MCM to notify us when a settings save triggers so that we can recalculate our 'runtime constants'
+- Add setting *Prepare to Remove Campaign Pacer*
+  - If enabled, on the next save it will convert the current time to vanilla units and clear our data from the savegame
+
+- Optionally auto-adjust pregnancy duration to `3/4 * DaysInYear` (reality) or faster `36/84 * DaysInYear` (vanilla)
+  - Use a dropdown selection to ensure mutual exclusivity
+  - Dynamically target Harmony patch upon whatever pregnancy model is present at OnGameStart
+  - Auto-adjust due dates of already in-progress pregnancies when converting from vanilla save
+
+- Add settings preset for *Vanilla* (already have *Default* and the user will make *Custom*)
 
 
 #### Normal Priority
 
-- Add setting *Prepare to Remove Campaign Pacer*
-  - If enabled, on the next save it will convert the current time to vanilla units (and clear our data from the savegame)
-
 - Like Community Patch, add acceptable hashes of our Harmony patch target method bodies so that we can recognize when there may be a problem caused by patching (hash mismatch).
-
-- Auto-adjust pregnancy duration to `0.75 * DaysInYear`
-  - Dynamically target Harmony patch upon whatever pregnancy model is present at OnGameStart
-  - Auto-adjust due dates of already in-progress pregnancies
 
 - Auto-adjust hero & troop/party healing rate if testing shows that it's faster with time multiplier > 1.
 
@@ -45,7 +33,7 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 - Auto-marry nobles over a certain age, as even at vanilla time paces, they have trouble marrying, and it'll be far worse with years that are much shorter
 
 
-### Necessary Testing
+### Testing:
 
 - Test whether aging works correctly with time speed factors >= 1.5 and factors <= 0.667
   - FaceGen / aesthetic aging

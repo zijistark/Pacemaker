@@ -32,13 +32,21 @@ namespace CampaignPacer
 		{
 			private static readonly ConcurrentDictionary<string, bool> _stackTraceMap = new ConcurrentDictionary<string, bool>();
 
+
 			[MethodImpl(MethodImplOptions.NoInlining)]
-			public static void Trace(List<string> extraInfo = null)
+			public static void Trace(string extraInfo, int framesToSkip = 2)
+			{
+				Trace(new List<string> { extraInfo }, framesToSkip);
+			}
+
+
+			[MethodImpl(MethodImplOptions.NoInlining)]
+			public static void Trace(List<string> extraInfo = null, int framesToSkip = 1)
 			{
 				if (!EnableTracer || !EnableLog)
 					return;
 
-				var st = new StackTrace(1, true);
+				var st = new StackTrace(framesToSkip, true);
 				var frames = st.GetFrames();
 				var evtMethod = frames[0].GetMethod();
 
@@ -72,6 +80,7 @@ namespace CampaignPacer
 					stStr = stStr.Replace("\r\n", "\n");
 					stStr = stStr.Remove(stStr.Length - 1, 1);
 
+					// only show a distinct stack trace once per event traced
 					if (_stackTraceMap.TryAdd(stStr, true))
 					{
 						msg.AddRange(new List<string>

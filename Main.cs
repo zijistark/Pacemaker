@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -11,16 +12,16 @@ namespace CampaignPacer
 	{
 		/* Semantic Versioning (https://semver.org): */
 		public const int SemVerMajor = 0;
-		public const int SemVerMinor = 7;
+		public const int SemVerMinor = 8;
 		public const int SemVerPatch = 0;
-		public const string SemVerSpecial = null;
+		public const string SemVerSpecial = "alpha0";
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{((SemVerSpecial != null) ? $"-{SemVerSpecial}" : "")}";
 
 		public static readonly string Name = typeof(Main).Namespace;
 		public const string DisplayName = "Campaign Pacer"; // to be shown to humans in-game
 		public static readonly string HarmonyDomain = "com.zijistark.bannerlord." + Name.ToLower();
 
-		public static Settings Config = null;
+		internal static Settings Config = null;
 		internal static TimeParams TimeParam;
 		internal static Harmony Harmony = null;
 
@@ -48,21 +49,18 @@ namespace CampaignPacer
 				else
 					Config = Settings.Instance;
 
+				// register for settings property-changed events
+				Config.PropertyChanged += OnSettingsPropertyChanged;
+
 				trace.AddRange(new List<string>
 				{
 					string.Empty,
 					"Settings:",
 				});
 
-				trace.AddRange(Config.ToStringLines(indent: "  "));
+				trace.AddRange(Config.ToStringLines(indentSize: 2));
 
-				// now that the Settings are available, initialize TimeParams right before we apply our Harmony patches:
-				TimeParam = new TimeParams(Config);
-
-				// also trace our main TimeParams:
-				trace.Add(string.Empty);
-				trace.AddRange(TimeParam.ToStringLines(indentSize: 2));
-
+				SetTimeParams(trace);
 				Harmony.PatchAll();
 
 				InformationManager.DisplayMessage(new InformationMessage($"Loaded {DisplayName} v{Version}", Color.FromUint(0x00F16D26)));
@@ -100,6 +98,24 @@ namespace CampaignPacer
 			{
 				gameInitializer.AddBehavior(new TickTraceBehavior());
 				trace.Add($"Behavior added: {typeof(TickTraceBehavior).FullName}");
+			}
+		}
+
+		protected static void SetTimeParams(List<string> trace)
+		{
+			trace.Add("Setting new time parameters...");
+			TimeParam = new TimeParams(Config.DaysPerSeason, trace);
+			trace.Add(string.Empty);
+			trace.AddRange(TimeParam.ToStringLines(indentSize: 2));
+		}
+
+		protected static void OnSettingsPropertyChanged(object sender, PropertyChangedEventArgs args)
+		{
+			if (sender is Settings && args.PropertyName == Settings.SaveTriggered)
+			{
+				var trace = new List<string> { "Received save-triggered property changed event from Settings..." };
+				SetTimeParams(trace);
+				Util.EventTracer.Trace(trace);
 			}
 		}
 
