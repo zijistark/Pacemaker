@@ -32,7 +32,6 @@ namespace CampaignPacer
 
 		public SimpleTime(CampaignTime ct)
 		{
-			DaysPerSeason = (int)Main.TimeParam.DayPerSeasonL;
 			double fracDays = ct.ToDays;
 
 			Year = ct.GetYear;
@@ -45,13 +44,14 @@ namespace CampaignPacer
 			fracDays -= Day;
 
 			FractionalDay = MathF.Clamp((float)fracDays, 0f, 0.99999f);
+			DaysPerSeason = (int)Main.TimeParam.DayPerSeasonL;
 		}
 
 		public CampaignTime ToCampaignTime() => CampaignTime.Years(Year) + CampaignTime.Seasons(Season) + CampaignTime.Days(Day + FractionalDay);
 
-		public bool IsNull => Year == -1 && Season == -1 && Day == -1 && FractionalDay == -1f;
+		public bool IsNull => Year == -1 && Season == -1 && Day == -1 && FractionalDay < -0.9 && DaysPerSeason == -1;
 		public bool IsValid => IsNull || (Year >= 0 && IsSeasonValid && Day >= 0 && IsFractionalDayValid);
-		public bool IsValidWithCurrentCalendar => IsValid && Day < Main.TimeParam.DayPerSeasonL;
+		public bool IsValidWithCurrentCalendar => IsValid && Day < Main.TimeParam.DayPerSeasonL && DaysPerSeason == (int)Main.TimeParam.DayPerSeasonL;
 		private bool IsFractionalDayValid => FractionalDay >= 0f && FractionalDay < 1f;
 		private bool IsSeasonValid => Season >= 0 && Season < TimeParams.SeasonPerYearL;
 

@@ -2,9 +2,10 @@
 
 ### v0.8.0
 
-#### v0.8.0-alpha1
+#### v0.8.0-alpha1 [WIP]
 
-- Fixed a minor issue upon loading an older CP-enabled savegame with different configured days/season wherein it could fail to restore the campaign time due to lack of saved configuration data
+- Fixed a minor issue upon loading an older CP-enabled savegame with different configured days/season wherein CP could fail to restore the campaign time due to lack of saved configuration data.
+
 
 #### v0.8.0-alpha0
 

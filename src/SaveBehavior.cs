@@ -36,6 +36,9 @@ namespace CampaignPacer
 
 			if (isLoad)
 			{
+				if (_savedTime?.IsNull ?? false)
+					_savedTime = null;
+
 				AdjustTimeOnLoad(trace);
 				_hasLoadedData = true;
 			}

@@ -42,6 +42,10 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 
 - Test whether health regeneration rate is sped up by the time multiplier and adjust accordingly
 
+- Test whether changing settings always properly triggers a save-triggered property change event in the debug log
+
+- 
+
 ---
 
 Please do add more items to the agenda if pertinent.

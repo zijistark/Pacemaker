@@ -10,7 +10,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CampaignPacer</RootNamespace>
-    <AssemblyName>CampaignPacer</AssemblyName>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -72,23 +72,19 @@
       <HintPath>%(Identity)</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="$(GameDir)\Modules\CustomBattle\bin\Win64_Shipping_Client\TaleWorlds*.dll">
-      <HintPath>%(Identity)</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <!-- Files & Classes -->
   <ItemGroup>
-    <Compile Include="CustomSaveableTypeDefiner.cs" />
     <Compile Include="Patches\CampaignPatch.cs" />
     <Compile Include="Patches\CampaignTimePatch.cs" />
-    <Compile Include="GameLog.cs" />
     <Compile Include="Patches\MapTimeTrackerTickPatch.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CustomSaveableTypeDefiner.cs" />
+    <Compile Include="GameLog.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="SaveBehavior.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Main.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleTime.cs" />
     <Compile Include="TickTraceBehavior.cs" />
     <Compile Include="TimeParams.cs" />
@@ -106,10 +102,6 @@
   <!-- Post-Build -->
   <PropertyGroup>
     <PostBuildEvent>xcopy /d /y "$(MSBuildProjectDirectory)\SubModule.xml" "$(ModDir)"</PostBuildEvent>
-    <!--
-    <PostBuildEvent>xcopy /d /y "$(MSBuildProjectDirectory)\SubModule.xml" "$(ModDir)"</PostBuildEvent>
-    <PostBuildEvent>xcopy /d /y "$(MSBuildProjectDirectory)\ModuleData"\special_items.xml "$(ModDir)\ModuleData\"</PostBuildEvent>
-    -->
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
