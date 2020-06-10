@@ -32,13 +32,11 @@ namespace CampaignPacer
 		{
 			private static readonly ConcurrentDictionary<string, bool> _stackTraceMap = new ConcurrentDictionary<string, bool>();
 
-
 			[MethodImpl(MethodImplOptions.NoInlining)]
-			public static void Trace(string extraInfo, int framesToSkip = 2)
+			public static void Trace(string extraInfo, int framesToSkip = 1)
 			{
-				Trace(new List<string> { extraInfo }, framesToSkip);
+				Trace(new List<string> { extraInfo }, framesToSkip + 1);
 			}
-
 
 			[MethodImpl(MethodImplOptions.NoInlining)]
 			public static void Trace(List<string> extraInfo = null, int framesToSkip = 1)
