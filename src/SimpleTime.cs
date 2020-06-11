@@ -42,7 +42,7 @@ namespace CampaignPacer
 			FractionalDay = MathF.Clamp((float)fracDays, 0f, 0.99999f);
 		}
 
-		public CampaignTime ToCampaignTime() => CampaignTime.Years(Year) + CampaignTime.Seasons(Season) + CampaignTime.Days(Day + FractionalDay);
+		public CampaignTime ToCampaignTime() => CampaignTimeExt.YearsD(Year) + CampaignTimeExt.SeasonsD(Season) + CampaignTimeExt.DaysD(Day + FractionalDay);
 
 		public bool IsNull => Year == -1 && Season == -1 && Day == -1 && FractionalDay < -0.99 && FractionalDay > -1.01;
 		public bool IsValid => IsNull || (Year >= 0 && IsSeasonValid && Day >= 0 && IsFractionalDayValid);

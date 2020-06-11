@@ -26,7 +26,7 @@ namespace CampaignPacer
 			}
 
 			dataStore.SyncData($"{Main.Name}SavedTime", ref _savedTime);
-			dataStore.SyncData($"{Main.Name}SavedTimeSettings", ref _savedTimeSettings);
+			dataStore.SyncData($"{Main.Name}SavedSettings", ref _savedSettings);
 
 			trace.AddRange(new List<string>
 			{
@@ -39,8 +39,8 @@ namespace CampaignPacer
 				if (SavedTime?.IsNull ?? false)
 					SavedTime = null;
 
-				if (SavedTimeSettings?.IsNull ?? false)
-					SavedTimeSettings = null;
+				if (SavedSettings?.IsNull ?? false)
+					SavedSettings = null;
 
 				AdjustTimeOnLoad(trace);
 				HasLoaded = true;
@@ -74,13 +74,6 @@ namespace CampaignPacer
 
 		private void AdjustTimeOnLoad(List<string> trace)
 		{
-			// Unconditionally (re)set the campaign start time, as this is harmless in most cases
-			// and vital in cases where the time configuration has changed:
-
-			trace.Add($"Campaign start time: {new SimpleTime(Campaign.Current.CampaignStartTime)}");
-			Patches.CampaignPatch.Helpers.ResetCampaignStartTime(Campaign.Current);
-			trace.Add($"Campaign start time (after reset): {new SimpleTime(Campaign.Current.CampaignStartTime)}");
-
 			var adjustedTime = CampaignTime.Zero;
 
 			if (SavedTime == null)
@@ -91,23 +84,25 @@ namespace CampaignPacer
 				trace.Add("Loading a vanilla save...");
 
 				var now = CampaignTime.Now;
-				trace.Add($"Apparent time:  {new SimpleTime(now)}");
-				trace.Add($"Apparent years: {now.ToYears:F4}");
+				trace.Add($"Apparent time: {new SimpleTime(now)}");
 
-				double adjustedYears = (double)now.ToYears / Main.TimeParam.TickRatioYearD;
-				trace.Add($"Adjusted years: {adjustedYears:F4}");
+				// NOTE: this formula assumes that the vanilla tick ratio for years equals that of seasons.
+				var seasons = now.ToSeasons;
+				var nSeasons = Math.Floor(seasons);
+				var fracSeason = seasons - nSeasons;
+				trace.Add($"Apparent seasons: {(int)nSeasons} (remainder: {fracSeason})");
 
-				adjustedTime = CampaignTime.Years((float)adjustedYears);
-				trace.Add($"Adjusted time:  {new SimpleTime(now)}");
+				// extract the days of the season. we assume vanilla days = our days.
+				var daysOfSeason = Math.Max(+0.0, fracSeason * Main.TimeParam.DayPerSeason);
+				trace.Add($"Apparent days of season: {daysOfSeason}");
 
-				if (adjustedTime < Campaign.Current.CampaignStartTime)
-				{
-					var daysBeforeStart = Campaign.Current.CampaignStartTime.ToDays - adjustedTime.ToDays;
-					trace.Add($"Adjusted time was {daysBeforeStart:F3} days before the start date, so clamping.");
-					adjustedTime = Campaign.Current.CampaignStartTime;
-				}
+				// but vanilla seasons != our seasons.
+				var adjustedSeasons = nSeasons / Main.TimeParam.TickRatioSeasonD;
+				trace.Add($"Adjusted seasons: {adjustedSeasons}");
 
-				SavedTime = new SimpleTime(adjustedTime); // become non-null
+				adjustedTime = CampaignTimeExt.SeasonsD(adjustedSeasons) + CampaignTimeExt.DaysD(daysOfSeason);
+
+				SavedTime = new SimpleTime(adjustedTime);
 			}
 			else if (SavedTime.IsValid)
 			{
@@ -116,12 +111,13 @@ namespace CampaignPacer
 				// If the configuration hasn't changed, do nothing at all.
 				// This allows switching calendar parameters mid-playthrough.
 
-				trace.Add($"Loading a save that had {Main.Name} enabled...");
-				trace.Add($"Saved time settings: {SavedTimeSettings}");
+				trace.Add($"Loading a {Main.Name}-enabled save...");
+				trace.Add($"Saved settings: {SavedSettings}");
 
-				if (SavedTimeSettings == null || SavedTimeSettings.DaysPerSeason != Main.TimeParam.DayPerSeason)
+
+				if (SavedSettings == null || SavedSettings.DaysPerSeason != Main.TimeParam.DayPerSeason)
 				{
-					trace.Add($"Configured days/season changed from {SavedTimeSettings?.DaysPerSeason} to {Main.TimeParam.DayPerSeason}.");
+					trace.Add($"Configured days/season changed from {SavedSettings?.DaysPerSeason} to {Main.TimeParam.DayPerSeason}.");
 					adjustedTime = SavedTime.ToCampaignTime();
 				}
 			}
@@ -131,14 +127,35 @@ namespace CampaignPacer
 				return;
 			}
 
+			// adjust campaign start time if it's not _exactly_ equal to the standard start time:
+			var startTime = Campaign.Current.CampaignStartTime;
+			trace.Add($"Apparent campaign start time: {new SimpleTime(startTime)}");
+
+			if (startTime != Patches.CampaignPatch.Helpers.StandardStartTime)
+			{
+				Patches.CampaignPatch.Helpers.ResetCampaignStartTime(Campaign.Current);
+				trace.Add($"New campaign start time: {new SimpleTime(Campaign.Current.CampaignStartTime)}");
+			}
+
 			if (adjustedTime != CampaignTime.Zero)
+			{
+				// first, ensure that elapsed time since campaign start is absolutely never negative:
+				if (adjustedTime < Campaign.Current.CampaignStartTime)
+				{
+					var daysBeforeStart = Campaign.Current.CampaignStartTime.ToDays - adjustedTime.ToDays;
+					trace.Add($"Adjusted time was {daysBeforeStart} days before the campaign start time, so clamping...");
+					adjustedTime = Campaign.Current.CampaignStartTime;
+				}
+
 				Patches.CampaignPatch.Helpers.SetMapTimeTracker(Campaign.Current, adjustedTime);
+				trace.Add($"New campaign time: {new SimpleTime(CampaignTime.Now)}");
+			}
 		}
 
-		protected SavedTimeSettings SavedTimeSettings
+		protected SavedSettings SavedSettings
 		{
-			get => _savedTimeSettings;
-			set => _savedTimeSettings = value;
+			get => _savedSettings;
+			set => _savedSettings = value;
 		}
 
 		protected SimpleTime SavedTime
@@ -150,6 +167,6 @@ namespace CampaignPacer
 		protected bool HasLoaded { get; set; }
 
 		private SimpleTime _savedTime = null;
-		private SavedTimeSettings _savedTimeSettings = null;
+		private SavedSettings _savedSettings = null;
 	}
 }

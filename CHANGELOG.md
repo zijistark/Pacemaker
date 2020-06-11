@@ -4,7 +4,12 @@
 
 #### v0.8.0-alpha2 [WIP]
 
-- Internally, weeks are now always 7 days for compatibility purposes, regardless of whether 7 evenly divides the season or year length
+- Internally, weeks are now always 7 days for compatibility purposes, regardless of whether 7 evenly divides the season or year length. Since they mean nothing to the player, let them mean what they were intended to mean to code.
+
+- Improved precision of calendar time conversion of vanilla saves, but I'm still not satisfied. More to come!
+
+- Generalized `SavedTimeSettings` into `SavedSettings` for the savegame synchronization of non-time settings that still need to be stored in savegames in order for changes in them to trigger conversions / adjustments upon load
+  - Motivated by eventual need to detect changes in *Year-Scaled Pregnancy Duration Factor* to trigger in-progress pregnancies' due date auto-adjustment
 
 #### v0.8.0-alpha1
 

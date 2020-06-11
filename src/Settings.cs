@@ -24,9 +24,8 @@ namespace CampaignPacer
 		private const string ScaledPregnancyDuration_Hint = "Scale pregnancy duration to this proportion of a " +
 			"year. [ Default: 75% ]";
 
-		private const string AdjustPregnancyDueDates_Hint = "[Only when year length changes] Auto-adjust " +
-			"in-progress pregnancies' due dates to match. If loading a save without " + Main.DisplayName +
-			", vanilla's duration (36 days) will be assumed when converting. [ Default: ON ]";
+		private const string AdjustPregnancyDueDates_Hint = "Auto-adjust in-progress pregnancies' due dates to " +
+			"match settings upon load of a game. [ Default: ON ]";
 
 		[SettingPropertyFloatingInteger("Time Multiplier", 0.25f, 8f, HintText = TimeMultiplier_Hint, RequireRestart = false, Order = 0)]
 		[SettingPropertyGroup("General Settings", GroupOrder = 0)]
@@ -40,7 +39,7 @@ namespace CampaignPacer
 		[SettingPropertyGroup("Pregnancy Duration", GroupOrder = 1, IsMainToggle = true)]
 		public bool EnablePregnancyTweaks { get; set; } = true;
 
-		[SettingPropertyFloatingInteger("Year-Scaled Pregnancy Length Factor", 0.2f, 4f, "#0%", HintText = ScaledPregnancyDuration_Hint, RequireRestart = false, Order = 1)]
+		[SettingPropertyFloatingInteger("Year-Scaled Pregnancy Duration Factor", 0.2f, 4f, "#0%", HintText = ScaledPregnancyDuration_Hint, RequireRestart = false, Order = 1)]
 		[SettingPropertyGroup("Pregnancy Duration")]
 		public float ScaledPregnancyDuration { get; set; } = 0.75f;
 

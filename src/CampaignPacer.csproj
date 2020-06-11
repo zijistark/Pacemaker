@@ -76,6 +76,7 @@
   </ItemGroup>
   <!-- Files & Classes -->
   <ItemGroup>
+    <Compile Include="CampaignTimeExt.cs" />
     <Compile Include="Patches\AgingCampaignBehaviorPatch.cs" />
     <Compile Include="Patches\CampaignPatch.cs" />
     <Compile Include="Patches\CampaignTimePatch.cs" />
@@ -86,7 +87,7 @@
     <Compile Include="GameLog.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="SaveBehavior.cs" />
-    <Compile Include="SavedTimeSettings.cs" />
+    <Compile Include="SavedSettings.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SimpleTime.cs" />
     <Compile Include="TickTraceBehavior.cs" />
