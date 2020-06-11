@@ -12,6 +12,7 @@ namespace CampaignPacer
         protected override void DefineClassTypes()
         {
             AddClassDefinition(typeof(SimpleTime), 1);
+            AddClassDefinition(typeof(SavedTimeSettings), 2);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace CampaignPacer.Patches
 
 		static void Prefix(ref float seconds)
 		{
-			seconds *= Main.Config.TimeMultiplier;
+			seconds *= Main.Settings.TimeMultiplier;
 		}
 	}
 }

@@ -4,8 +4,6 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 
 ### Now:
 
-- Decouple `DaysPerSeason` config from `SimpleTime` class and sync a new `SavedTimeSettings` class instance
-
 - Improve accuracy of vanilla date conversion logic
 
 - Optionally auto-adjust pregnancy duration to `F * DaysInYear` where F is configurable

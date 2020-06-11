@@ -8,6 +8,7 @@
 
 - Fixed a minor issue upon loading an older CP-enabled savegame with different configured days/season wherein CP could fail to restore the campaign time due to lack of saved configuration data.
 
+- Add settings menu options for pregnancy duration settings (but no implementation)
 
 #### v0.8.0-alpha0
 

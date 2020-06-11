@@ -16,9 +16,8 @@ namespace CampaignPacer
 		public override void SyncData(IDataStore dataStore)
 		{
 			var trace = new List<string>();
-			bool isLoad = !_isNewGame && !_hasLoadedData;
 
-			if (isLoad)
+			if (!HasLoaded)
 				trace.Add("Loading saved data...");
 			else
 			{
@@ -27,20 +26,24 @@ namespace CampaignPacer
 			}
 
 			dataStore.SyncData($"{Main.Name}SavedTime", ref _savedTime);
+			dataStore.SyncData($"{Main.Name}SavedTimeSettings", ref _savedTimeSettings);
 
 			trace.AddRange(new List<string>
 			{
-				$"Campaign tick date:   {CampaignTime.Now}",
-				$"Stored calendar date: {((_savedTime != null) ? _savedTime.ToString() : "NULL")}",
+				$"Campaign tick date:   {new SimpleTime(CampaignTime.Now)}",
+				$"Stored calendar date: {((SavedTime != null) ? SavedTime.ToString() : "NULL")}",
 			});
 
-			if (isLoad)
+			if (!HasLoaded)
 			{
-				if (_savedTime?.IsNull ?? false)
-					_savedTime = null;
+				if (SavedTime?.IsNull ?? false)
+					SavedTime = null;
+
+				if (SavedTimeSettings?.IsNull ?? false)
+					SavedTimeSettings = null;
 
 				AdjustTimeOnLoad(trace);
-				_hasLoadedData = true;
+				HasLoaded = true;
 			}
 
 			Util.EventTracer.Trace(trace);
@@ -48,7 +51,7 @@ namespace CampaignPacer
 
 		protected void OnNewGameCreated(CampaignGameStarter starter)
 		{
-			_isNewGame = true;
+			HasLoaded = true;
 			Util.EventTracer.Trace();
 		}
 
@@ -60,10 +63,10 @@ namespace CampaignPacer
 		{
 			var trace = new List<string>();
 
-			if (!_hasLoadedData && _savedTime == null)
+			if (!HasLoaded && SavedTime == null)
 			{
 				AdjustTimeOnLoad(trace);
-				_hasLoadedData = true;
+				HasLoaded = true;
 			}
 
 			Util.EventTracer.Trace(trace);
@@ -80,7 +83,7 @@ namespace CampaignPacer
 
 			var adjustedTime = CampaignTime.Zero;
 
-			if (_savedTime == null)
+			if (SavedTime == null)
 			{
 				// Load of save that didn't have CP enabled.
 				// Convert "current" campaign time back to what it would have been under the vanilla calendar.
@@ -88,12 +91,14 @@ namespace CampaignPacer
 				trace.Add("Loading a vanilla save...");
 
 				var now = CampaignTime.Now;
+				trace.Add($"Apparent time:  {new SimpleTime(now)}");
 				trace.Add($"Apparent years: {now.ToYears:F4}");
 
 				double adjustedYears = (double)now.ToYears / Main.TimeParam.TickRatioYear;
 				trace.Add($"Adjusted years: {adjustedYears:F4}");
 
 				adjustedTime = CampaignTime.Years((float)adjustedYears);
+				trace.Add($"Adjusted time:  {new SimpleTime(now)}");
 
 				if (adjustedTime < Campaign.Current.CampaignStartTime)
 				{
@@ -102,9 +107,9 @@ namespace CampaignPacer
 					adjustedTime = Campaign.Current.CampaignStartTime;
 				}
 
-				_savedTime = new SimpleTime(adjustedTime); // become non-null
+				SavedTime = new SimpleTime(adjustedTime); // become non-null
 			}
-			else if (_savedTime.IsValid)
+			else if (SavedTime.IsValid)
 			{
 				// Normal load of prior CP-enabled savegame.
 				// Simply restore saved calendar date as-is if the configured days/season has changed.
@@ -113,10 +118,10 @@ namespace CampaignPacer
 
 				trace.Add($"Loading a save that had {Main.Name} enabled...");
 
-				if (_savedTime.DaysPerSeason != Main.TimeParam.DayPerSeasonL || _savedTime.DaysPerSeason <= 0)
+				if (SavedTimeSettings == null || SavedTimeSettings.DaysPerSeason != Main.TimeParam.DayPerSeasonL)
 				{
-					trace.Add($"Configured days/season changed from {_savedTime.DaysPerSeason} to {Main.TimeParam.DayPerSeasonL}.");
-					adjustedTime = _savedTime.ToCampaignTime();
+					trace.Add($"Configured days/season changed from {SavedTimeSettings?.DaysPerSeason} to {Main.TimeParam.DayPerSeasonL}.");
+					adjustedTime = SavedTime.ToCampaignTime();
 				}
 			}
 			else
@@ -129,8 +134,21 @@ namespace CampaignPacer
 				Patches.CampaignPatch.Helpers.SetMapTimeTracker(Campaign.Current, adjustedTime);
 		}
 
-		private bool _isNewGame = false;
-		private bool _hasLoadedData = false;
+		protected SavedTimeSettings SavedTimeSettings
+		{
+			get => _savedTimeSettings;
+			set => _savedTimeSettings = value;
+		}
+
+		protected SimpleTime SavedTime
+		{
+			get => _savedTime;
+			set => _savedTime = value;
+		}
+
+		protected bool HasLoaded { get; set; }
+
 		private SimpleTime _savedTime = null;
+		private SavedTimeSettings _savedTimeSettings = null;
 	}
 }

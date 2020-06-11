@@ -21,7 +21,7 @@ namespace CampaignPacer
 		public const string DisplayName = "Campaign Pacer"; // to be shown to humans in-game
 		public static readonly string HarmonyDomain = "com.zijistark.bannerlord." + Name.ToLower();
 
-		internal static Settings Config = null;
+		internal static Settings Settings = null;
 		internal static TimeParams TimeParam;
 		internal static Harmony Harmony = null;
 
@@ -43,14 +43,14 @@ namespace CampaignPacer
 
 				if (Settings.Instance == null)
 				{
-					Config = new Settings(); // use defaults
+					Settings = new Settings(); // use defaults
 					trace.Add("Settings.Instance was NULL! Using default configuration instead.");
 				}
 				else
-					Config = Settings.Instance;
+					Settings = Settings.Instance;
 
 				// register for settings property-changed events
-				Config.PropertyChanged += OnSettings_PropertyChanged;
+				Settings.PropertyChanged += Settings_OnPropertyChanged;
 
 				SetTimeParams(trace);
 				Harmony.PatchAll();
@@ -97,15 +97,15 @@ namespace CampaignPacer
 		{
 			trace.Add(string.Empty);
 			trace.Add("Settings:");
-			trace.AddRange(Config.ToStringLines(indentSize: 4));
+			trace.AddRange(Settings.ToStringLines(indentSize: 4));
 			trace.Add(string.Empty);
 			trace.Add("Setting time parameters...");
-			TimeParam = new TimeParams(Config.DaysPerSeason, trace);
+			TimeParam = new TimeParams(Settings.DaysPerSeason, trace);
 			trace.Add(string.Empty);
 			trace.AddRange(TimeParam.ToStringLines(indentSize: 4));
 		}
 
-		protected static void OnSettings_PropertyChanged(object sender, PropertyChangedEventArgs args)
+		protected static void Settings_OnPropertyChanged(object sender, PropertyChangedEventArgs args)
 		{
 			if (sender is Settings && args.PropertyName == Settings.SaveTriggered)
 			{
