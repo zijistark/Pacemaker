@@ -50,15 +50,7 @@ namespace CampaignPacer
 					Config = Settings.Instance;
 
 				// register for settings property-changed events
-				Config.PropertyChanged += OnSettingsPropertyChanged;
-
-				trace.AddRange(new List<string>
-				{
-					string.Empty,
-					"Settings:",
-				});
-
-				trace.AddRange(Config.ToStringLines(indentSize: 2));
+				Config.PropertyChanged += OnSettings_PropertyChanged;
 
 				SetTimeParams(trace);
 				Harmony.PatchAll();
@@ -103,13 +95,17 @@ namespace CampaignPacer
 
 		protected static void SetTimeParams(List<string> trace)
 		{
-			trace.Add("Setting new time parameters...");
+			trace.Add(string.Empty);
+			trace.Add("Settings:");
+			trace.AddRange(Config.ToStringLines(indentSize: 4));
+			trace.Add(string.Empty);
+			trace.Add("Setting time parameters...");
 			TimeParam = new TimeParams(Config.DaysPerSeason, trace);
 			trace.Add(string.Empty);
-			trace.AddRange(TimeParam.ToStringLines(indentSize: 2));
+			trace.AddRange(TimeParam.ToStringLines(indentSize: 4));
 		}
 
-		protected static void OnSettingsPropertyChanged(object sender, PropertyChangedEventArgs args)
+		protected static void OnSettings_PropertyChanged(object sender, PropertyChangedEventArgs args)
 		{
 			if (sender is Settings && args.PropertyName == Settings.SaveTriggered)
 			{

@@ -4,6 +4,8 @@
 
 #### v0.8.0-alpha1 [WIP]
 
+- Fixed major issue with Harmony patching of patch class `Patches.CampaignPatch` that prevented loading the game
+
 - Fixed a minor issue upon loading an older CP-enabled savegame with different configured days/season wherein CP could fail to restore the campaign time due to lack of saved configuration data.
 
 

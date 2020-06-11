@@ -12,28 +12,31 @@ namespace CampaignPacer.Patches
 		//////////////////////////////////////////////////////////////////////////////////////////
 
 		// Note that MapTimeTracker is an `internal` type, so we use the return type of its PropertyGetter to get its ConstructorInfo
-		internal static readonly MethodInfo MapTimeTrackerGetMI = AccessTools.PropertyGetter(typeof(Campaign), "MapTimeTracker");
-		internal static readonly MethodInfo MapTimeTrackerSetMI = AccessTools.PropertySetter(typeof(Campaign), "MapTimeTracker");
-		internal static readonly Type MapTimeTrackerT = MapTimeTrackerGetMI.ReturnType;
-		internal static readonly ConstructorInfo MapTimeTrackerCtorCI = AccessTools.Constructor(MapTimeTrackerT, new[] { typeof(CampaignTime) });
-		internal static readonly MethodInfo CampaignStartTimeSetMI = AccessTools.PropertySetter(typeof(Campaign), "CampaignStartTime");
+		private static readonly MethodInfo MapTimeTrackerGetMI = AccessTools.PropertyGetter(typeof(Campaign), "MapTimeTracker");
+		private static readonly MethodInfo MapTimeTrackerSetMI = AccessTools.PropertySetter(typeof(Campaign), "MapTimeTracker");
+		private static readonly Type MapTimeTrackerT = MapTimeTrackerGetMI.ReturnType;
+		private static readonly ConstructorInfo MapTimeTrackerCtorCI = AccessTools.Constructor(MapTimeTrackerT, new[] { typeof(CampaignTime) });
+		private static readonly MethodInfo CampaignStartTimeSetMI = AccessTools.PropertySetter(typeof(Campaign), "CampaignStartTime");
 
 		// HELPERS
 		//////////////////////////////////////////////////////////////////////////////////////////
 
-		internal static void SetMapTimeTracker(Campaign campaign, CampaignTime campaignTime)
+		internal class Helpers
 		{
-			MapTimeTrackerSetMI.Invoke(campaign, new object[]
+			internal static void SetMapTimeTracker(Campaign campaign, CampaignTime campaignTime)
 			{
-				MapTimeTrackerCtorCI.Invoke(new object[] { campaignTime })
-			});
-		}
+				MapTimeTrackerSetMI.Invoke(campaign, new object[]
+				{
+					MapTimeTrackerCtorCI.Invoke(new object[] { campaignTime })
+				});
+			}
 
-		internal static CampaignTime StandardCampaignStartTime => CampaignTime.Years(1084f) + CampaignTime.Seasons(1f) + CampaignTime.Hours(9f);
+			internal static CampaignTime StandardStartTime => CampaignTime.Years(1084f) + CampaignTime.Seasons(1f) + CampaignTime.Hours(9f);
 
-		internal static void ResetCampaignStartTime(Campaign campaign)
-		{
-			CampaignStartTimeSetMI.Invoke(campaign, new object[] { StandardCampaignStartTime });
+			internal static void ResetCampaignStartTime(Campaign campaign)
+			{
+				CampaignStartTimeSetMI.Invoke(campaign, new object[] { StandardStartTime });
+			}
 		}
 
 		// PATCHES
@@ -41,10 +44,10 @@ namespace CampaignPacer.Patches
 
 		[HarmonyPostfix]
 		[HarmonyPatch(MethodType.Constructor, new[] { typeof(CampaignGameMode) })]
-		static void CtorPostfix(ref Campaign __instance, CampaignGameMode gameMode)
+		internal static void CtorPostfix(ref Campaign __instance, CampaignGameMode gameMode)
 		{
-			ResetCampaignStartTime(__instance);
-			SetMapTimeTracker(__instance, __instance.CampaignStartTime);
+			Helpers.ResetCampaignStartTime(__instance);
+			Helpers.SetMapTimeTracker(__instance, __instance.CampaignStartTime);
 		}
 	}
 }

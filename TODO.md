@@ -32,9 +32,9 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 
 - Use string keys everywhere & enable translations
 
-- Create wrapper type for the List<string> objects currently being constructed all over the place
+- Create wrapper type for the `List<string>` objects currently being constructed all over the place for tracing
   - Hopefully a friendlier interface (does C# have variadic methods?)
-  - Prevents actual List<string> construction if `Util.EnableTracer == false`
+  - Prevents actual `List<string>` construction if `Util.EnableTracer == false`
 
 - Allow the user to configure a custom start date (my code already adjusts the start date due to a TW bug for alternative calendars)
 
@@ -45,18 +45,15 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 
 ### Testing:
 
-- Test whether v0.8.0-alpha0 loads at all
-
 - Test whether v0.8.0-alpha0 loads a vanilla campaign that's run for a bit
   - Take special note of time when saved vs. time when loaded
 
 - Test loading a CP-enabled save game with & without different calendar settings
   - First create a fresh CP-enabled game.
+  - (Do or do not modify calendar settings, both variants)
   - Is it the correct campaign time upon load (i.e., the campaign time that it was when saved)?
 
 - Verify that equivalent `DaysPerWeekL` and `WeeksPerSeasonL` values are chosen when using a *Days Per Season* value greater than 9 (check debug log for time parameters)
-
-- Test whether changing settings always properly triggers a save-triggered property change event in the debug log
 
 - Test whether health regeneration rate is sped up by the time multiplier and adjust accordingly (applies to NPCs and party/troops)
 

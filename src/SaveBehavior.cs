@@ -73,7 +73,10 @@ namespace CampaignPacer
 		{
 			// Unconditionally (re)set the campaign start time, as this is harmless in most cases
 			// and vital in cases where the time configuration has changed:
-			Patches.CampaignPatch.ResetCampaignStartTime(Campaign.Current);
+
+			trace.Add($"Campaign start time: {new SimpleTime(Campaign.Current.CampaignStartTime)}");
+			Patches.CampaignPatch.Helpers.ResetCampaignStartTime(Campaign.Current);
+			trace.Add($"Campaign start time (after reset): {new SimpleTime(Campaign.Current.CampaignStartTime)}");
 
 			var adjustedTime = CampaignTime.Zero;
 
@@ -110,7 +113,7 @@ namespace CampaignPacer
 
 				trace.Add($"Loading a save that had {Main.Name} enabled...");
 
-				if (_savedTime.DaysPerSeason != Main.TimeParam.DayPerSeasonL)
+				if (_savedTime.DaysPerSeason != Main.TimeParam.DayPerSeasonL || _savedTime.DaysPerSeason <= 0)
 				{
 					trace.Add($"Configured days/season changed from {_savedTime.DaysPerSeason} to {Main.TimeParam.DayPerSeasonL}.");
 					adjustedTime = _savedTime.ToCampaignTime();
@@ -123,7 +126,7 @@ namespace CampaignPacer
 			}
 
 			if (adjustedTime != CampaignTime.Zero)
-				Patches.CampaignPatch.SetMapTimeTracker(Campaign.Current, adjustedTime);
+				Patches.CampaignPatch.Helpers.SetMapTimeTracker(Campaign.Current, adjustedTime);
 		}
 
 		private bool _isNewGame = false;
