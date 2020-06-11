@@ -2,13 +2,16 @@
 
 ### v0.8.0
 
-#### v0.8.0-alpha1 [WIP]
+#### v0.8.0-alpha1
 
 - Fixed major issue with Harmony patching of patch class `Patches.CampaignPatch` that prevented loading the game
 
 - Fixed a minor issue upon loading an older CP-enabled savegame with different configured days/season wherein CP could fail to restore the campaign time due to lack of saved configuration data.
 
-- Add settings menu options for pregnancy duration settings (but no implementation)
+- Add settings menu options for pregnancy duration (but not yet a full implementation)
+  - *Year-Scaled Pregnancy Length Factor* is implemented, and as long as Bannerlord Tweaks doesn't explicitly override this particular duration, it should be in full effect
+
+- Fixed a hard-coded assumption in `AgingCampaignBehavior` regarding the number of weeks in a year. Death probabilities will now always globally update every year.
 
 #### v0.8.0-alpha0
 

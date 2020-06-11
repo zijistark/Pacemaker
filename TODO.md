@@ -4,27 +4,28 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 
 ### Now:
 
-- Improve accuracy of vanilla date conversion logic
+- Scan decompiled vanilla code for all references to `CampaignTime.ElapsedWeeksUntilNow` and similar methods which use weeks. They might need a patch due to assumptions about a week's relation to other time units.
 
-- Optionally auto-adjust pregnancy duration to `F * DaysInYear` where F is configurable
-  - Dynamically target Harmony patch upon whatever pregnancy model is present at OnGameStart
 
 ### Future:
 
 #### High Priority
 
-- Whenever converting between time configurations, do a sanity pass over data structures and ensure things like:
-  - No Hero.BirthDate is in the future
-  - No Pregnanacy.DueDate is in the past or way too large
-  - No Hero death dates are in the future or way too far from their birthdate
+- Improve accuracy of vanilla date conversion math
 
 - Add setting *Prepare to Remove Campaign Pacer*
   - If enabled, on the next save it will convert the current time to vanilla units and clear our data from the savegame
 
-- Auto-adjust due dates of already in-progress pregnancies when converting from vanilla save (assumes vanilla pregnancy duration)
+- Auto-adjust due dates of already in-progress pregnancies when converting from vanilla save or different calendar settings
+  - `Pregnancy` class only stores `DueDate` (not date of conception), so this could be tricky
 
 
 #### Normal Priority
+
+- Whenever converting between time configurations, do a sanity pass over data structures and ensure things like:
+  - No Hero.BirthDate is in the future
+  - No Pregnanacy.DueDate is in the past or way too large
+  - No Hero death dates are in the future or way too far from their birthdate (200+ years)
 
 - Like Community Patch, add acceptable hashes of our Harmony patch target method bodies so that we can recognize when there may be a problem caused by patching (hash mismatch).
 

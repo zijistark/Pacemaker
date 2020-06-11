@@ -24,9 +24,9 @@ namespace CampaignPacer
 		private const string ScaledPregnancyDuration_Hint = "Scale pregnancy duration to this proportion of a " +
 			"year. [ Default: 75% ]";
 
-		private const string AdjustPregnancyDueDates_Hint = "(Happens only when year length changes) Auto-adjust " +
-			"in-progress pregnancies' due dates to match configured duration. If loading a save without " +
-			Main.DisplayName + ", vanilla's duration (36 days) will be assumed when converting. [ Default: ON ]";
+		private const string AdjustPregnancyDueDates_Hint = "[Only when year length changes] Auto-adjust " +
+			"in-progress pregnancies' due dates to match. If loading a save without " + Main.DisplayName +
+			", vanilla's duration (36 days) will be assumed when converting. [ Default: ON ]";
 
 		[SettingPropertyFloatingInteger("Time Multiplier", 0.25f, 8f, HintText = TimeMultiplier_Hint, RequireRestart = false, Order = 0)]
 		[SettingPropertyGroup("General Settings", GroupOrder = 0)]
@@ -37,15 +37,15 @@ namespace CampaignPacer
 		public int DaysPerSeason { get; set; } = 7;
 
 		[SettingPropertyBool("Pregnancy Duration", HintText = EnablePregnancyTweaks_Hint, RequireRestart = false, Order = 0)]
-		[SettingPropertyGroup("Gameplay Pace Adjustments/Pregnancy Duration", GroupOrder = 1, IsMainToggle = true)]
+		[SettingPropertyGroup("Pregnancy Duration", GroupOrder = 1, IsMainToggle = true)]
 		public bool EnablePregnancyTweaks { get; set; } = true;
 
-		[SettingPropertyFloatingInteger("Year-Scaled Pregnancy Length Factor", 0.2f, 5f, HintText = ScaledPregnancyDuration_Hint, RequireRestart = false, Order = 1)]
-		[SettingPropertyGroup("Gameplay Pace Adjustments/Pregnancy Duration")]
+		[SettingPropertyFloatingInteger("Year-Scaled Pregnancy Length Factor", 0.2f, 4f, "#0%", HintText = ScaledPregnancyDuration_Hint, RequireRestart = false, Order = 1)]
+		[SettingPropertyGroup("Pregnancy Duration")]
 		public float ScaledPregnancyDuration { get; set; } = 0.75f;
 
 		[SettingPropertyBool("Adjust In-Progress Pregnancy Due Dates", HintText = AdjustPregnancyDueDates_Hint, RequireRestart = false, Order = 2)]
-		[SettingPropertyGroup("Gameplay Pace Adjustments/Pregnancy Duration")]
+		[SettingPropertyGroup("Pregnancy Duration")]
 		public bool AdjustPregnancyDueDates { get; set; } = true;
 
 		public List<string> ToStringLines(uint indentSize = 0)

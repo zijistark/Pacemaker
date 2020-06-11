@@ -22,7 +22,7 @@ namespace CampaignPacer
 			else
 			{
 				trace.Add("Saving data...");
-				_savedTime = new SimpleTime(CampaignTime.Now);
+				SavedTime = new SimpleTime(CampaignTime.Now);
 			}
 
 			dataStore.SyncData($"{Main.Name}SavedTime", ref _savedTime);
