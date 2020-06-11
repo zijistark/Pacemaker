@@ -4,20 +4,28 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 
 ### Now:
 
-- Scan decompiled vanilla code for all references to `CampaignTime.ElapsedWeeksUntilNow` and similar methods which use weeks. They might need a patch due to assumptions about a week's relation to other time units.
+- Revert the `CampaignTime` API's notion of weeks to always be 7 days, regardless of the fact that 7 days might even be longer than the length of year (at `DaysPerSeason == 1`) and certainly may not evenly divide a season or year.
+  - This is consistent with my reasons for leaving the weekly tick at a 7-day period: coders expect weeks to be 7 days, and coders are the only ones exposed to weekly units
+  - This obviates the need to patch many misc. methods in order to maintain vanilla gameplay pace or sometimes WAD functionality
+  - This will indeed get weird for `CampaignTime.GetWeekOfYear` and such things, but no code seems to actually expect years or seasons to be evenly divisible by a week, so the benefit is greater than the cost.
+
+- Scan decompiled vanilla code for all references to `CampaignTime.ElapsedWeeksUntilNow` and indeed all API methods which use weeks.
+  - They might need a patch due to assumptions about a week's relation to other time units.
+
+- Auto-adjust due dates of already in-progress pregnancies when converting from vanilla save or different calendar settings
+  - `Pregnancy` class only stores `DueDate` (not date of conception), so this could be tricky
 
 
 ### Future:
 
 #### High Priority
 
+- Add CampaignTime extension methods for working in double-precision floating point and for extracting raw ticks
+
 - Improve accuracy of vanilla date conversion math
 
 - Add setting *Prepare to Remove Campaign Pacer*
   - If enabled, on the next save it will convert the current time to vanilla units and clear our data from the savegame
-
-- Auto-adjust due dates of already in-progress pregnancies when converting from vanilla save or different calendar settings
-  - `Pregnancy` class only stores `DueDate` (not date of conception), so this could be tricky
 
 
 #### Normal Priority
