@@ -12,7 +12,7 @@ namespace CampaignPacer.Patches
 			if (!Main.Settings.EnablePregnancyTweaks)
 				return true;
 
-			__result = Main.Settings.ScaledPregnancyDuration * Main.TimeParam.DayPerYearL;
+			__result = Main.Settings.ScaledPregnancyDuration * Main.TimeParam.DayPerYear;
 			return false;
 		}
 	}

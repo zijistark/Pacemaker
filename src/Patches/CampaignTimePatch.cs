@@ -16,42 +16,40 @@ namespace CampaignPacer.Patches
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* Elapsed[UNIT]sUntilNow */
 
-		/*
-		[HarmonyPostfix]
-		[HarmonyPatch("ElapsedMillisecondsUntilNow", MethodType.Getter)]
-		static void ElapsedMillisecondsUntilNow(ref float __result)
-		{
-			__result *= Main.TimeParam.TickRatioMsecF;
-		}
+		//[HarmonyPostfix]
+		//[HarmonyPatch("ElapsedMillisecondsUntilNow", MethodType.Getter)]
+		//static void ElapsedMillisecondsUntilNow(ref float __result)
+		//{
+		//	__result *= Main.TimeParam.TickRatioMsecF;
+		//}
 
-		[HarmonyPostfix]
-		[HarmonyPatch("ElapsedSecondsUntilNow", MethodType.Getter)]
-		static void ElapsedSecondsUntilNow(ref float __result)
-		{
-			__result *= Main.TimeParam.TickRatioSecF;
-		}
+		//[HarmonyPostfix]
+		//[HarmonyPatch("ElapsedSecondsUntilNow", MethodType.Getter)]
+		//static void ElapsedSecondsUntilNow(ref float __result)
+		//{
+		//	__result *= Main.TimeParam.TickRatioSecF;
+		//}
 
-		[HarmonyPostfix]
-		[HarmonyPatch("ElapsedHoursUntilNow", MethodType.Getter)]
-		static void ElapsedHoursUntilNow(ref float __result)
-		{
-			__result *= Main.TimeParam.TickRatioHourF;
-		}
+		//[HarmonyPostfix]
+		//[HarmonyPatch("ElapsedHoursUntilNow", MethodType.Getter)]
+		//static void ElapsedHoursUntilNow(ref float __result)
+		//{
+		//	__result *= Main.TimeParam.TickRatioHourF;
+		//}
 
-		[HarmonyPostfix]
-		[HarmonyPatch("ElapsedDaysUntilNow", MethodType.Getter)]
-		static void ElapsedDaysUntilNow(ref float __result)
-		{
-			__result *= Main.TimeParam.TickRatioDayF;
-		}
-		*/
+		//[HarmonyPostfix]
+		//[HarmonyPatch("ElapsedDaysUntilNow", MethodType.Getter)]
+		//static void ElapsedDaysUntilNow(ref float __result)
+		//{
+		//	__result *= Main.TimeParam.TickRatioDayF;
+		//}
 
-		[HarmonyPostfix]
-		[HarmonyPatch("ElapsedWeeksUntilNow", MethodType.Getter)]
-		static void ElapsedWeeksUntilNow(ref float __result)
-		{
-			__result *= Main.TimeParam.TickRatioWeekF;
-		}
+		//[HarmonyPostfix]
+		//[HarmonyPatch("ElapsedWeeksUntilNow", MethodType.Getter)]
+		//static void ElapsedWeeksUntilNow(ref float __result)
+		//{
+		//	__result *= Main.TimeParam.TickRatioWeekF;
+		//}
 
 		[HarmonyPostfix]
 		[HarmonyPatch("ElapsedSeasonsUntilNow", MethodType.Getter)]
@@ -70,42 +68,40 @@ namespace CampaignPacer.Patches
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* Remaining[UNIT]sFromNow */
 
-		/*
-		[HarmonyPostfix]
-		[HarmonyPatch("RemainingMillisecondsFromNow", MethodType.Getter)]
-		static void RemainingMillisecondsFromNow(ref float __result)
-		{
-			__result *= Main.TimeParam.TickRatioMsecF;
-		}
+		//[HarmonyPostfix]
+		//[HarmonyPatch("RemainingMillisecondsFromNow", MethodType.Getter)]
+		//static void RemainingMillisecondsFromNow(ref float __result)
+		//{
+		//	__result *= Main.TimeParam.TickRatioMsecF;
+		//}
 
-		[HarmonyPostfix]
-		[HarmonyPatch("RemainingSecondsFromNow", MethodType.Getter)]
-		static void RemainingSecondsFromNow(ref float __result)
-		{
-			__result *= Main.TimeParam.TickRatioSecF;
-		}
+		//[HarmonyPostfix]
+		//[HarmonyPatch("RemainingSecondsFromNow", MethodType.Getter)]
+		//static void RemainingSecondsFromNow(ref float __result)
+		//{
+		//	__result *= Main.TimeParam.TickRatioSecF;
+		//}
 
-		[HarmonyPostfix]
-		[HarmonyPatch("RemainingHoursFromNow", MethodType.Getter)]
-		static void RemainingHoursFromNow(ref float __result)
-		{
-			__result *= Main.TimeParam.TickRatioHourF;
-		}
+		//[HarmonyPostfix]
+		//[HarmonyPatch("RemainingHoursFromNow", MethodType.Getter)]
+		//static void RemainingHoursFromNow(ref float __result)
+		//{
+		//	__result *= Main.TimeParam.TickRatioHourF;
+		//}
 
-		[HarmonyPostfix]
-		[HarmonyPatch("RemainingDaysFromNow", MethodType.Getter)]
-		static void RemainingDaysFromNow(ref float __result)
-		{
-			__result *= Main.TimeParam.TickRatioDayF;
-		}
-		*/
+		//[HarmonyPostfix]
+		//[HarmonyPatch("RemainingDaysFromNow", MethodType.Getter)]
+		//static void RemainingDaysFromNow(ref float __result)
+		//{
+		//	__result *= Main.TimeParam.TickRatioDayF;
+		//}
 
-		[HarmonyPostfix]
-		[HarmonyPatch("RemainingWeeksFromNow", MethodType.Getter)]
-		static void RemainingWeeksFromNow(ref float __result)
-		{
-			__result *= Main.TimeParam.TickRatioWeekF;
-		}
+		//[HarmonyPostfix]
+		//[HarmonyPatch("RemainingWeeksFromNow", MethodType.Getter)]
+		//static void RemainingWeeksFromNow(ref float __result)
+		//{
+		//	__result *= Main.TimeParam.TickRatioWeekF;
+		//}
 
 		[HarmonyPostfix]
 		[HarmonyPatch("RemainingSeasonsFromNow", MethodType.Getter)]
@@ -124,90 +120,80 @@ namespace CampaignPacer.Patches
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* To[UNIT]s */
 
-		/*
-		[HarmonyPostfix]
-		[HarmonyPatch("ToMilliseconds", MethodType.Getter)]
-		static void ToMilliseconds(ref double __result)
-		{
-			__result *= Main.TimeParam.TickRatioMsec;
-		}
+		//[HarmonyPostfix]
+		//[HarmonyPatch("ToMilliseconds", MethodType.Getter)]
+		//static void ToMilliseconds(ref double __result)
+		//{
+		//	__result *= Main.TimeParam.TickRatioMsec;
+		//}
 
-		[HarmonyPostfix]
-		[HarmonyPatch("ToSeconds", MethodType.Getter)]
-		static void ToSeconds(ref double __result)
-		{
-			__result *= Main.TimeParam.TickRatioSec;
-		}
+		//[HarmonyPostfix]
+		//[HarmonyPatch("ToSeconds", MethodType.Getter)]
+		//static void ToSeconds(ref double __result)
+		//{
+		//	__result *= Main.TimeParam.TickRatioSec;
+		//}
 
-		[HarmonyPostfix]
-		[HarmonyPatch("ToMinutes", MethodType.Getter)]
-		static void ToMinutes(ref double __result)
-		{
-			__result *= Main.TimeParam.TickRatioMin;
-		}
+		//[HarmonyPostfix]
+		//[HarmonyPatch("ToMinutes", MethodType.Getter)]
+		//static void ToMinutes(ref double __result)
+		//{
+		//	__result *= Main.TimeParam.TickRatioMin;
+		//}
 
-		[HarmonyPostfix]
-		[HarmonyPatch("ToHours", MethodType.Getter)]
-		static void ToHours(ref double __result)
-		{
-			__result *= Main.TimeParam.TickRatioHour;
-		}
+		//[HarmonyPostfix]
+		//[HarmonyPatch("ToHours", MethodType.Getter)]
+		//static void ToHours(ref double __result)
+		//{
+		//	__result *= Main.TimeParam.TickRatioHour;
+		//}
 
-		[HarmonyPostfix]
-		[HarmonyPatch("ToDays", MethodType.Getter)]
-		static void ToDays(ref double __result)
-		{
-			__result *= Main.TimeParam.TickRatioDay;
-		}
-		*/
+		//[HarmonyPostfix]
+		//[HarmonyPatch("ToDays", MethodType.Getter)]
+		//static void ToDays(ref double __result)
+		//{
+		//	__result *= Main.TimeParam.TickRatioDay;
+		//}
 
-		[HarmonyPostfix]
-		[HarmonyPatch("ToWeeks", MethodType.Getter)]
-		static void ToWeeks(ref double __result)
-		{
-			__result *= Main.TimeParam.TickRatioWeek;
-		}
+		//[HarmonyPostfix]
+		//[HarmonyPatch("ToWeeks", MethodType.Getter)]
+		//static void ToWeeks(ref double __result)
+		//{
+		//	__result *= Main.TimeParam.TickRatioWeek;
+		//}
 
 		[HarmonyPostfix]
 		[HarmonyPatch("ToSeasons", MethodType.Getter)]
-		static void ToSeasons(ref double __result)
-		{
-			__result *= Main.TimeParam.TickRatioSeason;
-		}
+		static void ToSeasons(ref double __result) => __result *= Main.TimeParam.TickRatioSeasonD;
 
 		[HarmonyPostfix]
 		[HarmonyPatch("ToYears", MethodType.Getter)]
-		static void ToYears(ref double __result)
-		{
-			__result *= Main.TimeParam.TickRatioYear;
-		}
+		static void ToYears(ref double __result) => __result *= Main.TimeParam.TickRatioYearD;
 
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* Get[UNIT]Of[UNIT] */
 
-		/*
-		[HarmonyPrefix]
-		[HarmonyPatch("GetHourOfDay", MethodType.Getter)]
-		static bool GetHourOfDay(ref CampaignTime __instance, ref int __result)
-		{
-			__result = (int)(((long)TicksFI.GetValue(__instance) / TimeParams.TickPerHourL) % TimeParams.HourPerDayL);
-			return false;
-		}
-		*/
+		//[HarmonyPrefix]
+		//[HarmonyPatch("GetHourOfDay", MethodType.Getter)]
+		//static bool GetHourOfDay(ref CampaignTime __instance, ref int __result)
+		//{
+		//	__result = (int)(((long)TicksFI.GetValue(__instance) / TimeParams.TickPerHourL) % TimeParams.HourPerDayL);
+		//	return false;
+		//}
 
-		[HarmonyPrefix]
-		[HarmonyPatch("GetDayOfWeek", MethodType.Getter)]
-		static bool GetDayOfWeek(ref CampaignTime __instance, ref int __result)
-		{
-			__result = (int)(((long)TicksFI.GetValue(__instance) / TimeParams.TickPerDayL) % Main.TimeParam.DayPerWeekL);
-			return false;
-		}
+		//[HarmonyPrefix]
+		//[HarmonyPatch("GetDayOfWeek", MethodType.Getter)]
+		//static bool GetDayOfWeek(ref CampaignTime __instance, ref int __result)
+		//{
+		//	__result = (int)(((long)TicksFI.GetValue(__instance) / TimeParams.TickPerDayL) % Main.TimeParam.DayPerWeekL);
+		//	return false;
+		//}
 
 		[HarmonyPrefix]
 		[HarmonyPatch("GetDayOfSeason", MethodType.Getter)]
 		static bool GetDayOfSeason(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)(((long)TicksFI.GetValue(__instance) / TimeParams.TickPerDayL) % Main.TimeParam.DayPerSeasonL);
+			__result = (int)(((long)TicksFI.GetValue(__instance) / TimeParams.TickPerDayL) % Main.TimeParam.DayPerSeason);
 			return false;
 		}
 
@@ -215,23 +201,23 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("GetDayOfYear", MethodType.Getter)]
 		static bool GetDayOfYear(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)(((long)TicksFI.GetValue(__instance) / TimeParams.TickPerDayL) % Main.TimeParam.DayPerYearL);
+			__result = (int)(((long)TicksFI.GetValue(__instance) / TimeParams.TickPerDayL) % Main.TimeParam.DayPerYear);
 			return false;
 		}
 
-		[HarmonyPrefix]
-		[HarmonyPatch("GetWeekOfSeason", MethodType.Getter)]
-		static bool GetWeekOfSeason(ref CampaignTime __instance, ref int __result)
-		{
-			__result = (int)(((long)TicksFI.GetValue(__instance) / Main.TimeParam.TickPerWeekL) % Main.TimeParam.WeekPerSeasonL);
-			return false;
-		}
+		//[HarmonyPrefix]
+		//[HarmonyPatch("GetWeekOfSeason", MethodType.Getter)]
+		//static bool GetWeekOfSeason(ref CampaignTime __instance, ref int __result)
+		//{
+		//	__result = (int)(((long)TicksFI.GetValue(__instance) / Main.TimeParam.TickPerWeekL) % Main.TimeParam.WeekPerSeasonL);
+		//	return false;
+		//}
 
 		[HarmonyPrefix]
 		[HarmonyPatch("GetSeasonOfYear", MethodType.Getter)]
 		static bool GetSeasonOfYear(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)(((long)TicksFI.GetValue(__instance) / Main.TimeParam.TickPerSeasonL) % TimeParams.SeasonPerYearL);
+			__result = (int)(((long)TicksFI.GetValue(__instance) / Main.TimeParam.TickPerSeasonL) % TimeParams.SeasonPerYear);
 			return false;
 		}
 
@@ -250,7 +236,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("GetDayOfSeasonf", MethodType.Getter)]
 		static bool GetDayOfSeasonf(ref CampaignTime __instance, ref float __result)
 		{
-			__result = (float)Math.IEEERemainder((double)((long)TicksFI.GetValue(__instance) / TimeParams.TickPerDayL), (double)Main.TimeParam.DayPerSeasonL);
+			__result = (float)Math.IEEERemainder((double)((long)TicksFI.GetValue(__instance) / TimeParams.TickPerDayL), (double)Main.TimeParam.DayPerSeason);
 			return false;
 		}
 
@@ -258,68 +244,66 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("GetSeasonOfYearf", MethodType.Getter)]
 		static bool GetSeasonOfYearf(ref CampaignTime __instance, ref float __result)
 		{
-			__result = (float)Math.IEEERemainder((double)((long)TicksFI.GetValue(__instance) / Main.TimeParam.TickPerSeasonL), (double)TimeParams.SeasonPerYearL);
+			__result = (float)Math.IEEERemainder((double)((long)TicksFI.GetValue(__instance) / Main.TimeParam.TickPerSeasonL), (double)TimeParams.SeasonPerYear);
 			return false;
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* [UNIT]s (factory methods) */
 
-		/*
-		[HarmonyPrefix]
-		[HarmonyPatch("Milliseconds")]
-		static bool Milliseconds(long valueInMilliseconds, ref CampaignTime __result)
-		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[] { valueInMilliseconds * Main.TimeParam.TickPerMsecL });
-			return false;
-		}
+		//[HarmonyPrefix]
+		//[HarmonyPatch("Milliseconds")]
+		//static bool Milliseconds(long valueInMilliseconds, ref CampaignTime __result)
+		//{
+		//	__result = (CampaignTime)CtorCI.Invoke(new object[] { valueInMilliseconds * Main.TimeParam.TickPerMsecL });
+		//	return false;
+		//}
 
-		[HarmonyPrefix]
-		[HarmonyPatch("Seconds")]
-		static bool Seconds(long valueInSeconds, ref CampaignTime __result)
-		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[] { valueInSeconds * Main.TimeParam.TickPerSecL });
-			return false;
-		}
+		//[HarmonyPrefix]
+		//[HarmonyPatch("Seconds")]
+		//static bool Seconds(long valueInSeconds, ref CampaignTime __result)
+		//{
+		//	__result = (CampaignTime)CtorCI.Invoke(new object[] { valueInSeconds * Main.TimeParam.TickPerSecL });
+		//	return false;
+		//}
 
-		[HarmonyPrefix]
-		[HarmonyPatch("Minutes")]
-		static bool Minutes(long valueInMinutes, ref CampaignTime __result)
-		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[] { valueInMinutes * Main.TimeParam.TickPerMinL });
-			return false;
-		}
+		//[HarmonyPrefix]
+		//[HarmonyPatch("Minutes")]
+		//static bool Minutes(long valueInMinutes, ref CampaignTime __result)
+		//{
+		//	__result = (CampaignTime)CtorCI.Invoke(new object[] { valueInMinutes * Main.TimeParam.TickPerMinL });
+		//	return false;
+		//}
 
-		[HarmonyPrefix]
-		[HarmonyPatch("Hours")]
-		static bool Hours(float valueInHours, ref CampaignTime __result)
-		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(Main.TimeParam.TickPerHour * valueInHours) });
-			return false;
-		}
+		//[HarmonyPrefix]
+		//[HarmonyPatch("Hours")]
+		//static bool Hours(float valueInHours, ref CampaignTime __result)
+		//{
+		//	__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(Main.TimeParam.TickPerHour * valueInHours) });
+		//	return false;
+		//}
 
-		[HarmonyPrefix]
-		[HarmonyPatch("Days")]
-		static bool Days(float valueInDays, ref CampaignTime __result)
-		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(Main.TimeParam.TickPerDay * valueInDays) });
-			return false;
-		}
-		*/
+		//[HarmonyPrefix]
+		//[HarmonyPatch("Days")]
+		//static bool Days(float valueInDays, ref CampaignTime __result)
+		//{
+		//	__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(Main.TimeParam.TickPerDay * valueInDays) });
+		//	return false;
+		//}
 
-		[HarmonyPrefix]
-		[HarmonyPatch("Weeks")]
-		static bool Weeks(float valueInWeeeks, ref CampaignTime __result)
-		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(Main.TimeParam.TickPerWeek * valueInWeeeks) });
-			return false;
-		}
+		//[HarmonyPrefix]
+		//[HarmonyPatch("Weeks")]
+		//static bool Weeks(float valueInWeeeks, ref CampaignTime __result)
+		//{
+		//	__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(Main.TimeParam.TickPerWeek * valueInWeeeks) });
+		//	return false;
+		//}
 
 		[HarmonyPrefix]
 		[HarmonyPatch("Seasons")]
 		static bool Seasons(float valueInSeasons, ref CampaignTime __result)
 		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(Main.TimeParam.TickPerSeason * valueInSeasons) });
+			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(Main.TimeParam.TickPerSeasonD * valueInSeasons) });
 			return false;
 		}
 
@@ -327,80 +311,80 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("Years")]
 		static bool Years(float valueInYears, ref CampaignTime __result)
 		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(Main.TimeParam.TickPerYear * valueInYears) });
+			__result = (CampaignTime)CtorCI.Invoke(new object[] { (long)(Main.TimeParam.TickPerYearD * valueInYears) });
 			return false;
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* [UNIT]sFromNow (factory methods) */
 
-		/*
-		[HarmonyPrefix]
-		[HarmonyPatch("MillisecondsFromNow")]
-		static bool MillisecondsFromNow(long valueInMilliseconds, ref CampaignTime __result)
-		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[]
-			{
-				(long)CurrentTicksMI.Invoke(null, null) + valueInMilliseconds * Main.TimeParam.TickPerMsecL
-			});
-			return false;
-		}
+		//[HarmonyPrefix]
+		//[HarmonyPatch("MillisecondsFromNow")]
+		//static bool MillisecondsFromNow(long valueInMilliseconds, ref CampaignTime __result)
+		//{
+		//	__result = (CampaignTime)CtorCI.Invoke(new object[]
+		//	{
+		//		(long)CurrentTicksMI.Invoke(null, null) + valueInMilliseconds * Main.TimeParam.TickPerMsecL
+		//	});
+		//	return false;
+		//}
 
-		[HarmonyPrefix]
-		[HarmonyPatch("SecondsFromNow")]
-		static bool SecondsFromNow(long valueInSeconds, ref CampaignTime __result)
-		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[]
-			{
-				(long)CurrentTicksMI.Invoke(null, null) + valueInSeconds * Main.TimeParam.TickPerSecL
-			});
-			return false;
-		}
+		//[HarmonyPrefix]
+		//[HarmonyPatch("SecondsFromNow")]
+		//static bool SecondsFromNow(long valueInSeconds, ref CampaignTime __result)
+		//{
+		//	__result = (CampaignTime)CtorCI.Invoke(new object[]
+		//	{
+		//		(long)CurrentTicksMI.Invoke(null, null) + valueInSeconds * Main.TimeParam.TickPerSecL
+		//	});
+		//	return false;
+		//}
 
-		[HarmonyPrefix]
-		[HarmonyPatch("MinutesFromNow")]
-		static bool MinutesFromNow(long valueInMinutes, ref CampaignTime __result)
-		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[]
-			{
-				(long)CurrentTicksMI.Invoke(null, null) + valueInMinutes * Main.TimeParam.TickPerMinL
-			});
-			return false;
-		}
+		//[HarmonyPrefix]
+		//[HarmonyPatch("MinutesFromNow")]
+		//static bool MinutesFromNow(long valueInMinutes, ref CampaignTime __result)
+		//{
+		//	__result = (CampaignTime)CtorCI.Invoke(new object[]
+		//	{
+		//		(long)CurrentTicksMI.Invoke(null, null) + valueInMinutes * Main.TimeParam.TickPerMinL
+		//	});
+		//	return false;
+		//}
 
-		[HarmonyPrefix]
-		[HarmonyPatch("HoursFromNow")]
-		static bool HoursFromNow(float valueInHours, ref CampaignTime __result)
-		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[]
-			{
-				(long)CurrentTicksMI.Invoke(null, null) + (long)(Main.TimeParam.TickPerHour * valueInHours)
-			});
-			return false;
-		}
+		//[HarmonyPrefix]
+		//[HarmonyPatch("HoursFromNow")]
+		//static bool HoursFromNow(float valueInHours, ref CampaignTime __result)
+		//{
+		//	__result = (CampaignTime)CtorCI.Invoke(new object[]
+		//	{
+		//		(long)CurrentTicksMI.Invoke(null, null) + (long)(Main.TimeParam.TickPerHour * valueInHours)
+		//	});
+		//	return false;
+		//}
 
-		[HarmonyPrefix]
-		[HarmonyPatch("DaysFromNow")]
-		static bool DaysFromNow(float valueInDays, ref CampaignTime __result)
-		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[]
-			{
-				(long)CurrentTicksMI.Invoke(null, null) + (long)(Main.TimeParam.TickPerDay * valueInDays)
-			});
-			return false;
-		}
-		*/
+		//[HarmonyPrefix]
+		//[HarmonyPatch("DaysFromNow")]
+		//static bool DaysFromNow(float valueInDays, ref CampaignTime __result)
+		//{
+		//	__result = (CampaignTime)CtorCI.Invoke(new object[]
+		//	{
+		//		(long)CurrentTicksMI.Invoke(null, null) + (long)(Main.TimeParam.TickPerDay * valueInDays)
+		//	});
+		//	return false;
+		//}
 
-		[HarmonyPrefix]
-		[HarmonyPatch("WeeksFromNow")]
-		static bool WeeksFromNow(float valueInWeeks, ref CampaignTime __result)
-		{
-			__result = (CampaignTime)CtorCI.Invoke(new object[]
-			{
-				(long)CurrentTicksMI.Invoke(null, null) + (long)(Main.TimeParam.TickPerWeek * valueInWeeks)
-			});
-			return false;
-		}
+		//[HarmonyPrefix]
+		//[HarmonyPatch("WeeksFromNow")]
+		//static bool WeeksFromNow(float valueInWeeks, ref CampaignTime __result)
+		//{
+		//	__result = (CampaignTime)CtorCI.Invoke(new object[]
+		//	{
+		//		(long)CurrentTicksMI.Invoke(null, null) + (long)(Main.TimeParam.TickPerWeek * valueInWeeks)
+		//	});
+		//	return false;
+		//}
+
+		// NOTE: SeasonsFromNow doesn't exist
 
 		[HarmonyPrefix]
 		[HarmonyPatch("YearsFromNow")]
@@ -408,7 +392,7 @@ namespace CampaignPacer.Patches
 		{
 			__result = (CampaignTime)CtorCI.Invoke(new object[]
 			{
-				(long)CurrentTicksMI.Invoke(null, null) + (long)(Main.TimeParam.TickPerYear * valueInYears)
+				(long)CurrentTicksMI.Invoke(null, null) + (long)(Main.TimeParam.TickPerYearD * valueInYears)
 			});
 			return false;
 		}

@@ -2,6 +2,10 @@
 
 ### v0.8.0
 
+#### v0.8.0-alpha2 [WIP]
+
+- Internally, weeks are now always 7 days for compatibility purposes, regardless of whether 7 evenly divides the season or year length
+
 #### v0.8.0-alpha1
 
 - Fixed major issue with Harmony patching of patch class `Patches.CampaignPatch` that prevented loading the game

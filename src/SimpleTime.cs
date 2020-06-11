@@ -31,10 +31,10 @@ namespace CampaignPacer
 			double fracDays = ct.ToDays;
 
 			Year = ct.GetYear;
-			fracDays -= Year * Main.TimeParam.DayPerYearL;
+			fracDays -= Year * Main.TimeParam.DayPerYear;
 
 			Season = ct.GetSeasonOfYear;
-			fracDays -= Season * Main.TimeParam.DayPerSeasonL;
+			fracDays -= Season * Main.TimeParam.DayPerSeason;
 
 			Day = ct.GetDayOfSeason;
 			fracDays -= Day;
@@ -46,17 +46,17 @@ namespace CampaignPacer
 
 		public bool IsNull => Year == -1 && Season == -1 && Day == -1 && FractionalDay < -0.99 && FractionalDay > -1.01;
 		public bool IsValid => IsNull || (Year >= 0 && IsSeasonValid && Day >= 0 && IsFractionalDayValid);
-		public bool IsValidWithCurrentCalendar => IsValid && Day < Main.TimeParam.DayPerSeasonL;
+		public bool IsValidWithCurrentCalendar => IsValid && Day < Main.TimeParam.DayPerSeason;
 		private bool IsFractionalDayValid => FractionalDay >= 0f && FractionalDay < 1f;
-		private bool IsSeasonValid => Season >= 0 && Season < TimeParams.SeasonPerYearL;
+		private bool IsSeasonValid => Season >= 0 && Season < TimeParams.SeasonPerYear;
 
 		public override string ToString()
 		{
 			// only intended for debugging
 			var ct = CampaignTime.Days(FractionalDay);
 			var hour = (int)ct.ToHours;
-			var min = (int)ct.ToMinutes % TimeParams.MinPerHourL;
-			var sec = (int)ct.ToSeconds % TimeParams.SecPerMinL;
+			var min = (int)ct.ToMinutes % TimeParams.MinPerHour;
+			var sec = (int)ct.ToSeconds % TimeParams.SecPerMin;
 			var season = !IsSeasonValid ? $"[BAD_SEASON: {Season}]" : _seasonNames[Season];
 
 			return $"{season} {Day + 1}, {Year} at {hour:D2}:{min:D2}:{sec:D2} ({(100f * FractionalDay):F3}% of the day)";

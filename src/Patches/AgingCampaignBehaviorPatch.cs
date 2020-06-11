@@ -21,7 +21,7 @@ namespace CampaignPacer.Patches
 			int seasonsElapsed = (int)Campaign.Current.CampaignStartTime.ElapsedSeasonsUntilNow;
 
 			// globally update death probabilities yearly
-			if ((seasonsElapsed % TimeParams.SeasonPerYearL) == 0)
+			if ((seasonsElapsed % TimeParams.SeasonPerYear) == 0)
 				UpdateHeroDeathProbabilitiesMI.Invoke(__instance, null);
 		}
 	}

@@ -25,7 +25,7 @@ namespace CampaignPacer
 		}
 
 		public bool IsNull => TimeMultiplier < -0.99 && TimeMultiplier > -1.01 && DaysPerSeason == -1;
-		public bool IsValid => IsNull || (TimeMultiplier >= 0.01f && DaysPerSeason > 0);
+		public bool IsValid => IsNull || (TimeMultiplier > 0.009f && DaysPerSeason > 0);
 
 		public override string ToString() => $"{{TimeMultiplier = {TimeMultiplier}, DaysPerSeason = {DaysPerSeason}}}";
 	}

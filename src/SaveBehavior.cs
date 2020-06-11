@@ -94,7 +94,7 @@ namespace CampaignPacer
 				trace.Add($"Apparent time:  {new SimpleTime(now)}");
 				trace.Add($"Apparent years: {now.ToYears:F4}");
 
-				double adjustedYears = (double)now.ToYears / Main.TimeParam.TickRatioYear;
+				double adjustedYears = (double)now.ToYears / Main.TimeParam.TickRatioYearD;
 				trace.Add($"Adjusted years: {adjustedYears:F4}");
 
 				adjustedTime = CampaignTime.Years((float)adjustedYears);
@@ -117,10 +117,11 @@ namespace CampaignPacer
 				// This allows switching calendar parameters mid-playthrough.
 
 				trace.Add($"Loading a save that had {Main.Name} enabled...");
+				trace.Add($"Saved time settings: {SavedTimeSettings}");
 
-				if (SavedTimeSettings == null || SavedTimeSettings.DaysPerSeason != Main.TimeParam.DayPerSeasonL)
+				if (SavedTimeSettings == null || SavedTimeSettings.DaysPerSeason != Main.TimeParam.DayPerSeason)
 				{
-					trace.Add($"Configured days/season changed from {SavedTimeSettings?.DaysPerSeason} to {Main.TimeParam.DayPerSeasonL}.");
+					trace.Add($"Configured days/season changed from {SavedTimeSettings?.DaysPerSeason} to {Main.TimeParam.DayPerSeason}.");
 					adjustedTime = SavedTime.ToCampaignTime();
 				}
 			}

@@ -14,7 +14,7 @@ namespace CampaignPacer
 		public const int SemVerMajor = 0;
 		public const int SemVerMinor = 8;
 		public const int SemVerPatch = 0;
-		public const string SemVerSpecial = "alpha1";
+		public const string SemVerSpecial = "alpha2";
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{((SemVerSpecial != null) ? $"-{SemVerSpecial}" : "")}";
 
 		public static readonly string Name = typeof(Main).Namespace;
@@ -100,7 +100,7 @@ namespace CampaignPacer
 			trace.AddRange(Settings.ToStringLines(indentSize: 4));
 			trace.Add(string.Empty);
 			trace.Add("Setting time parameters...");
-			TimeParam = new TimeParams(Settings.DaysPerSeason, trace);
+			TimeParam = new TimeParams(Settings.DaysPerSeason);
 			trace.Add(string.Empty);
 			trace.AddRange(TimeParam.ToStringLines(indentSize: 4));
 		}

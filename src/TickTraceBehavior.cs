@@ -30,7 +30,7 @@ namespace CampaignPacer
 			if (clan != Clan.PlayerClan)
 				return;
 
-			Util.EventTracer.Trace(new List<string> { $"Fired for player clan: {clan.Name}" });
+			Util.EventTracer.Trace(new List<string> { $"Fired for Player Clan: {clan.Name}" });
 		}
 
 		public void OnHourlyTick()

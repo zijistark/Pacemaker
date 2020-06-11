@@ -58,13 +58,14 @@ namespace CampaignPacer
 				{
 					msg.AddRange(new List<string>
 					{
-						$"Campaign Time:      {CampaignTime.Now}",
-						$"  Elapsed Years:    {Campaign.Current.CampaignStartTime.ElapsedYearsUntilNow:F2}",
-						$"  Elapsed Seasons:  {Campaign.Current.CampaignStartTime.ElapsedSeasonsUntilNow:F2}",
+						$"Campaign Time:      {new SimpleTime(CampaignTime.Now)}",
+						$"  Elapsed Years:    {Campaign.Current.CampaignStartTime.ElapsedYearsUntilNow:F3}",
+						$"  Elapsed Seasons:  {Campaign.Current.CampaignStartTime.ElapsedSeasonsUntilNow:F3}",
 						$"  Elapsed Weeks:    {Campaign.Current.CampaignStartTime.ElapsedWeeksUntilNow:F2}",
 						$"  Elapsed Days:     {Campaign.Current.CampaignStartTime.ElapsedDaysUntilNow:F2}",
 						$"  Elapsed Hours:    {Campaign.Current.CampaignStartTime.ElapsedHoursUntilNow:F2}",
 						$"  Week of Season:   {CampaignTime.Now.GetWeekOfSeason + 1}",
+						$"  Day of Season:    {CampaignTime.Now.GetDayOfSeason + 1}",
 						$"  Day of Week:      {CampaignTime.Now.GetDayOfWeek + 1}",
 						$"  Hour of Day:      {CampaignTime.Now.GetHourOfDay}",
 					});
