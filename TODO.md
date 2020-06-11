@@ -2,17 +2,28 @@
 
 We should address these issues / features / tests for CampaignPacer (CP) in the relatively near future:
 
+### Now:
+
+- Decouple `DaysPerSeason` config from `SimpleTime` class and sync a new `SavedTimeSettings` class instance
+
+- Improve accuracy of vanilla date conversion logic
+
+- Optionally auto-adjust pregnancy duration to `F * DaysInYear` where F is configurable
+  - Dynamically target Harmony patch upon whatever pregnancy model is present at OnGameStart
+
 ### Future:
 
 #### High Priority
 
+- Whenever converting between time configurations, do a sanity pass over data structures and ensure things like:
+  - No Hero.BirthDate is in the future
+  - No Pregnanacy.DueDate is in the past or way too large
+  - No Hero death dates are in the future or way too far from their birthdate
+
 - Add setting *Prepare to Remove Campaign Pacer*
   - If enabled, on the next save it will convert the current time to vanilla units and clear our data from the savegame
 
-- Optionally auto-adjust pregnancy duration to `3/4 * DaysInYear` (reality) or faster `36/84 * DaysInYear` (vanilla)
-  - Use a dropdown selection to ensure mutual exclusivity
-  - Dynamically target Harmony patch upon whatever pregnancy model is present at OnGameStart
-  - Sub-option: Auto-adjust due dates of already in-progress pregnancies when converting from vanilla save (assumes vanilla pregnancy duration)
+- Auto-adjust due dates of already in-progress pregnancies when converting from vanilla save (assumes vanilla pregnancy duration)
 
 
 #### Normal Priority
