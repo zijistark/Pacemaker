@@ -1,4 +1,7 @@
-[![CodeFactor](https://www.codefactor.io/repository/github/zijistark/campaignpacer/badge)](https://www.codefactor.io/repository/github/zijistark/campaignpacer)
+<p align="center">
+	<img src="https://tokei.rs/b1/github/zijistark/CampaignPacer?category=code" alt="Lines of Code"/>
+	<a href="https://www.codefactor.io/repository/github/zijistark/campaignpacer"><img src="https://www.codefactor.io/repository/github/zijistark/campaignpacer/badge" alt="CodeFactor"/></a>
+</p>
 
 ## CampaignPacer
 
