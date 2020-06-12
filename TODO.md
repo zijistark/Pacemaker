@@ -4,8 +4,6 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 
 ### Now:
 
-- (Round 2) Vastly improve accuracy of date conversion math when adding CP to a vanilla save.
-
 - Auto-adjust due dates of already in-progress pregnancies when converting from vanilla save / different calendar settings or a different pregnancy duration factor
 
 - Scan decompiled vanilla code for all `CampaignTime` methods which use weeks.
@@ -53,10 +51,6 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 
 
 ### Testing:
-
-- Test whether `v0.8.0-alpha2` loads a vanilla campaign that's run for a bit
-  - Take very special note of time when saved non-CP vs. time when loaded with CP
-  - Save log of loading with CP
 
 - Test loading a CP-enabled save game with & without different calendar settings
   - First create a fresh CP-enabled game.

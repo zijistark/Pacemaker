@@ -4,11 +4,15 @@
 
 #### v0.8.0-alpha2 [WIP]
 
+- Calendar time conversion from non-CP / vanilla savegames is now virtually exact in its precision.
+
+- Fixed a bug where relevant settings would not be synchronized to/from savegames as intended.
+
+- `v0.8.0-alpha2` is save-incompatible with the previous version, because the fractional component of the `SimpleTime` class (represents symbolic calendar time) is now double-precision instead of single-precision.
+
 - Internally, weeks are now always 7 days for compatibility purposes, regardless of whether 7 evenly divides the season or year length. Since they mean nothing to the player, let them mean what they were intended to mean to code.
 
-- Improved precision of calendar time conversion of vanilla saves, but I'm still not satisfied. More to come!
-
-- Generalized `SavedTimeSettings` into `SavedSettings` for the savegame synchronization of non-time settings that still need to be stored in savegames in order for changes in them to trigger conversions / adjustments upon load
+- Generalized `SavedTimeSettings` into `SavedSettings` for the savegame synchronization of non-time settings that still need to be stored in savegames in order for changes in them to trigger conversions / adjustments upon load.
   - Motivated by eventual need to detect changes in *Year-Scaled Pregnancy Duration Factor* to trigger in-progress pregnancies' due date auto-adjustment
 
 #### v0.8.0-alpha1
@@ -21,6 +25,7 @@
   - *Year-Scaled Pregnancy Length Factor* is implemented, and as long as Bannerlord Tweaks doesn't explicitly override this particular duration, it should be in full effect
 
 - Fixed a hard-coded assumption in `AgingCampaignBehavior` regarding the number of weeks in a year. Death probabilities will now always globally update every year.
+
 
 #### v0.8.0-alpha0
 

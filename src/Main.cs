@@ -37,29 +37,34 @@ namespace CampaignPacer
 		{
 			var trace = new List<string>();
 
-			if (!_loaded)
-			{
+
+			if (_loaded)
+				trace.Add("Module was already loaded.");
+			else
 				trace.Add("Module is loading for the first time...");
 
-				if (Settings.Instance == null)
-				{
-					Settings = new Settings(); // use defaults
-					trace.Add("Settings.Instance was NULL! Using default configuration instead.");
-				}
-				else
-					Settings = Settings.Instance;
+			if (Settings.Instance != null && Settings.Instance != Settings)
+			{
+				Settings = Settings.Instance;
 
 				// register for settings property-changed events
 				Settings.PropertyChanged += Settings_OnPropertyChanged;
 
-				SetTimeParams(trace);
+				trace.Add(string.Empty);
+				trace.Add("Loaded Settings:");
+				trace.AddRange(Settings.ToStringLines(indentSize: 4));
+				trace.Add(string.Empty);
+
+				SetTimeParams(new TimeParams(Settings.DaysPerSeason), trace);
+			}
+
+			if (!_loaded)
+			{
 				Harmony.PatchAll();
 
 				InformationManager.DisplayMessage(new InformationMessage($"Loaded {DisplayName} v{Version}", Color.FromUint(0x00F16D26)));
 				_loaded = true;
 			}
-			else
-				trace.Add("Module was already fully loaded.");
 
 			if (Util.EnableTracer)
 				Util.EventTracer.Trace(trace);
@@ -93,24 +98,29 @@ namespace CampaignPacer
 			}
 		}
 
-		protected static void SetTimeParams(List<string> trace)
+		internal static TimeParams SetTimeParams(TimeParams newParams, List<string> trace)
 		{
-			trace.Add(string.Empty);
-			trace.Add("Settings:");
-			trace.AddRange(Settings.ToStringLines(indentSize: 4));
-			trace.Add(string.Empty);
 			trace.Add("Setting time parameters...");
-			TimeParam = new TimeParams(Settings.DaysPerSeason);
+
+			var oldParams = TimeParam;
+			TimeParam = newParams;
+
 			trace.Add(string.Empty);
 			trace.AddRange(TimeParam.ToStringLines(indentSize: 4));
+
+			return oldParams;
 		}
 
 		protected static void Settings_OnPropertyChanged(object sender, PropertyChangedEventArgs args)
 		{
 			if (sender is Settings && args.PropertyName == Settings.SaveTriggered)
 			{
-				var trace = new List<string> { "Received save-triggered property changed event from Settings..." };
-				SetTimeParams(trace);
+				var trace = new List<string> { "Received save-triggered event from Settings..." };
+				trace.Add(string.Empty);
+				trace.Add("New Settings:");
+				trace.AddRange(Settings.ToStringLines(indentSize: 4));
+				trace.Add(string.Empty);
+				SetTimeParams(new TimeParams(Settings.DaysPerSeason), trace);
 				Util.EventTracer.Trace(trace);
 			}
 		}

@@ -9,9 +9,9 @@ namespace CampaignPacer.Patches
 	class CampaignTimePatch
 	{
 		/* necessary reflection info for the largely-internal class CampaignTime */
-		public static readonly FieldInfo TicksFI = AccessTools.Field(typeof(CampaignTime), "_numTicks");
-		public static readonly ConstructorInfo CtorCI = AccessTools.Constructor(typeof(CampaignTime), new[] { typeof(long) });
-		public static readonly MethodInfo CurrentTicksMI = AccessTools.PropertyGetter(typeof(CampaignTime), "CurrentTicks");
+		private static readonly FieldInfo TicksFI = AccessTools.Field(typeof(CampaignTime), "_numTicks");
+		private static readonly ConstructorInfo CtorCI = AccessTools.Constructor(typeof(CampaignTime), new[] { typeof(long) });
+		private static readonly MethodInfo CurrentTicksMI = AccessTools.PropertyGetter(typeof(CampaignTime), "CurrentTicks");
 
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* Elapsed[UNIT]sUntilNow */
@@ -53,17 +53,11 @@ namespace CampaignPacer.Patches
 
 		[HarmonyPostfix]
 		[HarmonyPatch("ElapsedSeasonsUntilNow", MethodType.Getter)]
-		static void ElapsedSeasonsUntilNow(ref float __result)
-		{
-			__result *= Main.TimeParam.TickRatioSeasonF;
-		}
+		static void ElapsedSeasonsUntilNow(ref float __result) => __result *= Main.TimeParam.TickRatioSeasonF;
 
 		[HarmonyPostfix]
 		[HarmonyPatch("ElapsedYearsUntilNow", MethodType.Getter)]
-		static void ElapsedYearsUntilNow(ref float __result)
-		{
-			__result *= Main.TimeParam.TickRatioYearF;
-		}
+		static void ElapsedYearsUntilNow(ref float __result) => __result *= Main.TimeParam.TickRatioYearF;
 
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* Remaining[UNIT]sFromNow */
@@ -105,17 +99,11 @@ namespace CampaignPacer.Patches
 
 		[HarmonyPostfix]
 		[HarmonyPatch("RemainingSeasonsFromNow", MethodType.Getter)]
-		static void RemainingSeasonsFromNow(ref float __result)
-		{
-			__result *= Main.TimeParam.TickRatioSeasonF;
-		}
+		static void RemainingSeasonsFromNow(ref float __result) => __result *= Main.TimeParam.TickRatioSeasonF;
 
 		[HarmonyPostfix]
 		[HarmonyPatch("RemainingYearsFromNow", MethodType.Getter)]
-		static void RemainingYearsFromNow(ref float __result)
-		{
-			__result *= Main.TimeParam.TickRatioYearF;
-		}
+		static void RemainingYearsFromNow(ref float __result) => __result *= Main.TimeParam.TickRatioYearF;
 
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/* To[UNIT]s */
@@ -236,7 +224,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("GetDayOfSeasonf", MethodType.Getter)]
 		static bool GetDayOfSeasonf(ref CampaignTime __instance, ref float __result)
 		{
-			__result = (float)Math.IEEERemainder((double)((long)TicksFI.GetValue(__instance) / TimeParams.TickPerDayL), (double)Main.TimeParam.DayPerSeason);
+			__result = (float)Math.IEEERemainder((double)((long)TicksFI.GetValue(__instance) / TimeParams.TickPerDayL), Main.TimeParam.DayPerSeason);
 			return false;
 		}
 
@@ -244,7 +232,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("GetSeasonOfYearf", MethodType.Getter)]
 		static bool GetSeasonOfYearf(ref CampaignTime __instance, ref float __result)
 		{
-			__result = (float)Math.IEEERemainder((double)((long)TicksFI.GetValue(__instance) / Main.TimeParam.TickPerSeasonL), (double)TimeParams.SeasonPerYear);
+			__result = (float)Math.IEEERemainder((double)((long)TicksFI.GetValue(__instance) / Main.TimeParam.TickPerSeasonL), TimeParams.SeasonPerYear);
 			return false;
 		}
 
