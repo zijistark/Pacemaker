@@ -7,6 +7,20 @@ namespace CampaignPacer
 {
 	class SaveBehavior : CampaignBehaviorBase
 	{
+		protected SimpleTime SavedTime
+		{
+			get => _savedTime;
+			set => _savedTime = value;
+		}
+
+		protected SavedSettings SavedSettings
+		{
+			get => _savedSettings;
+			set => _savedSettings = value;
+		}
+
+		protected bool HasLoaded { get; set; }
+
 		public override void RegisterEvents()
 		{
 			CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnNewGameCreated));
@@ -43,7 +57,7 @@ namespace CampaignPacer
 				if (SavedSettings?.IsNull ?? false)
 					SavedSettings = null;
 
-				AdjustTimeOnLoad(trace);
+				AdjustOnLoad(trace);
 				HasLoaded = true;
 			}
 
@@ -64,16 +78,22 @@ namespace CampaignPacer
 		{
 			var trace = new List<string>();
 
-			if (!HasLoaded && SavedTime == null)
+			if (!HasLoaded)
 			{
-				AdjustTimeOnLoad(trace);
+				AdjustOnLoad(trace);
 				HasLoaded = true;
 			}
 
 			Util.EventTracer.Trace(trace);
 		}
 
-		private void AdjustTimeOnLoad(List<string> trace)
+		protected void AdjustOnLoad(List<string> trace)
+		{
+			AdjustTimeOnLoad(trace);
+			AdjustPregnanciesOnLoad(trace);
+		}
+
+		protected void AdjustTimeOnLoad(List<string> trace)
 		{
 			// adjust campaign start time if it's not _exactly_ equal to the standard start time:
 			var startTime = Campaign.Current.CampaignStartTime;
@@ -135,14 +155,11 @@ namespace CampaignPacer
 				}
 			}
 			else
-			{
-				trace.Add("Loaded an invalid calendar date! Skipping any adjustment...");
-				return;
-			}
+				trace.Add("Loaded an invalid calendar date! Skipping campaign time adjustment...");
 
 			if (adjustedTime != CampaignTime.Zero)
 			{
-				// first, ensure that elapsed time since campaign start is absolutely never negative:
+				// First, ensure that elapsed time since campaign start is absolutely never negative:
 				if (adjustedTime < Campaign.Current.CampaignStartTime)
 				{
 					var daysBeforeStart = Campaign.Current.CampaignStartTime.ToDays - adjustedTime.ToDays;
@@ -156,19 +173,28 @@ namespace CampaignPacer
 			}
 		}
 
-		protected SavedSettings SavedSettings
+		protected void AdjustPregnanciesOnLoad(List<string> trace)
 		{
-			get => _savedSettings;
-			set => _savedSettings = value;
-		}
+			if (SavedSettings != null)
+			{
+				if (!SavedSettings.IsValid)
+					return;
 
-		protected SimpleTime SavedTime
-		{
-			get => _savedTime;
-			set => _savedTime = value;
-		}
+				if (SavedSettings.SameDaysPerSeason && SavedSettings.SameScaledPregnancyDuration)
+					return;
+			}
 
-		protected bool HasLoaded { get; set; }
+			float oldDuration = (SavedSettings == null)
+				? 36f // vanilla
+				: SavedSettings.ScaledPregnancyDuration * SavedSettings.DaysPerSeason * TimeParams.SeasonPerYear;
+
+			float newDuration = Main.Settings.ScaledPregnancyDuration * Main.TimeParam.DayPerSeason * TimeParams.SeasonPerYear;
+
+			if (Util.NearlyEqual(oldDuration, newDuration, 1e-2))
+				return;
+
+			// TODO: Finish up, mang.
+		}
 
 		private SimpleTime _savedTime = null;
 		private SavedSettings _savedSettings = null;

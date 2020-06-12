@@ -29,10 +29,15 @@ namespace CampaignPacer
 			ScaledPregnancyDuration = settings.ScaledPregnancyDuration;
 		}
 
-		public bool IsNull => TimeMultiplier < -0.99 && TimeMultiplier > -1.01 &&
-			ScaledPregnancyDuration < -0.99 && ScaledPregnancyDuration > -1.01 && DaysPerSeason == -1;
+		public bool IsNull => DaysPerSeason == -1 &&
+			Util.NearlyEqual(TimeMultiplier, -1f) &&
+			Util.NearlyEqual(ScaledPregnancyDuration, -1f);
 
 		public bool IsValid => IsNull || (TimeMultiplier > 0.009f && ScaledPregnancyDuration > 0.009f && DaysPerSeason > 0);
+
+		public bool SameTimeMultiplier => Util.NearlyEqual(TimeMultiplier, Main.Settings.TimeMultiplier, 1e-3);
+		public bool SameDaysPerSeason => DaysPerSeason == Main.Settings.DaysPerSeason;
+		public bool SameScaledPregnancyDuration => Util.NearlyEqual(ScaledPregnancyDuration, Main.Settings.ScaledPregnancyDuration, 1e-3);
 
 		public override string ToString() => "{\n" +
 			$"{Tab}{nameof(TimeMultiplier)} = {TimeMultiplier:F2}\n" +

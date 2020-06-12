@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core.ViewModelCollection;
 
 namespace CampaignPacer
 {
@@ -27,6 +28,10 @@ namespace CampaignPacer
 		public static bool EnableTracer { get; set; } = false;
 
 		public static GameLogBase Log = new GameLogBase(); // GameLogBase, parent of GameLog, implements do-nothing virtual output methods
+
+		// Slightly out of place, but meh:
+		public static bool NearlyEqual(float v1, float v2, float epsilon = 1e-5f) => Math.Abs(v1 - v2) < epsilon;
+		public static bool NearlyEqual(double v1, double v2, double epsilon = 1e-5f) => Math.Abs(v1 - v2) < epsilon;
 
 		public static class EventTracer
 		{
