@@ -37,7 +37,6 @@ namespace CampaignPacer
 		{
 			var trace = new List<string>();
 
-
 			if (_loaded)
 				trace.Add("Module was already loaded.");
 			else
