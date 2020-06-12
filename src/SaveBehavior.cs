@@ -114,7 +114,6 @@ namespace CampaignPacer
 				trace.Add($"Loading a {Main.Name}-enabled save...");
 				trace.Add($"Saved settings: {SavedSettings}");
 
-
 				if (SavedSettings == null || SavedSettings.DaysPerSeason != Main.TimeParam.DayPerSeason)
 				{
 					trace.Add($"Configured days/season changed from {SavedSettings?.DaysPerSeason} to {Main.TimeParam.DayPerSeason}.");
