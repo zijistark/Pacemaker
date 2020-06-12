@@ -2,7 +2,7 @@
 
 ### v0.8.0
 
-#### v0.8.0-alpha2 [WIP]
+#### v0.8.0-alpha2
 
 - Calendar time conversion from non-CP / vanilla savegames is now virtually exact in its precision.
 

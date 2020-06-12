@@ -4,6 +4,8 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 
 ### Now:
 
+- Overhaul means of storing & loading save-synchronized settings so that adding/removing settings in the future will be gracefully handled without invalidation of any previously-stored settings (i.e., allow partial settings to be loaded)
+
 - Auto-adjust due dates of already in-progress pregnancies when converting from vanilla save / different calendar settings or a different pregnancy duration factor
 
 - Scan decompiled vanilla code for all `CampaignTime` methods which use weeks.
@@ -19,13 +21,6 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 
 
 #### Normal Priority
-
-- If date conversion cannot be made essentially exact:
-  - Whenever converting between time configurations, do a sanity pass over data structures and ensure things like:
-    - No `Hero.BirthDate` is in the future
-    - No `Pregnanacy.DueDate` is in the past or way too large
-    - No Hero death dates are in the future or way too far from their birthdate (200+ years)
-    - Search for other `CampaignTime` fields stored within the game to police
 
 - Like Community Patch, add acceptable hashes of our Harmony patch target method bodies so that we can recognize when there may be a problem caused by patching (hash mismatch).
 
