@@ -4,10 +4,9 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 
 ### Now:
 
-- Auto-adjust due dates of already in-progress pregnancies when converting from vanilla save / different calendar settings or a different pregnancy duration factor
-
 - Scan decompiled vanilla code for all `CampaignTime` methods which use weeks.
   - They might need a patch due to assumptions about a week's relation to other time units.
+
 
 ### Future:
 
@@ -45,6 +44,8 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 
 
 ### Testing:
+
+- Test decreasing/increasing the effective pregnancy duration (via the days/season or year-scaled pregnancy duration-- or both) on an existing save where it was first set to a known value (36 coming from vanilla and 75% of a year in CP). Can you force most pregnancies to immediately deliver all at once with a severely decreased effective duration?
 
 - Test whether health regeneration rate is sped up by the time multiplier and adjust accordingly (applies to NPCs and party/troops)
 

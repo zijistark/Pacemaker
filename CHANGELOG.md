@@ -2,6 +2,10 @@
 
 ### v0.8.0
 
+#### v0.8.0-alpha4 [WIP]
+
+- If the option is enabled in settings, we now auto-adjust due dates of already in-progress pregnancies when converting from vanilla saves, different calendar settings, or a different year-scaled pregnancy duration factor.
+
 #### v0.8.0-alpha3
 
 - Changed save format, use fresh saves (this won't be happening again-- at least not for a long time)
