@@ -166,6 +166,7 @@ namespace CampaignPacer
 				trace.Add($"Current PregnancyModel-derived type: {pregModel.GetType().FullName}");
 				trace.Add($"{Main.Name}'s pregnancy duration patch isn't in effect. Skipping auto-adjustment " +
 					"of in-progress pregnancy due dates.");
+				return;
 			}
 
 			var oldDuration = (SavedValues.DaysPerSeason != 0 && SavedValues.ScaledPregnancyDuration != 0f)
