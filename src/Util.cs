@@ -98,8 +98,6 @@ namespace CampaignPacer
 
 				if (extraInfo != null && extraInfo.Count > 0)
 				{
-
-
 					msg.AddRange(new List<string>
 					{
 						String.Empty,
