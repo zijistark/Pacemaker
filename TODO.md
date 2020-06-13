@@ -4,13 +4,10 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 
 ### Now:
 
-- Overhaul means of storing & loading save-synchronized settings so that adding/removing settings in the future will be gracefully handled without invalidation of any previously-stored settings (i.e., allow partial settings to be loaded)
-
 - Auto-adjust due dates of already in-progress pregnancies when converting from vanilla save / different calendar settings or a different pregnancy duration factor
 
 - Scan decompiled vanilla code for all `CampaignTime` methods which use weeks.
   - They might need a patch due to assumptions about a week's relation to other time units.
-
 
 ### Future:
 
@@ -38,6 +35,8 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
   - Hopefully a friendlier interface (does C# have variadic methods?)
   - Prevents actual `List<string>` construction if `Util.EnableTracer == false`
 
+- Overhaul means of storing & loading save-synchronized settings so that adding/removing settings in the future will be gracefully handled without invalidation of any previously-stored settings (i.e., allow partial settings to be loaded)
+
 - Allow the user to configure a custom start date (my code already adjusts and resets the start date)
 
 - Consider alternative presentation of CP as a silent, integrated library DLL for overhauls that want custom start dates and modified calendar properties but do not want the user to see CP
@@ -46,12 +45,6 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 
 
 ### Testing:
-
-- Test loading a CP-enabled save game with & without different calendar settings
-  - First create a fresh CP-enabled game.
-  - (Do or do not modify calendar settings, both variants)
-  - Is it the same exact campaign time upon load (i.e., the campaign time that it was when saved)?
-  - Save all 4 logs (before/after, two variants)
 
 - Test whether health regeneration rate is sped up by the time multiplier and adjust accordingly (applies to NPCs and party/troops)
 

@@ -1,26 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using HarmonyLib;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
+using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 
 namespace CampaignPacer
 {
 	class SaveBehavior : CampaignBehaviorBase
 	{
-		protected SimpleTime SavedTime
-		{
-			get => _savedTime;
-			set => _savedTime = value;
-		}
-
-		protected SavedSettings SavedSettings
-		{
-			get => _savedSettings;
-			set => _savedSettings = value;
-		}
-
-		protected bool HasLoaded { get; set; }
-
 		public override void RegisterEvents()
 		{
 			CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnNewGameCreated));
@@ -37,29 +24,21 @@ namespace CampaignPacer
 			{
 				trace.Add("Saving data...");
 				SavedTime = new SimpleTime(CampaignTime.Now);
-				SavedSettings = new SavedSettings(Main.Settings);
+				SavedValues.Snapshot();
 			}
 
 			dataStore.SyncData($"{Main.Name}SavedTime", ref _savedTime);
-			dataStore.SyncData($"{Main.Name}SavedSettings", ref _savedSettings);
+			dataStore.SyncData($"{Main.Name}SavedValues", ref _savedValues);
 
 			trace.AddRange(new List<string>
 			{
-				$"Campaign tick date:   {new SimpleTime(CampaignTime.Now)}",
-				$"Stored calendar date: {((SavedTime != null) ? SavedTime.ToString() : "NULL")}",
+				$"Campaign time: {new SimpleTime(CampaignTime.Now)}",
+				$"Stored calendar time: {((SavedTime != null) ? SavedTime.ToString() : "NULL")}",
+				$"Stored values: {SavedValues}",
 			});
 
 			if (!HasLoaded)
-			{
-				if (SavedTime?.IsNull ?? false)
-					SavedTime = null;
-
-				if (SavedSettings?.IsNull ?? false)
-					SavedSettings = null;
-
-				AdjustOnLoad(trace);
-				HasLoaded = true;
-			}
+				OnLoad(trace);
 
 			Util.EventTracer.Trace(trace);
 		}
@@ -70,42 +49,31 @@ namespace CampaignPacer
 			Util.EventTracer.Trace();
 		}
 
-		// OnGameEarlyLoaded is only present so that we can still adjust the [incorrect] apparent time when adding
-		// the mod to a save that didn't have it enabled (so-called "vanilla save"). This is because SyncData does
-		// not even get called during game loading for behaviors belonging to submodules that were previously not
-		// part of the save.
+		/* OnGameEarlyLoaded is only present so that we can still initialize when adding the mod to a save
+		 * that didn't previously have it enabled (so-called "vanilla save"). This is because SyncData does
+		 * not even get called during game loading for behaviors belonging to submodules that were previously
+		 * not part of the save.
+		 */
 		protected void OnGameEarlyLoaded(CampaignGameStarter starter)
 		{
 			var trace = new List<string>();
 
-			if (!HasLoaded)
-			{
-				AdjustOnLoad(trace);
-				HasLoaded = true;
-			}
+			if (!HasLoaded) // if SyncData were to be called, it would've been by now
+				OnLoad(trace);
 
 			Util.EventTracer.Trace(trace);
 		}
 
-		protected void AdjustOnLoad(List<string> trace)
+		protected void OnLoad(List<string> trace)
 		{
 			AdjustTimeOnLoad(trace);
 			AdjustPregnanciesOnLoad(trace);
+
+			HasLoaded = true;
 		}
 
 		protected void AdjustTimeOnLoad(List<string> trace)
 		{
-			// adjust campaign start time if it's not _exactly_ equal to the standard start time:
-			var startTime = Campaign.Current.CampaignStartTime;
-			trace.Add($"Apparent campaign start time: {new SimpleTime(startTime)}");
-
-			if (startTime != Patches.CampaignPatch.Helpers.StandardStartTime)
-			{
-				Patches.CampaignPatch.Helpers.ResetCampaignStartTime(Campaign.Current);
-				trace.Add($"New campaign start time: {new SimpleTime(Campaign.Current.CampaignStartTime)}");
-				trace.Add($"New campaign start time (ticks): {Campaign.Current.CampaignStartTime.GetTicks()}");
-			}
-
 			var adjustedTime = CampaignTime.Zero;
 
 			if (SavedTime == null)
@@ -146,16 +114,25 @@ namespace CampaignPacer
 				// If the configuration hasn't changed, do nothing at all.
 
 				trace.Add($"Loading a {Main.Name}-enabled save...");
-				trace.Add($"Saved settings: {SavedSettings}");
 
-				if (SavedSettings == null || SavedSettings.DaysPerSeason != Main.TimeParam.DayPerSeason)
+				if (SavedValues.DaysPerSeason != Main.TimeParam.DayPerSeason)
 				{
-					trace.Add($"Configured days/season changed from {SavedSettings?.DaysPerSeason} to {Main.TimeParam.DayPerSeason}.");
+					trace.Add($"Configured days/season changed from {SavedValues.DaysPerSeason} to {Main.TimeParam.DayPerSeason}.");
 					adjustedTime = SavedTime.ToCampaignTime();
 				}
 			}
 			else
 				trace.Add("Loaded an invalid calendar date! Skipping campaign time adjustment...");
+
+			// Adjust campaign start time if it's not exactly equal to the standard start time:
+			var startTime = Campaign.Current.CampaignStartTime;
+
+			if (startTime != Patches.CampaignPatch.Helpers.StandardStartTime)
+			{
+				trace.Add($"Apparent campaign start time: {new SimpleTime(startTime)}");
+				Patches.CampaignPatch.Helpers.ResetCampaignStartTime(Campaign.Current);
+				trace.Add($"New campaign start time: {new SimpleTime(Campaign.Current.CampaignStartTime)}");
+			}
 
 			if (adjustedTime != CampaignTime.Zero)
 			{
@@ -169,34 +146,43 @@ namespace CampaignPacer
 
 				Patches.CampaignPatch.Helpers.SetMapTimeTracker(Campaign.Current, adjustedTime);
 				trace.Add($"New campaign time: {new SimpleTime(CampaignTime.Now)}");
-				trace.Add($"New campaign time (ticks): {CampaignTime.Now.GetTicks()}");
 			}
 		}
 
 		protected void AdjustPregnanciesOnLoad(List<string> trace)
 		{
-			if (SavedSettings != null)
-			{
-				if (!SavedSettings.IsValid)
-					return;
+			var oldDuration = (SavedValues.DaysPerSeason != 0 && SavedValues.ScaledPregnancyDuration != 0f)
+				? SavedValues.ScaledPregnancyDuration * SavedValues.DaysPerSeason * TimeParams.SeasonPerYear
+				: VanillaPregnancyDuration;
 
-				if (SavedSettings.SameDaysPerSeason && SavedSettings.SameScaledPregnancyDuration)
-					return;
-			}
+			var newDuration = Main.Settings.ScaledPregnancyDuration * Main.Settings.DaysPerSeason * TimeParams.SeasonPerYear;
 
-			float oldDuration = (SavedSettings == null)
-				? 36f // vanilla
-				: SavedSettings.ScaledPregnancyDuration * SavedSettings.DaysPerSeason * TimeParams.SeasonPerYear;
-
-			float newDuration = Main.Settings.ScaledPregnancyDuration * Main.TimeParam.DayPerSeason * TimeParams.SeasonPerYear;
-
-			if (Util.NearlyEqual(oldDuration, newDuration, 1e-2))
+			if (Util.NearEqual(oldDuration, newDuration, 1e-3f))
 				return;
+
+			//trace.Add("\nAuto-adjusting in-progress pregnancy due dates due to a change in pregnancy duration...");
+
+			//var pregBehavior = Campaign.Current.CampaignBehaviorManager.GetBehavior<PregnancyCampaignBehavior>();
 
 			// TODO: Finish up, mang.
 		}
 
+		protected SimpleTime SavedTime
+		{
+			get => _savedTime;
+			set => _savedTime = value;
+		}
+
+		protected SavedValues SavedValues
+		{
+			get => _savedValues;
+			set => _savedValues = value;
+		}
+
+		protected bool HasLoaded { get; set; }
+
 		private SimpleTime _savedTime = null;
-		private SavedSettings _savedSettings = null;
+		private SavedValues _savedValues = new SavedValues(); // empty
+		private const float VanillaPregnancyDuration = 36f;
 	}
 }

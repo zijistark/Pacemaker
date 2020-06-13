@@ -2,6 +2,10 @@
 
 ### v0.8.0
 
+#### v0.8.0-alpha3
+
+- Changed save format, use fresh saves (this won't be happening again-- at least not for a long time)
+
 #### v0.8.0-alpha2
 
 - Calendar time conversion from non-CP / vanilla savegames is now virtually exact in its precision.

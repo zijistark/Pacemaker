@@ -88,7 +88,7 @@
     <Compile Include="GameLog.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="SaveBehavior.cs" />
-    <Compile Include="SavedSettings.cs" />
+    <Compile Include="SavedValues.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SimpleTime.cs" />
     <Compile Include="TickTraceBehavior.cs" />

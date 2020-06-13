@@ -1,7 +1,7 @@
 ﻿<Module>
   <Name value="Campaign Pacer"/>
   <Id value="CampaignPacer"/>
-  <Version value="e0.8.0.2"/>
+  <Version value="e0.8.0.3"/>
   <SingleplayerModule value="true"/>
   <MultiplayerModule value="false"/>
   <Official value="false"/>
