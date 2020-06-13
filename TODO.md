@@ -45,7 +45,9 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 
 ### Testing:
 
-- Test decreasing/increasing the effective pregnancy duration (via the days/season or year-scaled pregnancy duration-- or both) on an existing save where it was first set to a known value (36 coming from vanilla and 75% of a year in CP). Can you force most pregnancies to immediately deliver all at once with a severely decreased effective duration?
+- Test decreasing/increasing the effective pregnancy duration (via the days/season or year-scaled pregnancy duration-- or both) on an existing save where it was first set to a known value (36 coming from vanilla and 75% of a year in CP).
+  - Can you force most pregnancies to immediately deliver all at once with a severely decreased effective duration?
+  - Note that the checks for whether a pregnancy is due occur on the daily hero tick, which is distributed over all heroes over a day, so you'll need to wait a minute to see results.
 
 - Test whether health regeneration rate is sped up by the time multiplier and adjust accordingly (applies to NPCs and party/troops)
 

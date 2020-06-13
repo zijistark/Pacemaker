@@ -5,6 +5,7 @@
 #### v0.8.0-alpha4 [WIP]
 
 - If the option is enabled in settings, we now auto-adjust due dates of already in-progress pregnancies when converting from vanilla saves, different calendar settings, or a different year-scaled pregnancy duration factor.
+  - We now also check if our pregnancy duration is equal to the effective one supplied by the currently installed `PregnancyModel`, and if not, then we never auto-adjust in-progress pregnancy due dates.
 
 #### v0.8.0-alpha3
 

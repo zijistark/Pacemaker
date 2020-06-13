@@ -154,12 +154,25 @@ namespace CampaignPacer
 			if (!Main.Settings.EnablePregnancyTweaks || !Main.Settings.AdjustPregnancyDueDates)
 				return;
 
+			var newDuration = Main.Settings.ScaledPregnancyDuration * Main.TimeParam.DayPerYear;
+
+			// Check whether our pregnancy duration is actually in force (i.e., no interference from other mods) before
+			// we do any auto-adjustment. Check whichever PregnanacyModel-derived class is currently in place and ask
+			// of it the pregnanacy duration.
+			var pregModel = Campaign.Current.Models.PregnancyModel;
+
+			if (!Util.NearEqual(pregModel.PregnancyDurationInDays, newDuration))
+			{
+				trace.Add($"Current PregnancyModel-derived type: {pregModel.GetType().FullName}");
+				trace.Add($"{Main.Name}'s pregnancy duration patch isn't in effect. Skipping auto-adjustment " +
+					"of in-progress pregnancy due dates.");
+			}
+
 			var oldDuration = (SavedValues.DaysPerSeason != 0 && SavedValues.ScaledPregnancyDuration != 0f)
 				? SavedValues.ScaledPregnancyDuration * SavedValues.DaysPerSeason * TimeParams.SeasonPerYear
 				: VanillaPregnancyDuration;
 
-			var newDuration = Main.Settings.ScaledPregnancyDuration * Main.Settings.DaysPerSeason * TimeParams.SeasonPerYear;
-
+			// Don't bother if the effective old and new durations barely differ if at all.
 			if (Util.NearEqual(oldDuration, newDuration, 1e-3f))
 				return;
 
@@ -199,7 +212,7 @@ namespace CampaignPacer
 			}
 
 			// OK, done setting up reflection info. Start by grabbing the instance of the behavior (gee, a public API!):
-			var pregBehavior = Campaign.Current.CampaignBehaviorManager.GetBehavior<PregnancyCampaignBehavior>();
+			var pregBehavior = GetCampaignBehavior<PregnancyCampaignBehavior>();
 
 			if (pregBehavior == null)
 			{
@@ -244,7 +257,7 @@ namespace CampaignPacer
 		protected bool HasLoaded { get; set; }
 
 		private SimpleTime _savedTime = null;
-		private SavedValues _savedValues = new SavedValues(); // empty
+		private SavedValues _savedValues = new SavedValues();
 		private const float VanillaPregnancyDuration = 36f;
 	}
 }
