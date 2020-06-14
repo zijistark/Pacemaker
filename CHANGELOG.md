@@ -2,10 +2,14 @@
 
 ### v0.8.0
 
-#### v0.8.0-alpha4 [WIP]
+#### v0.8.0-alpha4
+
+- Disabled tick tracing (confident that we're A+ on tick synchronization at this point).
 
 - If the option is enabled in settings, we now auto-adjust due dates of already in-progress pregnancies when converting from vanilla saves, different calendar settings, or a different year-scaled pregnancy duration factor.
   - We now also check if our pregnancy duration is equal to the effective one supplied by the currently installed `PregnancyModel`, and if not, then we never auto-adjust in-progress pregnancy due dates.
+  - **POSSIBLE ISSUE:** An anecdotal test that also involved campaign time adjustment (days/season changed) wherein, prior to calendar adjustment, a character definitely had conceived a child but after calendar adjustment, the code for auto-adjustment of in-progress pregnancy due dates [correctly] triggered but reported processing 0 pregnancies.
+    - As the code looks fine and the huge outstanding issue with stored `CampaignTime` objects in the game (such as the `DueDate` for a pregnancy) not being adjusted upon calendar time conversion is still unresolved, I've decided to defer further digging into this possible issue until after that outstanding issue has been resolved in v0.9.0.
 
 #### v0.8.0-alpha3
 

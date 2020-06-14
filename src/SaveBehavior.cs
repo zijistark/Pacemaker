@@ -32,8 +32,8 @@ namespace CampaignPacer
 
 			trace.AddRange(new List<string>
 			{
-				$"Campaign time: {new SimpleTime(CampaignTime.Now)}",
-				$"Stored calendar time: {((SavedTime != null) ? SavedTime.ToString() : "NULL")}",
+				$"Current campaign time: {new SimpleTime(CampaignTime.Now)}",
+				$"Stored campaign time: {((SavedTime != null) ? SavedTime.ToString() : "NULL")}",
 				$"Stored values: {SavedValues}",
 			});
 
@@ -230,10 +230,18 @@ namespace CampaignPacer
 				return;
 			}
 
+			if (pregList.Count == 0)
+			{
+				trace.Add("No pregnancies are in-progress. Aborting.");
+				return;
+			}
+			else
+				trace.Add($"Pregnancies in-progress: {pregList.Count}");
+
 			var dueDateDeltaCT = CampaignTime.Days(dueDateDelta);
 			int nPregs = 0;
 
-			foreach (object preg in pregList)
+			foreach (var preg in pregList)
 			{
 				CampaignTime dueDateCT = (CampaignTime)pregDueDateFI.GetValue(preg);
 				pregDueDateFI.SetValue(preg, dueDateCT + dueDateDeltaCT);

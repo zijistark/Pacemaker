@@ -1,6 +1,5 @@
 ﻿using System;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 
 namespace CampaignPacer
@@ -47,10 +46,12 @@ namespace CampaignPacer
 			CampaignTimeExt.SeasonsD(Season) +
 			CampaignTimeExt.DaysD(Day + FractionalDay);
 
-		public bool IsNull => Year == -1 && Season == -1 && Day == -1 && FractionalDay < -0.99 && FractionalDay > -1.01;
-		public bool IsValid => IsNull || (Year >= 0 && IsSeasonValid && Day >= 0 && IsFractionalDayValid);
-		public bool IsValidWithCurrentCalendar => IsValid && Day < Main.TimeParam.DayPerSeason;
-		private bool IsFractionalDayValid => FractionalDay >= 0f && FractionalDay < 1f;
+		public bool IsValid => Year >= 0 &&
+			IsSeasonValid &&
+			Day >= 0 &&
+			FractionalDay >= 0f &&
+			FractionalDay < 1f;
+
 		private bool IsSeasonValid => Season >= 0 && Season < TimeParams.SeasonPerYear;
 
 		public override string ToString()

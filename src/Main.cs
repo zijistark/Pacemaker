@@ -14,7 +14,7 @@ namespace CampaignPacer
 		public const int SemVerMajor = 0;
 		public const int SemVerMinor = 8;
 		public const int SemVerPatch = 0;
-		public const string SemVerSpecial = "alpha4";
+		public const string SemVerSpecial = null;
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{((SemVerSpecial != null) ? $"-{SemVerSpecial}" : "")}";
 
 		public static readonly string Name = typeof(Main).Namespace;
@@ -24,6 +24,8 @@ namespace CampaignPacer
 		internal static Settings Settings = null;
 		internal static TimeParams TimeParam;
 		internal static Harmony Harmony = null;
+
+		internal bool EnableTickTracer = false;
 
 		protected override void OnSubModuleLoad()
 		{
@@ -90,7 +92,7 @@ namespace CampaignPacer
 			gameInitializer.AddBehavior(new SaveBehavior());
 			trace.Add($"Behavior added: {typeof(SaveBehavior).FullName}");
 
-			if (Util.EnableTracer && Util.EnableLog)
+			if (EnableTickTracer && Util.EnableTracer && Util.EnableLog)
 			{
 				gameInitializer.AddBehavior(new TickTraceBehavior());
 				trace.Add($"Behavior added: {typeof(TickTraceBehavior).FullName}");
