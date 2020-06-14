@@ -1,8 +1,21 @@
-## CampaignPacer: Changelog
+## Campaign Pacer: Changelog
+
+### v0.9.0
+
+The scope of the v0.9.0 release series is to address the following rather major problem:
+
+If a calendar time conversion occurs due to adding CampaignPacer to a vanilla savegame or CampaignPacer's calendar settings (*Days Per Season*) are altered mid-savegame, then while we do currently correct the current campaign time as well as campaign start time from the intrinsic warping of times that occurs upon such a conversion, we do NOT yet correct the countless stored `CampaignTime` objects throughout the game or within submodules (mods).
+
+We're going to finally address them by adding a tick correction offset internally to all of the `CampaignTime` API's methods. And all shall be the most serene.
+
+
+#### v0.9.0-alpha1
+
+Nothing done yet. _Hold your horses!_
+
+---
 
 ### v0.8.0
-
-#### v0.8.0-alpha4
 
 - Disabled tick tracing (confident that we're A+ on tick synchronization at this point).
 
@@ -30,7 +43,7 @@
 
 #### v0.8.0-alpha1
 
-- Fixed major issue with Harmony patching of patch class `Patches.CampaignPatch` that prevented loading the game
+- Fixed major issue with Harmony patching of patch class `Patches.CampaignPatch` that prevents loading the game
 
 - Fixed a minor issue upon loading an older CP-enabled savegame with different configured days/season wherein CP could fail to restore the campaign time due to lack of saved configuration data.
 
