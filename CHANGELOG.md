@@ -6,6 +6,8 @@
 
 - Renamed submodule to _Pacemaker_
 
+- Re-enabled tick tracing due to the major time overhaul
+
 ---
 
 ### v0.9.0
