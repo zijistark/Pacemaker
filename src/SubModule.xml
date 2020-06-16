@@ -1,7 +1,7 @@
 ﻿<Module>
-  <Name value="Campaign Pacer"/>
-  <Id value="CampaignPacer"/>
-  <Version value="v0.9.0"/>
+  <Name value="Pacemaker"/>
+  <Id value="Pacemaker"/>
+  <Version value="v0.9.1"/>
   <SingleplayerModule value="true"/>
   <MultiplayerModule value="false"/>
   <Official value="false"/>
@@ -13,9 +13,9 @@
   </DependedModules>
   <SubModules>
     <SubModule>
-      <Name value="CampaignPacer"/>
-      <DLLName value="CampaignPacer.dll"/>
-      <SubModuleClassType value="CampaignPacer.Main"/>
+      <Name value="Pacemaker"/>
+      <DLLName value="Pacemaker.dll"/>
+      <SubModuleClassType value="Pacemaker.Main"/>
       <Tags>
         <Tag key="DedicatedServerType" value="none" />
         <Tag key="IsNoRenderModeElement" value="false" />

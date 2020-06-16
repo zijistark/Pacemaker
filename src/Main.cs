@@ -6,26 +6,32 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace CampaignPacer
+namespace Pacemaker
 {
 	public class Main : MBSubModuleBase
 	{
 		/* Semantic Versioning (https://semver.org): */
 		public const int SemVerMajor = 0;
 		public const int SemVerMinor = 9;
-		public const int SemVerPatch = 0;
+		public const int SemVerPatch = 1;
 		public const string SemVerSpecial = null;
-		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{((SemVerSpecial != null) ? $"-{SemVerSpecial}" : "")}";
+		public static readonly string Version = SemVerMajor.ToString() + '.' +
+			SemVerMinor.ToString() + '.' +
+			SemVerPatch.ToString() + (
+				(SemVerSpecial != null)
+				? '-' + SemVerSpecial
+				: string.Empty
+			);
 
 		public static readonly string Name = typeof(Main).Namespace;
-		public const string DisplayName = "Campaign Pacer"; // to be shown to humans in-game
+		public static readonly string DisplayName = Name; // to be shown to humans in-game
 		public static readonly string HarmonyDomain = "com.zijistark.bannerlord." + Name.ToLower();
 
 		internal static Settings Settings = null;
 		internal static TimeParams TimeParam;
 		internal static Harmony Harmony = null;
 
-		internal bool EnableTickTracer = false;
+		protected bool EnableTickTracer = true;
 
 		protected override void OnSubModuleLoad()
 		{

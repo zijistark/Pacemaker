@@ -7,7 +7,7 @@ using System.Text;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace CampaignPacer
+namespace Pacemaker
 {
 	public class GameLog : GameLogBase
 	{

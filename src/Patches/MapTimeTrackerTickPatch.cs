@@ -3,7 +3,7 @@ using System;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 
-namespace CampaignPacer.Patches
+namespace Pacemaker.Patches
 {
 	[HarmonyPatch]
 	class MapTimeTrackerTickPatch

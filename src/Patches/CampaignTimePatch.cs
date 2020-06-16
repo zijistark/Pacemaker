@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 
-namespace CampaignPacer.Patches
+namespace Pacemaker.Patches
 {
 	[HarmonyPatch(typeof(CampaignTime))]
 	class CampaignTimePatch
@@ -36,7 +36,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("ElapsedMillisecondsUntilNow", MethodType.Getter)]
 		static bool ElapsedMillisecondsUntilNow(ref CampaignTime __instance, ref float __result)
 		{
-			long dTicks = (long)CurrentTicksMI.Invoke(__instance, null) - (long)TicksFI.GetValue(__instance);
+			long dTicks = (long)CurrentTicksMI.Invoke(null, null) - (long)TicksFI.GetValue(__instance);
 			__result = Ticks.Convert(dTicks) / TimeParams.TickPerMsecF;
 			return false;
 		}
@@ -45,7 +45,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("ElapsedSecondsUntilNow", MethodType.Getter)]
 		static bool ElapsedSecondsUntilNow(ref CampaignTime __instance, ref float __result)
 		{
-			long dTicks = (long)CurrentTicksMI.Invoke(__instance, null) - (long)TicksFI.GetValue(__instance);
+			long dTicks = (long)CurrentTicksMI.Invoke(null, null) - (long)TicksFI.GetValue(__instance);
 			__result = Ticks.Convert(dTicks) / TimeParams.TickPerSecF;
 			return false;
 		}
@@ -54,7 +54,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("ElapsedDaysUntilNow", MethodType.Getter)]
 		static bool ElapsedDaysUntilNow(ref CampaignTime __instance, ref float __result)
 		{
-			long dTicks = (long)CurrentTicksMI.Invoke(__instance, null) - (long)TicksFI.GetValue(__instance);
+			long dTicks = (long)CurrentTicksMI.Invoke(null, null) - (long)TicksFI.GetValue(__instance);
 			__result = Ticks.Convert(dTicks) / TimeParams.TickPerDayF;
 			return false;
 		}
@@ -63,7 +63,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("ElapsedWeeksUntilNow", MethodType.Getter)]
 		static bool ElapsedWeeksUntilNow(ref CampaignTime __instance, ref float __result)
 		{
-			long dTicks = (long)CurrentTicksMI.Invoke(__instance, null) - (long)TicksFI.GetValue(__instance);
+			long dTicks = (long)CurrentTicksMI.Invoke(null, null) - (long)TicksFI.GetValue(__instance);
 			__result = Ticks.Convert(dTicks) / TimeParams.OldTickPerWeekF;
 			return false;
 		}
@@ -72,7 +72,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("ElapsedSeasonsUntilNow", MethodType.Getter)]
 		static bool ElapsedSeasonsUntilNow(ref CampaignTime __instance, ref float __result)
 		{
-			long dTicks = (long)CurrentTicksMI.Invoke(__instance, null) - (long)TicksFI.GetValue(__instance);
+			long dTicks = (long)CurrentTicksMI.Invoke(null, null) - (long)TicksFI.GetValue(__instance);
 			__result = Ticks.Convert(dTicks) / Main.TimeParam.TickPerSeasonF;
 			return false;
 		}
@@ -81,7 +81,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("ElapsedYearsUntilNow", MethodType.Getter)]
 		static bool ElapsedYearsUntilNow(ref CampaignTime __instance, ref float __result)
 		{
-			long dTicks = (long)CurrentTicksMI.Invoke(__instance, null) - (long)TicksFI.GetValue(__instance);
+			long dTicks = (long)CurrentTicksMI.Invoke(null, null) - (long)TicksFI.GetValue(__instance);
 			__result = Ticks.Convert(dTicks) / Main.TimeParam.TickPerYearF;
 			return false;
 		}
@@ -93,7 +93,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("RemainingMillisecondsFromNow", MethodType.Getter)]
 		static bool RemainingMillisecondsFromNow(ref CampaignTime __instance, ref float __result)
 		{
-			long dTicks = (long)TicksFI.GetValue(__instance) - (long)CurrentTicksMI.Invoke(__instance, null);
+			long dTicks = (long)TicksFI.GetValue(__instance) - (long)CurrentTicksMI.Invoke(null, null);
 			__result = Ticks.Convert(dTicks) / TimeParams.TickPerMsecF;
 			return false;
 		}
@@ -102,7 +102,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("RemainingSecondsFromNow", MethodType.Getter)]
 		static bool RemainingSecondsFromNow(ref CampaignTime __instance, ref float __result)
 		{
-			long dTicks = (long)TicksFI.GetValue(__instance) - (long)CurrentTicksMI.Invoke(__instance, null);
+			long dTicks = (long)TicksFI.GetValue(__instance) - (long)CurrentTicksMI.Invoke(null, null);
 			__result = Ticks.Convert(dTicks) / TimeParams.TickPerSecF;
 			return false;
 		}
@@ -111,7 +111,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("RemainingDaysFromNow", MethodType.Getter)]
 		static bool RemainingDaysFromNow(ref CampaignTime __instance, ref float __result)
 		{
-			long dTicks = (long)TicksFI.GetValue(__instance) - (long)CurrentTicksMI.Invoke(__instance, null);
+			long dTicks = (long)TicksFI.GetValue(__instance) - (long)CurrentTicksMI.Invoke(null, null);
 			__result = Ticks.Convert(dTicks) / TimeParams.TickPerDayF;
 			return false;
 		}
@@ -120,7 +120,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("RemainingWeeksFromNow", MethodType.Getter)]
 		static bool RemainingWeeksFromNow(ref CampaignTime __instance, ref float __result)
 		{
-			long dTicks = (long)TicksFI.GetValue(__instance) - (long)CurrentTicksMI.Invoke(__instance, null);
+			long dTicks = (long)TicksFI.GetValue(__instance) - (long)CurrentTicksMI.Invoke(null, null);
 			__result = Ticks.Convert(dTicks) / TimeParams.OldTickPerWeekF;
 			return false;
 		}
@@ -129,7 +129,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("RemainingSeasonsFromNow", MethodType.Getter)]
 		static bool RemainingSeasonsFromNow(ref CampaignTime __instance, ref float __result)
 		{
-			long dTicks = (long)TicksFI.GetValue(__instance) - (long)CurrentTicksMI.Invoke(__instance, null);
+			long dTicks = (long)TicksFI.GetValue(__instance) - (long)CurrentTicksMI.Invoke(null, null);
 			__result = Ticks.Convert(dTicks) / Main.TimeParam.TickPerSeasonF;
 			return false;
 		}
@@ -138,7 +138,7 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("RemainingYearsFromNow", MethodType.Getter)]
 		static bool RemainingYearsFromNow(ref CampaignTime __instance, ref float __result)
 		{
-			long dTicks = (long)TicksFI.GetValue(__instance) - (long)CurrentTicksMI.Invoke(__instance, null);
+			long dTicks = (long)TicksFI.GetValue(__instance) - (long)CurrentTicksMI.Invoke(null, null);
 			__result = Ticks.Convert(dTicks) / Main.TimeParam.TickPerYearF;
 			return false;
 		}
@@ -217,7 +217,8 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("GetHourOfDay", MethodType.Getter)]
 		static bool GetHourOfDay(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)((Ticks.Convert((long)TicksFI.GetValue(__instance)) / TimeParams.TickPerHourL) % TimeParams.HourPerDay);
+			long nHour = Ticks.Convert((long)TicksFI.GetValue(__instance)) / TimeParams.TickPerHourL;
+			__result = (int)(nHour % TimeParams.HourPerDay);
 			return false;
 		}
 
@@ -225,7 +226,8 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("GetDayOfWeek", MethodType.Getter)]
 		static bool GetDayOfWeek(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)((Ticks.Convert((long)TicksFI.GetValue(__instance)) / TimeParams.TickPerDayL) % TimeParams.DayPerWeek);
+			long nDay = Ticks.Convert((long)TicksFI.GetValue(__instance)) / TimeParams.TickPerDayL;
+			__result = (int)(nDay % TimeParams.DayPerWeek);
 			return false;
 		}
 
@@ -233,7 +235,8 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("GetDayOfSeason", MethodType.Getter)]
 		static bool GetDayOfSeason(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)((Ticks.Convert((long)TicksFI.GetValue(__instance)) / TimeParams.TickPerDayL) % Main.TimeParam.DayPerSeason);
+			long nDay = Ticks.Convert((long)TicksFI.GetValue(__instance)) / TimeParams.TickPerDayL;
+			__result = (int)(nDay % Main.TimeParam.DayPerSeason);
 			return false;
 		}
 
@@ -241,7 +244,8 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("GetDayOfYear", MethodType.Getter)]
 		static bool GetDayOfYear(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)((Ticks.Convert((long)TicksFI.GetValue(__instance)) / TimeParams.TickPerDayL) % Main.TimeParam.DayPerYear);
+			long nDay = Ticks.Convert((long)TicksFI.GetValue(__instance)) / TimeParams.TickPerDayL;
+			__result = (int)(nDay % Main.TimeParam.DayPerYear);
 			return false;
 		}
 
@@ -249,7 +253,8 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("GetWeekOfSeason", MethodType.Getter)]
 		static bool GetWeekOfSeason(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)((Ticks.Convert((long)TicksFI.GetValue(__instance)) / TimeParams.OldTickPerWeekL) % TimeParams.OldWeekPerSeason);
+			long nWeek = Ticks.Convert((long)TicksFI.GetValue(__instance)) / TimeParams.OldTickPerWeekL;
+			__result = (int)(nWeek % TimeParams.OldWeekPerSeason);
 			return false;
 		}
 
@@ -257,7 +262,8 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("GetSeasonOfYear", MethodType.Getter)]
 		static bool GetSeasonOfYear(ref CampaignTime __instance, ref int __result)
 		{
-			__result = (int)((Ticks.Convert((long)TicksFI.GetValue(__instance)) / Main.TimeParam.TickPerSeasonL) % TimeParams.SeasonPerYear);
+			long nSeason = Ticks.Convert((long)TicksFI.GetValue(__instance)) / Main.TimeParam.TickPerSeasonL;
+			__result = (int)(nSeason % TimeParams.SeasonPerYear);
 			return false;
 		}
 
@@ -276,7 +282,11 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("GetDayOfSeasonf", MethodType.Getter)]
 		static bool GetDayOfSeasonf(ref CampaignTime __instance, ref float __result)
 		{
-			__result = (float)Math.IEEERemainder(Ticks.Convert((long)TicksFI.GetValue(__instance)) / TimeParams.TickPerDayL, Main.TimeParam.DayPerSeason);
+			__result = (float)Math.IEEERemainder(
+				Ticks.Convert((long)TicksFI.GetValue(__instance)) / TimeParams.TickPerDayL,
+				Main.TimeParam.DayPerSeason
+				);
+
 			return false;
 		}
 
@@ -284,7 +294,11 @@ namespace CampaignPacer.Patches
 		[HarmonyPatch("GetSeasonOfYearf", MethodType.Getter)]
 		static bool GetSeasonOfYearf(ref CampaignTime __instance, ref float __result)
 		{
-			__result = (float)Math.IEEERemainder(Ticks.Convert((long)TicksFI.GetValue(__instance)) / Main.TimeParam.TickPerSeasonL, TimeParams.SeasonPerYear);
+			__result = (float)Math.IEEERemainder(
+				Ticks.Convert((long)TicksFI.GetValue(__instance)) / Main.TimeParam.TickPerSeasonL,
+				TimeParams.SeasonPerYear
+				);
+
 			return false;
 		}
 	}
