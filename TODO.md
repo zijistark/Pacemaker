@@ -4,7 +4,48 @@ We should address these issues / features / tests for CampaignPacer (CP) in the 
 
 ### Now:
 
-- Design the new calendar time conversion tick auto-correction offset system for the `CampaignTime` API.
+As part of the new `CampaignTime` tick auto-correction redesign:
+
+- Remove code in `SaveBehavior` which restores the time and start time upon change in the *Days Per Season* setting or load of a vanilla save (automatically happens now)
+- Remove the `Patches.CampaignTime.Helpers` class and inline them into the actual `Campaign` constructor patch
+- The `CampaignTime` API adjustments:
+  - Create a helper method `ConvertTicks` to convert raw, stored ticks to the amount of ticks which are expected by the current *Days Per Season* configuration
+  - The following patched (or unpatched) methods must be implemented as always-skipping prefix patches (i.e., replacement methods) that use `ConvertTicks`:
+    - `ElapsedMillisecondsUntilNow`
+    - `ElapsedSecondsUntilNow`
+    - `ElapsedHoursUntilNow`
+    - `ElapsedDaysUntilNow`
+    - `ElapsedWeeksUntilNow`
+    - `ElapsedSeasonsUntilNow`
+    - `ElapsedYearsUntilNow`
+    - `RemainingMillisecondsFromNow`
+    - `RemainingSecondsFromNow`
+    - `RemainingHoursFromNow`
+    - `RemainingDaysFromNow`
+    - `RemainingWeeksFromNow`
+    - `RemainingSeasonsFromNow`
+    - `RemainingYearsFromNow`
+    - `ToMilliseconds`
+    - `ToSeconds`
+    - `ToMinutes`
+    - `ToHours`
+    - `ToDays`
+    - `ToWeeks`
+    - `ToSeasons`
+    - `ToYears`
+    - `GetHourOfDay`
+    - `GetDayOfWeek`
+    - `GetDayOfSeason`
+    - `GetDayOfYear`
+    - `GetWeekOfSeason`
+    - `GetSeasonOfYear`
+    - `GetYear`
+    - `GetDayOfSeasonf`
+    - `GetSeasonOfYearf`
+  - The following patched methods must be dropped, reverted to vanilla implementation:
+    - `Seasons`
+    - `Years`
+    - `YearsFromNow`
 
 ### Future:
 
