@@ -1,5 +1,15 @@
 ## Pacemaker: Changelog
 
+### v0.10.0 [WIP]
+
+- Hero & troop health regeneration rate is now auto-calibrated to maintain vanilla pace. Examples:
+  - If the *Time Multiplier* setting is 2, health regenerates half as quickly per day
+  - If the *Time Multiplier* setting is 0.5, health regenerates twice as quickly per day
+
+- Upgraded to MCM.Integrated v3.18.1 from v3.14
+
+---
+
 ### v0.9.1
 
 - Fixed several of the `CampaignTime` Harmony patches invoking, via reflection, `CampaignTime.CurrentTicks` as if it were an instance method rather than the static method it is. It's unclear whether this had any negative impact, but it's fixed regardless.

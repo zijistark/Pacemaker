@@ -81,6 +81,7 @@
     <Compile Include="Patches\AgingCampaignBehaviorPatch.cs" />
     <Compile Include="Patches\CampaignPatch.cs" />
     <Compile Include="Patches\CampaignTimePatch.cs" />
+    <Compile Include="Patches\DefaultPartyHealingModelPatch.cs" />
     <Compile Include="Patches\DefaultPregnancyModelPatch.cs" />
     <Compile Include="Patches\MapTimeTrackerTickPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -98,7 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Bannerlord.MCM.Integrated">
-      <Version>3.1.4</Version>
+      <Version>3.1.8.1</Version>
     </PackageReference>
     <PackageReference Include="Lib.Harmony">
       <Version>2.0.1</Version>
