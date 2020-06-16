@@ -1,6 +1,6 @@
 ## Pacemaker: Changelog
 
-### v0.10.0 [WIP]
+### v0.10.0
 
 - Hero & troop health regeneration rate is now auto-calibrated to maintain vanilla pace. Examples:
   - If the *Time Multiplier* setting is 2, health regenerates half as quickly per day

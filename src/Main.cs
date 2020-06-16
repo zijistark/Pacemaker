@@ -12,8 +12,8 @@ namespace Pacemaker
 	{
 		/* Semantic Versioning (https://semver.org): */
 		public const int SemVerMajor = 0;
-		public const int SemVerMinor = 9;
-		public const int SemVerPatch = 1;
+		public const int SemVerMinor = 10;
+		public const int SemVerPatch = 0;
 		public const string SemVerSpecial = null;
 		public static readonly string Version = SemVerMajor.ToString() + '.' +
 			SemVerMinor.ToString() + '.' +
