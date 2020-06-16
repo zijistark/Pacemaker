@@ -1,65 +1,21 @@
-## TODO
+## Pacemaker: TODO
 
-We should address these issues / features / tests for CampaignPacer (CP) in the relatively near future:
+We should address these issues / features / tests for Pacemaker in the relatively near future:
 
 ### Now:
 
-As part of the new `CampaignTime` tick auto-correction redesign:
-
-- Remove code in `SaveBehavior` which restores the time and start time upon change in the *Days Per Season* setting or load of a vanilla save (automatically happens now)
-- Remove the `Patches.CampaignTime.Helpers` class and inline them into the actual `Campaign` constructor patch
-- The `CampaignTime` API adjustments:
-  - Create a helper method `ConvertTicks` to convert raw, stored ticks to the amount of ticks which are expected by the current *Days Per Season* configuration
-  - The following patched (or unpatched) methods must be implemented as always-skipping prefix patches (i.e., replacement methods) that use `ConvertTicks`:
-    - `ElapsedMillisecondsUntilNow`
-    - `ElapsedSecondsUntilNow`
-    - `ElapsedHoursUntilNow`
-    - `ElapsedDaysUntilNow`
-    - `ElapsedWeeksUntilNow`
-    - `ElapsedSeasonsUntilNow`
-    - `ElapsedYearsUntilNow`
-    - `RemainingMillisecondsFromNow`
-    - `RemainingSecondsFromNow`
-    - `RemainingHoursFromNow`
-    - `RemainingDaysFromNow`
-    - `RemainingWeeksFromNow`
-    - `RemainingSeasonsFromNow`
-    - `RemainingYearsFromNow`
-    - `ToMilliseconds`
-    - `ToSeconds`
-    - `ToMinutes`
-    - `ToHours`
-    - `ToDays`
-    - `ToWeeks`
-    - `ToSeasons`
-    - `ToYears`
-    - `GetHourOfDay`
-    - `GetDayOfWeek`
-    - `GetDayOfSeason`
-    - `GetDayOfYear`
-    - `GetWeekOfSeason`
-    - `GetSeasonOfYear`
-    - `GetYear`
-    - `GetDayOfSeasonf`
-    - `GetSeasonOfYearf`
-  - The following patched methods must be dropped, reverted to vanilla implementation:
-    - `Seasons`
-    - `Years`
-    - `YearsFromNow`
+Nothing for now.
 
 ### Future:
 
 #### High Priority
 
-- Add setting *Prepare to Remove Campaign Pacer*
-  - If enabled, on the next save it will convert the current time to vanilla units and clear our data from the savegame
+- Auto-adjust hero & troop/party healing rate if testing shows that it's faster with time multiplier > 1.
 
 
 #### Normal Priority
 
 - Like Community Patch, add acceptable hashes of our Harmony patch target method bodies so that we can recognize when there may be a problem caused by patching (hash mismatch).
-
-- Auto-adjust hero & troop/party healing rate if testing shows that it's faster with time multiplier > 1.
 
 - Add settings preset for *Vanilla* (already have *Default* and the user will make *Custom*)
 
@@ -73,26 +29,19 @@ As part of the new `CampaignTime` tick auto-correction redesign:
   - Hopefully a friendlier interface (does C# have variadic methods?)
   - Prevents actual `List<string>` construction if `Util.EnableTracer == false`
 
-- Overhaul means of storing & loading save-synchronized settings so that adding/removing settings in the future will be gracefully handled without invalidation of any previously-stored settings (i.e., allow partial settings to be loaded)
+- Allow the user to configure a custom start date (my code already adjusts and resets the start date)?
 
-- Allow the user to configure a custom start date (my code already adjusts and resets the start date)
-
-- Consider alternative presentation of CP as a silent, integrated library DLL for overhauls that want custom start dates and modified calendar properties but do not want the user to see CP
+- Consider alternative presentation of Pacemaker as a silent, integrated library DLL for overhauls that want custom start dates and modified calendar properties but do not want the user to see Pacemaker
 
 - Auto-marry nobles over a certain age, as even at vanilla time paces, they have trouble marrying, and it'll be far worse with years that are much shorter
 
 
 ### Testing:
 
-- Test decreasing/increasing the effective pregnancy duration (via the days/season or year-scaled pregnancy duration-- or both) on an existing save where it was first set to a known value (36 coming from vanilla and 75% of a year in CP).
-  - Can you force most pregnancies to immediately deliver all at once with a severely decreased effective duration?
-  - Note that the checks for whether a pregnancy is due occur on the daily hero tick, which is distributed over all heroes over a day, so you'll need to wait a minute to see results.
-
 - Test whether health regeneration rate is sped up by the time multiplier and adjust accordingly (applies to NPCs and party/troops)
 
-- Test whether aging works correctly with time speed factors >= 1.5 and factors <= 0.667
+- Test whether aging works correctly
   - FaceGen / aesthetic aging
-  - Old age death probabilities 
 
 ---
 

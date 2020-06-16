@@ -1,17 +1,21 @@
-## Campaign Pacer: Changelog
+## Pacemaker: Changelog
 
 ### v0.9.0
 
-The scope of the v0.9.0 release series is to address the following rather major problem:
+Since we no longer alter the calibration of the ticks stored internal to either `MapTimeTracker` or `CampaignTime`, v0.9.0 is save-incompatible with all past versions.
 
-If a calendar time conversion occurs due to adding CampaignPacer to a vanilla savegame or CampaignPacer's calendar settings (*Days Per Season*) are altered mid-savegame, then while we do currently correct the current campaign time as well as campaign start time from the intrinsic warping of times that occurs upon such a conversion, we do NOT yet correct the countless stored `CampaignTime` objects throughout the game or within submodules (mods).
-
-We're going to finally address them by adding a tick correction offset internally to all of the `CampaignTime` API's methods. And all shall be the most serene.
-
-
-#### v0.9.0-alpha1
-
-Nothing done yet. _Hold your horses!_
+- Created a `CampaignTime` tick auto-calibration system
+  - Allows the currently configured *Days Per Season* setting to be correctly reflected even before Pacemaker can load data from the savegame
+    - Addresses time coherency issues in the period of execution between `Campaign.OnLoad` and considerably later when Pacemaker could access the data saved in the savegame
+    - Addresses theoretical thread-safety issues of correcting the current time and potentially the campaign start time well after the game has been loaded
+  - Changes in *Days Per Season* are now always correctly reflected, without any adjustment necessary, in all instances of `CampaignTime` objects in the game and any 3rd-party submodules
+    - `CampaignTime` objects will no longer require any auto-correction upon change of settings
+    - We won't even have to adjust the campaign's current time itself upon change in settings or loading a save that didn't have Pacemaker enabled
+    - No more negative ages!
+  - Raw, stored tick counts are now always calibrated for vanilla's days/season (21) and we convert to ticks calibrated for the currently configured *Days Per Season* on-the-fly
+  - Removal of Pacemaker from a savegame now requires no special steps
+    - The tick counts stored everywhere are already in vanilla units
+    - The small amount of data we do save to the savegame is apparently automatically disregarded when loading without Pacemaker
 
 ---
 
@@ -30,7 +34,7 @@ Nothing done yet. _Hold your horses!_
 
 #### v0.8.0-alpha2
 
-- Calendar time conversion from non-CP / vanilla savegames is now virtually exact in its precision.
+- Calendar time conversion from non-Pacemaker / vanilla savegames is now virtually exact in its precision.
 
 - Fixed a bug where relevant settings would not be synchronized to/from savegames as intended.
 
@@ -45,7 +49,7 @@ Nothing done yet. _Hold your horses!_
 
 - Fixed major issue with Harmony patching of patch class `Patches.CampaignPatch` that prevents loading the game
 
-- Fixed a minor issue upon loading an older CP-enabled savegame with different configured days/season wherein CP could fail to restore the campaign time due to lack of saved configuration data.
+- Fixed a minor issue upon loading an older Pacemaker-enabled savegame with different configured days/season wherein Pacemaker could fail to restore the campaign time due to lack of saved configuration data.
 
 - Add settings menu options for pregnancy duration (but not yet a full implementation)
   - *Year-Scaled Pregnancy Length Factor* is implemented, and as long as Bannerlord Tweaks doesn't explicitly override this particular duration, it should be in full effect

@@ -12,7 +12,7 @@ namespace CampaignPacer
 	{
 		/* Semantic Versioning (https://semver.org): */
 		public const int SemVerMajor = 0;
-		public const int SemVerMinor = 8;
+		public const int SemVerMinor = 9;
 		public const int SemVerPatch = 0;
 		public const string SemVerSpecial = null;
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{((SemVerSpecial != null) ? $"-{SemVerSpecial}" : "")}";
