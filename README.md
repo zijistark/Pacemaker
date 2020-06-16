@@ -1,6 +1,6 @@
 <p align="center">
-	<img src="https://tokei.rs/b1/github/zijistark/CampaignPacer?category=code" alt="Lines of Code"/>
-	<a href="https://www.codefactor.io/repository/github/zijistark/campaignpacer"><img src="https://www.codefactor.io/repository/github/zijistark/campaignpacer/badge" alt="CodeFactor"/></a>
+	<img src="https://tokei.rs/b1/github/zijistark/Pacemaker?category=code" alt="Lines of Code"/>
+	<a href="https://www.codefactor.io/repository/github/zijistark/pacemaker"><img src="https://www.codefactor.io/repository/github/zijistark/pacemaker/badge" alt="CodeFactor"/></a>
 </p>
 
 ## Pacemaker
