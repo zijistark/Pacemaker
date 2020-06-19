@@ -3,7 +3,7 @@ using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 
-namespace Pacemaker.Patches
+namespace CampaignPacer.Patches
 {
 	[HarmonyPatch(typeof(AgingCampaignBehavior))]
 	class AgingCampaignBehaviorPatch

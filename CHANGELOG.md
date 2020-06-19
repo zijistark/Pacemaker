@@ -1,5 +1,6 @@
 ## Pacemaker: Changelog
 
+
 ### v0.10.0
 
 - Hero & troop health regeneration rate is now auto-calibrated to maintain vanilla pace. Examples:
@@ -22,7 +23,7 @@
 
 ### v0.9.0
 
-Since we no longer alter the calibration of the ticks stored internal to either `MapTimeTracker` or `CampaignTime`, v0.9.0 is save-incompatible with all past versions. This is one of the reasons that I wanted to hurry the architectural switch described herein:
+Since we no longer alter the calibration of the ticks stored internal to either `MapTimeTracker` or `CampaignTime`, v0.9.0 is save-incompatible with all past versions.
 
 - Created a `CampaignTime` tick auto-calibration system
   - Allows the currently configured *Days Per Season* setting to be correctly reflected even before Pacemaker can load data from the savegame
@@ -54,7 +55,7 @@ Since we no longer alter the calibration of the ticks stored internal to either 
 
 #### v0.8.0-alpha2
 
-- Calendar time conversion from non-CP / vanilla savegames is now virtually exact in its precision.
+- Calendar time conversion from non-Pacemaker / vanilla savegames is now virtually exact in its precision.
 
 - Fixed a bug where relevant settings would not be synchronized to/from savegames as intended.
 
@@ -69,7 +70,7 @@ Since we no longer alter the calibration of the ticks stored internal to either 
 
 - Fixed major issue with Harmony patching of patch class `Patches.CampaignPatch` that prevents loading the game
 
-- Fixed a minor issue upon loading an older CP-enabled savegame with different configured days/season wherein CP could fail to restore the campaign time due to lack of saved configuration data.
+- Fixed a minor issue upon loading an older Pacemaker-enabled savegame with different configured days/season wherein Pacemaker could fail to restore the campaign time due to lack of saved configuration data.
 
 - Add settings menu options for pregnancy duration (but not yet a full implementation)
   - *Year-Scaled Pregnancy Length Factor* is implemented, and as long as Bannerlord Tweaks doesn't explicitly override this particular duration, it should be in full effect

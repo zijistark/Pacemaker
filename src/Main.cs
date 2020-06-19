@@ -6,7 +6,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace Pacemaker
+namespace CampaignPacer
 {
 	public class Main : MBSubModuleBase
 	{
@@ -15,23 +15,17 @@ namespace Pacemaker
 		public const int SemVerMinor = 10;
 		public const int SemVerPatch = 0;
 		public const string SemVerSpecial = null;
-		public static readonly string Version = SemVerMajor.ToString() + '.' +
-			SemVerMinor.ToString() + '.' +
-			SemVerPatch.ToString() + (
-				(SemVerSpecial != null)
-				? '-' + SemVerSpecial
-				: string.Empty
-			);
+		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{((SemVerSpecial != null) ? $"-{SemVerSpecial}" : "")}";
 
 		public static readonly string Name = typeof(Main).Namespace;
-		public static readonly string DisplayName = Name; // to be shown to humans in-game
+		public const string DisplayName = "Campaign Pacer"; // to be shown to humans in-game
 		public static readonly string HarmonyDomain = "com.zijistark.bannerlord." + Name.ToLower();
 
 		internal static Settings Settings = null;
 		internal static TimeParams TimeParam;
 		internal static Harmony Harmony = null;
 
-		protected bool EnableTickTracer = true;
+		internal bool EnableTickTracer = false;
 
 		protected override void OnSubModuleLoad()
 		{

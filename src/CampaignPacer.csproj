@@ -9,7 +9,7 @@
     <ProjectGuid>{9A8ABAD2-10D6-49A6-8335-F62EADDE629F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pacemaker</RootNamespace>
+    <RootNamespace>CampaignPacer</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -50,7 +50,7 @@
   <PropertyGroup>
     <StartAction>Program</StartAction>
     <StartProgram>$(GameDir)\bin\Win64_Shipping_Client\Bannerlord.exe</StartProgram>
-    <StartArguments>/singleplayer _MODULES_*Native*SandBoxCore*SandBox*StoryMode*CustomBattle*Pacemaker*_MODULES_</StartArguments>
+    <StartArguments>/singleplayer _MODULES_*Native*SandBoxCore*SandBox*StoryMode*CustomBattle*CampaignPacer*_MODULES_</StartArguments>
     <StartWorkingDirectory>$(GameDir)\bin\Win64_Shipping_Client</StartWorkingDirectory>
   </PropertyGroup>
   <!-- Bannerlord Native Assemblies -->

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Pacemaker
+namespace CampaignPacer
 {
 	public class TimeParams
 	{

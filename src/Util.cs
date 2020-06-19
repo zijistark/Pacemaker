@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core.ViewModelCollection;
 
-namespace Pacemaker
+namespace CampaignPacer
 {
 	public class Util
 	{

@@ -2,7 +2,7 @@
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 
-namespace Pacemaker
+namespace CampaignPacer
 {
 	public static class CampaignTimeExt
 	{

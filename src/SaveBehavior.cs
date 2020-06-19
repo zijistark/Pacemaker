@@ -4,7 +4,7 @@ using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 
-namespace Pacemaker
+namespace CampaignPacer
 {
 	class SaveBehavior : CampaignBehaviorBase
 	{

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 
-namespace Pacemaker
+namespace CampaignPacer
 {
 	class TickTraceBehavior : CampaignBehaviorBase
 	{

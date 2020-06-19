@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 
-namespace Pacemaker.Patches
+namespace CampaignPacer.Patches
 {
 	[HarmonyPriority(Priority.HigherThanNormal)]
 	[HarmonyPatch(typeof(DefaultPregnancyModel), "PregnancyDurationInDays", MethodType.Getter)]

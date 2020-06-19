@@ -3,7 +3,7 @@ using System.Reflection;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 
-namespace Pacemaker.Patches
+namespace CampaignPacer.Patches
 {
 	[HarmonyPatch(typeof(Campaign))]
 	internal class CampaignPatch
