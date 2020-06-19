@@ -12,7 +12,15 @@ namespace CampaignPacer
 
         protected override void DefineClassTypes()
         {
-            AddClassDefinition(typeof(SavedValues), 1);
+            AddClassDefinition(typeof(SimpleTime), 1);
+            AddClassDefinition(typeof(SavedValues), 2);
         }
+
+        //protected override void DefineContainerDefinitions()
+        //{
+        //    ConstructContainerDefinition(typeof(Dictionary<string, long>));
+        //    ConstructContainerDefinition(typeof(Dictionary<string, double>));
+        //    ConstructContainerDefinition(typeof(Dictionary<string, string>));
+        //}
     }
 }

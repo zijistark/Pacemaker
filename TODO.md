@@ -1,4 +1,4 @@
-## Pacemaker: TODO
+## TODO
 
 We should address these issues / features / tests for Pacemaker in the relatively near future:
 
@@ -12,6 +12,7 @@ We should address these issues / features / tests for Pacemaker in the relativel
 
 - Like Community Patch, add acceptable hashes of our Harmony patch target method bodies so that we can recognize when there may be a problem caused by patching (hash mismatch).
 
+
 - Add settings preset for *Vanilla* (already have *Default* and the user will make *Custom*)
 
 
@@ -24,12 +25,17 @@ We should address these issues / features / tests for Pacemaker in the relativel
   - Hopefully a friendlier interface (does C# have variadic methods?)
   - Prevents actual `List<string>` construction if `Util.EnableTracer == false`
 
-- Consider alternative presentation of Pacemaker as a silent, integrated library DLL for overhauls that want custom start dates and modified calendar properties but do not want the user to see Pacemaker
+
+- Allow the user to configure a custom start date (my code already adjusts and resets the start date)?
+
 
 - Auto-marry nobles over a certain age, as even at vanilla time paces, they have trouble marrying, and it'll be far worse with years that are much shorter
 
 
 ### Testing:
+
+
+- Test whether health regeneration rate is sped up by the time multiplier and adjust accordingly (applies to NPCs and party/troops)
 
 - Test whether aging works correctly
   - FaceGen / aesthetic aging
