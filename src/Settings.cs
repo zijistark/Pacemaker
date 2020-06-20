@@ -12,12 +12,11 @@ namespace Pacemaker
 		public override string FolderName => Main.Name;
 		public override string Format => "json";
 
-		/* basic time & calendar config */
-
 		private const string TimeMultiplier_Hint = "Multiplies the rate at which campaign time passes. " +
 			"Note that the same general pace is maintained: days simply pass more quickly/slowly. [ Default: 2 ]";
 
-		private const string DaysPerSeason_Hint = "Alters the length of a season. Vanilla uses 21 days. [ Default: 7 ]";
+		private const string DaysPerSeason_Hint = "Alters the length of a season (and thus a year). Vanilla uses " +
+			"21. NOTE: Once you start a game, this value is permanently set for that campaign. [ Default: 7 ]";
 
 		private const string EnablePregnancyTweaks_Hint = "Adjust the duration of pregnancies. [ Default: ON ]";
 

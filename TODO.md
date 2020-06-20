@@ -4,8 +4,6 @@ We should address these issues / features / tests for Pacemaker in the relativel
 
 ### Now:
 
-- Update setting description for *Days Per Season* to note that a new game is required for changes to take effect, and campaigns will always use the value with which they were started.
-
 - In `SaveBehavior`:
   - Drop `AdjustTimeOnLoad()` (was futile / only mattered if `DaysPerSeason` could change)
   - In `SyncData`, stop synchronizing `SavedTime` and indeed remove it altogether

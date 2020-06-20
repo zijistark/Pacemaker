@@ -1,7 +1,9 @@
-## Pacemaker: Changelog
+## Pacemaker: Changelog [WIP]
 
 
 ### v0.11.0
+
+- Added a note in the *Days Per Season* setting's hint text about how the value is permanent for a campaign once you start it.
 
 - Reverted tick auto-calibration system added in v0.9.0, intended for fluid support for changes in the *Days Per Season* setting, due to unforeseen and seemingly insurmountable issues
 
