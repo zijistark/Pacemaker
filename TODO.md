@@ -4,10 +4,6 @@ We should address these issues / features / tests for Pacemaker in the relativel
 
 ### Now:
 
-- Upgrade MCM
-
-- Replace the `CampaignTime` postfix patches with skipping prefix patches as I did with auto-calibration (except don't auto-calibrate)
-
 - Update setting description for *Days Per Season* to note that a new game is required for changes to take effect, and campaigns will always use the value with which they were started.
 
 - In `SaveBehavior`:
