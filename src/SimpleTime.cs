@@ -7,24 +7,16 @@ namespace Pacemaker
 	public class SimpleTime
 	{
 		[SaveableProperty(1)]
-		public int Year { get; set; }
+		public int Year { get; set; } = 0;
 
 		[SaveableProperty(2)]
-		public int Season { get; set; }
+		public int Season { get; set; } = 0;
 
 		[SaveableProperty(3)]
-		public int Day { get; set; }
+		public int Day { get; set; } = 0;
 
 		[SaveableProperty(4)]
-		public double FractionalDay { get; set; }
-
-		public SimpleTime()
-		{
-			Year = -1;
-			Season = -1;
-			Day = -1;
-			FractionalDay = -1f;
-		}
+		public double FractionalDay { get; set; } = 0f;
 
 		public SimpleTime(CampaignTime ct)
 		{
@@ -39,7 +31,7 @@ namespace Pacemaker
 			Day = ct.GetDayOfSeason;
 			fracDays -= Day;
 
-			FractionalDay = Math.Min(0.99999, Math.Max(+0.0, fracDays)); // clamp to [+0, 0.99999]
+			FractionalDay = Math.Min(0.999999, Math.Max(+0.0, fracDays)); // clamp to [+0, 0.999999]
 		}
 
 		public CampaignTime ToCampaignTime() => CampaignTimeExt.YearsD(Year) +

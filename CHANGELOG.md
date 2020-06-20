@@ -1,7 +1,9 @@
-## Pacemaker: Changelog [WIP]
+## Pacemaker: Changelog
 
 
-### v0.11.0
+### v0.11.0 [WIP]
+
+- Removed all code related to adjusting the current time or campaign start time upon load of a save, as it was futile (*Days Per Season* can no longer change mid-game).
 
 - Added a note in the *Days Per Season* setting's hint text about how the value is permanent for a campaign once you start it.
 

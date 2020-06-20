@@ -5,12 +5,8 @@ We should address these issues / features / tests for Pacemaker in the relativel
 ### Now:
 
 - In `SaveBehavior`:
-  - Drop `AdjustTimeOnLoad()` (was futile / only mattered if `DaysPerSeason` could change)
-  - In `SyncData`, stop synchronizing `SavedTime` and indeed remove it altogether
   - `OnLoad`, ensure that `Main.TimeParam` is calibrated for the saved `DaysPerSeason`
   - `OnLoad`, display warning/reminder text if savegame uses different `DaysPerSeason` than the current value in `Settings`
-
-- Remove `SimpleTime` from the `CustomSaveableTypeDefiner`
 
 ### Future:
 
