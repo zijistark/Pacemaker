@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.SaveSystem;
 
-namespace CampaignPacer
+namespace Pacemaker
 {
     public class CustomSaveableTypeDefiner : SaveableTypeDefiner
     {

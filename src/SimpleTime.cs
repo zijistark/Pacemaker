@@ -2,7 +2,7 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.SaveSystem;
 
-namespace CampaignPacer
+namespace Pacemaker
 {
 	public class SimpleTime
 	{

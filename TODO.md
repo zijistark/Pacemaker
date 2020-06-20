@@ -4,9 +4,33 @@ We should address these issues / features / tests for Pacemaker in the relativel
 
 ### Now:
 
+- Upgrade MCM
+
+- Replace the `CampaignTime` postfix patches with skipping prefix patches as I did with auto-calibration (except don't auto-calibrate)
+
+- Update setting description for *Days Per Season* to note that a new game is required for changes to take effect, and campaigns will always use the value with which they were started.
+
+- In `SaveBehavior`:
+  - Drop `AdjustTimeOnLoad()` (was futile / only mattered if `DaysPerSeason` could change)
+  - In `SyncData`, stop synchronizing `SavedTime` and indeed remove it altogether
+  - `OnLoad`, ensure that `Main.TimeParam` is calibrated for the saved `DaysPerSeason`
+  - `OnLoad`, display warning/reminder text if savegame uses different `DaysPerSeason` than the current value in `Settings`
+
+- Remove `SimpleTime` from the `CustomSaveableTypeDefiner`
+
 ### Future:
 
 #### High Priority
+
+
+- In `SaveBehavior`:
+  - Add a `BeforeSaveEvent` listener which updates the `GameSpecificSettings` structure/file with the current player character + player clan names and the save's configured `DaysPerSeason`
+- Create a `GameSpecificSettings` class which encapsulates a mapping between player character + clan names (our best approximation of a campaign identifier) and a set of settings
+  - Must save & load to formatted JSON (or custom) text format
+  - Settings should be key-value and support data types of `long`, `decimal`, `bool`, and `string` (eventually-- first support `long` for `DaysPerSeason`)
+  - Load upon submodule initialization
+
+- Patch `Campaign.OnLoad` to lookup the player character ID in `GameSpecificSettings` and, if the current time parameters in effect don't match the saved `DaysPerSeason` for this campaign, then switch the time parameters appropriately 
 
 #### Normal Priority
 

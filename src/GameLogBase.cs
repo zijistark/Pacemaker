@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.Library;
 
-namespace CampaignPacer
+namespace Pacemaker
 {
 	public class GameLogBase
 	{

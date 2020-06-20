@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CampaignPacer
+namespace Pacemaker
 {
 	public class TimeParams
 	{
@@ -215,7 +215,7 @@ namespace CampaignPacer
 				$"{nameof(OldTickPerYearL)}   = {OldTickPerYearL}",
 			}));
 
-			lines.AddRange(Indent(indent, --level, "Ticks per Unit Ratio (vanilla to CP):"));
+			lines.AddRange(Indent(indent, --level, "Ticks per Unit Ratio (vanilla to Pacemaker):"));
 
 			lines.AddRange(Indent(indent, ++level, new List<string>
 			{

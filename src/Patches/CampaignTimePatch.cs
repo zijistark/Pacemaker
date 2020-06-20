@@ -3,7 +3,7 @@ using System.Reflection;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 
-namespace CampaignPacer.Patches
+namespace Pacemaker.Patches
 {
 	[HarmonyPatch(typeof(CampaignTime))]
 	class CampaignTimePatch

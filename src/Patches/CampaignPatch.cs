@@ -3,7 +3,7 @@ using System.Reflection;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 
-namespace CampaignPacer.Patches
+namespace Pacemaker.Patches
 {
 	[HarmonyPatch(typeof(Campaign))]
 	internal class CampaignPatch
@@ -33,10 +33,8 @@ namespace CampaignPacer.Patches
 
 			internal static CampaignTime StandardStartTime => CampaignTime.Years(1084f) + CampaignTime.Seasons(1f) + CampaignTime.Hours(9f);
 
-			internal static void ResetCampaignStartTime(Campaign campaign)
-			{
+			internal static void ResetCampaignStartTime(Campaign campaign) =>
 				CampaignStartTimeSetMI.Invoke(campaign, new object[] { StandardStartTime });
-			}
 		}
 
 		// PATCHES

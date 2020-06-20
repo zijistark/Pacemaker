@@ -4,7 +4,7 @@ using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 
-namespace CampaignPacer
+namespace Pacemaker
 {
 	class SaveBehavior : CampaignBehaviorBase
 	{
@@ -78,7 +78,7 @@ namespace CampaignPacer
 
 			if (SavedTime == null)
 			{
-				// Load of save that didn't have CP enabled.
+				// Load of save that didn't have Pacemaker enabled.
 				// Convert "current" campaign time back to what it would have been under the vanilla calendar.
 				trace.Add("Loading a vanilla save...");
 
@@ -87,18 +87,18 @@ namespace CampaignPacer
 				trace.Add($"Apparent time (ticks): {now.GetTicks()}");
 				trace.Add(string.Empty);
 
-				// Swap out CP's configured calendar parameters for vanilla calendar parameters, momentarily
+				// Swap out Pacemaker's configured calendar parameters for vanilla calendar parameters, momentarily
 				var vanillaTimeParams = new TimeParams(TimeParams.OldDayPerWeek * TimeParams.OldWeekPerSeason);
 				var ourTimeParams = Main.SetTimeParams(vanillaTimeParams, trace);
 
 				// Since we're using vanilla parameters, the CampaignTime API should automatically be reporting
 				// correct symbolic calendar information (e.g., year, season, day of season). Now we just mimic
-				// the process which CP-enabled savegames go through: save our symbolic time and then restore it,
-				// except restoration must happen under CP's calendar parameters.
+				// the process which Pacemaker-enabled savegames go through: save our symbolic time and then restore it,
+				// except restoration must happen under Pacemaker's calendar parameters.
 
 				SavedTime = new SimpleTime(now);
 
-				// Restore CP's configured calendar parameters:
+				// Restore Pacemaker's configured calendar parameters:
 				trace.Add(string.Empty);
 				Main.SetTimeParams(ourTimeParams, trace);
 
@@ -109,7 +109,7 @@ namespace CampaignPacer
 			}
 			else if (SavedTime.IsValid)
 			{
-				// Normal load of prior CP-enabled savegame.
+				// Normal load of prior Pacemaker-enabled savegame.
 				// Simply restore saved calendar date as-is if the configured days/season has changed.
 				// If the configuration hasn't changed, do nothing at all.
 

@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using TaleWorlds.SaveSystem;
 
-namespace CampaignPacer
+namespace Pacemaker
 {
 	class SavedValues
 	{

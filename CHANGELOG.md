@@ -1,4 +1,11 @@
-## Campaign Pacer: Changelog
+## Pacemaker: Changelog
+
+
+### v0.11.0
+
+- Reverted tick auto-calibration system added in v0.9.0, intended for fluid support for changes in the *Days Per Season* setting, due to unforeseen and seemingly insurmountable issues
+
+- Upgraded to MCM.Integrated v3.19
 
 
 ### v0.10.0
@@ -23,16 +30,7 @@
 
 ### v0.9.0
 
-The scope of the v0.9.0 release series is to address the following rather major problem:
-
-If a calendar time conversion occurs due to adding CampaignPacer to a vanilla savegame or CampaignPacer's calendar settings (*Days Per Season*) are altered mid-savegame, then while we do currently correct the current campaign time as well as campaign start time from the intrinsic warping of times that occurs upon such a conversion, we do NOT yet correct the countless stored `CampaignTime` objects throughout the game or within submodules (mods).
-
-We're going to finally address them by adding a tick correction offset internally to all of the `CampaignTime` API's methods. And all shall be the most serene.
-
-
-#### v0.9.0-alpha1
-
-Nothing done yet. _Hold your horses!_
+- Added a tick auto-calibration system that could've allowed Pacemaker to work with preexisting vanilla saves, change the *Days Per Season* setting mid-playthrough, and be easily removed without any correction necessary. By v0.11.0, we'd conclude that it couldn't reasonably be done without the unforeseen issues we encountered.
 
 ---
 
@@ -51,7 +49,7 @@ Nothing done yet. _Hold your horses!_
 
 #### v0.8.0-alpha2
 
-- Calendar time conversion from non-CP / vanilla savegames is now virtually exact in its precision.
+- Calendar time conversion from non-Pacemaker / vanilla savegames is now virtually exact in its precision.
 
 - Fixed a bug where relevant settings would not be synchronized to/from savegames as intended.
 
@@ -66,7 +64,7 @@ Nothing done yet. _Hold your horses!_
 
 - Fixed major issue with Harmony patching of patch class `Patches.CampaignPatch` that prevents loading the game
 
-- Fixed a minor issue upon loading an older CP-enabled savegame with different configured days/season wherein CP could fail to restore the campaign time due to lack of saved configuration data.
+- Fixed a minor issue upon loading an older Pacemaker-enabled savegame with different configured days/season wherein Pacemaker could fail to restore the campaign time due to lack of saved configuration data.
 
 - Add settings menu options for pregnancy duration (but not yet a full implementation)
   - *Year-Scaled Pregnancy Length Factor* is implemented, and as long as Bannerlord Tweaks doesn't explicitly override this particular duration, it should be in full effect
