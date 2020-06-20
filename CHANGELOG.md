@@ -3,6 +3,10 @@
 
 ### v0.11.0 [WIP]
 
+- On game load, we now ensure that the current time parameters are calibrated for the saved *Days Per Season* setting (and similar for loading a vanilla save)
+
+- On game load, we now print some orange text to the screen -- "Pacemaker: Using X Days/Season" -- if the current Pacemaker setting (i.e., in the menu) doesn't match the campaign's locked-in setting
+
 - Removed all code related to adjusting the current time or campaign start time upon load of a save, as it was futile (*Days Per Season* can no longer change mid-game).
 
 - Added a note in the *Days Per Season* setting's hint text about how the value is permanent for a campaign once you start it.

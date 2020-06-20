@@ -6,7 +6,7 @@ namespace Pacemaker
 	class SavedValues
 	{
 		[SaveableProperty(1)]
-		internal long DaysPerSeason { get; set; } = 0;
+		internal int DaysPerSeason { get; set; } = 0;
 
 		[SaveableProperty(2)]
 		internal float ScaledPregnancyDuration { get; set; } = 0f;

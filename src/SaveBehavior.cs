@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
+using TaleWorlds.Core;
 
 namespace Pacemaker
 {
@@ -31,7 +32,7 @@ namespace Pacemaker
 			trace.Add($"Stored values: {SavedValues}");
 
 			if (!HasLoaded)
-				OnLoad(trace);
+				OnLoad(isVanilla: false, trace);
 
 			Util.EventTracer.Trace(trace);
 		}
@@ -52,15 +53,47 @@ namespace Pacemaker
 			var trace = new List<string>();
 
 			if (!HasLoaded) // if SyncData were to be called, it would've been by now
-				OnLoad(trace);
+				OnLoad(isVanilla: true, trace);
 
 			Util.EventTracer.Trace(trace);
 		}
 
-		protected void OnLoad(List<string> trace)
+		protected void OnLoad(bool isVanilla, List<string> trace)
 		{
+			if (isVanilla)
+				trace.Add("Loading vanilla save...");
+
+			AdjustTimeParams(isVanilla, trace);
+			WarnDayPerSeasonMismatch(isVanilla);
 			AdjustPregnanciesOnLoad(trace);
 			HasLoaded = true;
+		}
+
+		protected void AdjustTimeParams(bool isVanilla, List<string> trace)
+		{
+			var neededDps = (isVanilla) ? 21 : SavedValues.DaysPerSeason;
+
+			if (Main.TimeParam.DayPerSeason != neededDps)
+			{
+				trace.Add($"Time param DayPerSeason={Main.TimeParam.DayPerSeason} is incorrect for this campaign.");
+				Main.SetTimeParams(new TimeParams(neededDps), trace);
+			}
+		}
+
+		protected void WarnDayPerSeasonMismatch(bool isVanilla)
+		{
+			if (isVanilla && Main.Settings.DaysPerSeason != 21)
+			{
+				// special popup reminder re: days/season, will only happen when first loading a vanilla save
+			}
+
+			if (Main.Settings.DaysPerSeason != Main.TimeParam.DayPerSeason)
+			{
+				InformationManager.DisplayMessage(
+					new InformationMessage(
+						$"{Main.DisplayName}: Using {Main.TimeParam.DayPerSeason} Days/Season",
+						Main.ImportantTextColor));
+			}
 		}
 
 		protected void AdjustPregnanciesOnLoad(List<string> trace)

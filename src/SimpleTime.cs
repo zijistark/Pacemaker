@@ -16,7 +16,7 @@ namespace Pacemaker
 		public int Day { get; set; } = 0;
 
 		[SaveableProperty(4)]
-		public double FractionalDay { get; set; } = 0f;
+		public double FractionalDay { get; set; } = 0;
 
 		public SimpleTime(CampaignTime ct)
 		{

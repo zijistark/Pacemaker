@@ -15,23 +15,26 @@ namespace Pacemaker
 		public const int SemVerMinor = 10;
 		public const int SemVerPatch = 0;
 		public const string SemVerSpecial = null;
-		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{((SemVerSpecial != null) ? $"-{SemVerSpecial}" : "")}";
+		private static readonly string SemVerEnd = (SemVerSpecial != null) ? '-' + SemVerSpecial : string.Empty;
+		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{SemVerEnd}";
 
 		public static readonly string Name = typeof(Main).Namespace;
-		public const string DisplayName = "Pacemaker"; // to be shown to humans in-game
+		public static readonly string DisplayName = Name; // to be shown to humans in-game
 		public static readonly string HarmonyDomain = "com.zijistark.bannerlord." + Name.ToLower();
+
+		internal static readonly Color ImportantTextColor = Color.FromUint(0x00F16D26); // orange
 
 		internal static Settings Settings = null;
 		internal static TimeParams TimeParam;
 		internal static Harmony Harmony = null;
 
-		internal bool EnableTickTracer = false;
+		internal bool EnableTickTracer = true;
 
 		protected override void OnSubModuleLoad()
 		{
 			base.OnSubModuleLoad();
 			Util.EnableLog = true; // enable various debug logging
-			Util.EnableTracer = true; // enable code event tracing (requires enabled logging to actually go anywhere)
+			Util.EnableTracer = true; // enable code event tracing (requires enabled logging)
 			Harmony = new Harmony(HarmonyDomain);
 		}
 
@@ -63,7 +66,9 @@ namespace Pacemaker
 			{
 				Harmony.PatchAll();
 
-				InformationManager.DisplayMessage(new InformationMessage($"Loaded {DisplayName} v{Version}", Color.FromUint(0x00F16D26)));
+				InformationManager.DisplayMessage(
+					new InformationMessage($"Loaded {DisplayName} v{Version}", ImportantTextColor));
+
 				_loaded = true;
 			}
 
