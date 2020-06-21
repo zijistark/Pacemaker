@@ -21,8 +21,13 @@ We should address these issues / features / tests for Pacemaker in the relativel
 
 #### High Priority
 
-- Consider making the healing rate auto-calibration nonlinear (e.g., a *Time Multiplier* of 8x probably shouldn't result in quite as much slowing of healing as 1/8th the normal rate per day for a variety of reasons)
+- Display warning text when another mod has overridden the pregnancy model in a way which conflicts.
 
+AND/OR:
+
+- Make in-progress pregnancy due date auto-adjustment work regardless of whether our configured pregnancy duration patch is in effect (due to potential mod conflicts).
+  - Add a `PregnancyDuration` field to our `SavedValues` and use that as the "old duration" while asking whatever pregnancy model is installed for the new duration directly instead of calculating it from the `ScaledPregnancyDuration` and the year length ourselves.
+  - The due date adjustment math will continue to work correctly (it only relies upon the old duration, the new duration, and the old due date).
 
 #### Normal Priority
 
@@ -30,8 +35,6 @@ We should address these issues / features / tests for Pacemaker in the relativel
   - Like Community Patch, add acceptable hashes of our Harmony patch target method bodies so that we can recognize at runtime when there may be a problem caused by patching (mismatch with acceptable/confirmed hashes).
     - Requires adding a program to our build toolchain to actually generate the acceptable hashes
   - Also like Community Patch, check whether other mods have already patched one of our target methods in a conflicting way
-
-- Add warning that in-progress pregnancy due date auto-adjustment isn't in effect when another mod has overridden the pregnancy model in a way which conflicts
 
 #### Low Priority
 

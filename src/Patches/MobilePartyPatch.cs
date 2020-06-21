@@ -26,7 +26,7 @@ namespace Pacemaker.Patches
 		 * method, and in reality, it doesn't add much.
 		 */
 
-		private const float MinHourlyChanceToHeal = 0.05f; // nothing lower than 5% chance to heal per hour
+		private const float MinHourlyChanceToHeal = 0.05f; // never lower than 5% chance to heal per hour
 
 		[HarmonyPrefix]
 		[HarmonyPatch("HealHeroes")]
@@ -35,9 +35,9 @@ namespace Pacemaker.Patches
 			if (heroHp >= 1f)
 				return true;
 
-			var healProbability = (float)Math.Max(MinHourlyChanceToHeal, heroHp);
+			var healChance = (float)Math.Max(MinHourlyChanceToHeal, heroHp);
 
-			if (MBRandom.RandomFloat < healProbability)
+			if (MBRandom.RandomFloat < healChance)
 				return true; // hooray, you get to heal
 
 			return false; // boohoo, hope that wound isn't infected
