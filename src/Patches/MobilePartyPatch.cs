@@ -26,7 +26,7 @@ namespace Pacemaker.Patches
 		 * method, and in reality, it doesn't add much.
 		 */
 
-		private const float MinHourlyChanceToHeal = 0.025f; // nothing lower than 2.5% chance to heal per hour
+		private const float MinHourlyChanceToHeal = 0.05f; // nothing lower than 5% chance to heal per hour
 
 		[HarmonyPrefix]
 		[HarmonyPatch("HealHeroes")]
