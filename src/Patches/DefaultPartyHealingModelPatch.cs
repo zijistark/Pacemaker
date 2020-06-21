@@ -16,7 +16,7 @@ namespace Pacemaker.Patches
 		[HarmonyPatch("GetDailyHealingForRegulars")]
 		static void GetDailyHealingForRegulars(MobileParty party, StatExplainer explanation, ref float __result)
 		{
-			if (!Main.Settings.EnableHealingTweaks)
+			if (!Main.Settings.EnableHealingTweaks || __result <= 0f)
 				return;
 
 			float factor = Main.Settings.HealingRateFactor / Main.Settings.TimeMultiplier;
@@ -34,7 +34,7 @@ namespace Pacemaker.Patches
 		[HarmonyPatch("GetDailyHealingHpForHeroes")]
 		static void GetDailyHealingHpForHeroes(MobileParty party, StatExplainer explanation, ref float __result)
 		{
-			if (!Main.Settings.EnableHealingTweaks)
+			if (!Main.Settings.EnableHealingTweaks || __result <= 0f)
 				return;
 
 			float factor = Main.Settings.HealingRateFactor / Main.Settings.TimeMultiplier;
@@ -44,7 +44,7 @@ namespace Pacemaker.Patches
 
 			float newHealing = __result * factor;
 			new ExplainedNumber(newHealing - __result, explanation, AdjustmentExplanation);
-			__result = (float)Math.Round(newHealing, 2);
+			__result = newHealing;
 		}
 	}
 }

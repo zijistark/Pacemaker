@@ -4,14 +4,9 @@ We should address these issues / features / tests for Pacemaker in the relativel
 
 ### Now:
 
-- Test that the tooltips for party & hero healing rate now make sense
-
-### Future:
-
-
-#### High Priority
-
-- Consider making the healing rate auto-calibration nonlinear (e.g., a *Time Multiplier* of 8x probably shouldn't result in quite as much slowing of healing as 1/8th the normal rate per day for a variety of reasons)
+- For the party healing rate tooltip, separately show the impact of the *Healing Rate Auto-Calibration Factor* setting if not equal to 100% from the impact of the *Time Multiplier* setting. In the tooltip, call them:
+  - Configured Healing Factor (Pacemaker): +2.46
+  - Time Multiplier Factor (Pacemaker): -6.01
 
 - Enable others to do translations / localisations of our [pretty small amount of] text
   - Use string keys / localisation keys for all text
@@ -19,6 +14,14 @@ We should address these issues / features / tests for Pacemaker in the relativel
       - How do we generate a new string key ID properly? (6-digit alphanumeric code)
       - Do we even need to use 6-digit alphanumeric string keys? We might be able to use longer, semantically named keys (e.g., `{=Pacemaker_SettingsHintText_TimeMultiplier}`
   - Move English text to an XML file & provide a template for another translation (if not another translation itself -- e.g., Spanish)
+
+
+### Future:
+
+
+#### High Priority
+
+- Consider making the healing rate auto-calibration nonlinear (e.g., a *Time Multiplier* of 8x probably shouldn't result in quite as much slowing of healing as 1/8th the normal rate per day for a variety of reasons)
 
 
 #### Normal Priority
