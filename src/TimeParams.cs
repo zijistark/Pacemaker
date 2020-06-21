@@ -3,98 +3,102 @@ using System.Collections.Generic;
 
 namespace Pacemaker
 {
-	public class TimeParams
+	class TimeParams
 	{
 		/* units */
-		public const int MsecPerSec = 1000;
-		public const int SecPerMin = 60;
-		public const int MinPerHour = 60;
-		public const int HourPerDay = 24;
-		public const int DayPerWeek = 7; // may not evenly divide a season (note lack of WeekPerSeason)
-		public const int SeasonPerYear = 4;
+		internal const int MsecPerSec = 1000;
+		internal const int SecPerMin = 60;
+		internal const int MinPerHour = 60;
+		internal const int HourPerDay = 24;
+		internal const int DayPerWeek = 7; // may not evenly divide a season (note lack of WeekPerSeason)
+		internal const int SeasonPerYear = 4;
 
 		/* special units */
-		public readonly int DayPerSeason; // independent configurable variable
-		public readonly int DayPerYear;
+		internal readonly int DayPerSeason; // independent configurable variable
+		internal readonly int DayPerYear;
 
 		/* ticks per unit */
-		public const long TickPerMsecL = 10L;
-		public const long TickPerSecL = TickPerMsecL * MsecPerSec;
-		public const long TickPerMinL = TickPerSecL * SecPerMin;
-		public const long TickPerHourL = TickPerMinL * MinPerHour;
-		public const long TickPerDayL = TickPerHourL * HourPerDay;
-		public const long TickPerWeekL = TickPerDayL * DayPerWeek;
-		public readonly long TickPerSeasonL;
-		public readonly long TickPerYearL;
+		internal const long TickPerMsecL = 10L;
+		internal const long TickPerSecL = TickPerMsecL * MsecPerSec;
+		internal const long TickPerMinL = TickPerSecL * SecPerMin;
+		internal const long TickPerHourL = TickPerMinL * MinPerHour;
+		internal const long TickPerDayL = TickPerHourL * HourPerDay;
+		internal const long TickPerWeekL = TickPerDayL * DayPerWeek;
+		internal readonly long TickPerSeasonL;
+		internal readonly long TickPerYearL;
 
 		/* double-precision floating-point ticks per unit */
-		public const double TickPerMsecD = TickPerMsecL;
-		public const double TickPerSecD = TickPerSecL;
-		public const double TickPerMinD = TickPerMinL;
-		public const double TickPerHourD = TickPerHourL;
-		public const double TickPerDayD = TickPerDayL;
-		public const double TickPerWeekD = TickPerWeekL;
-		public readonly double TickPerSeasonD;
-		public readonly double TickPerYearD;
+		internal const double TickPerMsecD = TickPerMsecL;
+		internal const double TickPerSecD = TickPerSecL;
+		internal const double TickPerMinD = TickPerMinL;
+		internal const double TickPerHourD = TickPerHourL;
+		internal const double TickPerDayD = TickPerDayL;
+		internal const double TickPerWeekD = TickPerWeekL;
+		internal readonly double TickPerSeasonD;
+		internal readonly double TickPerYearD;
 
 		/* single-precision floating-point ticks per unit */
-		public const float TickPerMsecF = TickPerMsecL;
-		public const float TickPerSecF = TickPerSecL;
-		public const float TickPerMinF = TickPerMinL;
-		public const float TickPerHourF = TickPerHourL;
-		public const float TickPerDayF = TickPerDayL;
-		public const float TickPerWeekF = TickPerWeekL;
-		public readonly float TickPerSeasonF;
-		public readonly float TickPerYearF;
+		internal const float TickPerMsecF = TickPerMsecL;
+		internal const float TickPerSecF = TickPerSecL;
+		internal const float TickPerMinF = TickPerMinL;
+		internal const float TickPerHourF = TickPerHourL;
+		internal const float TickPerDayF = TickPerDayL;
+		internal const float TickPerWeekF = TickPerWeekL;
+		internal readonly float TickPerSeasonF;
+		internal readonly float TickPerYearF;
 
 		/* units (vanilla) */
-		public const int OldMsecPerSec = 1000;
-		public const int OldSecPerMin = 60;
-		public const int OldMinPerHour = 60;
-		public const int OldHourPerDay = 24;
-		public const int OldDayPerWeek = 7;
-		public const int OldWeekPerSeason = 3;
-		public const int OldSeasonPerYear = 4;
+		internal const int OldMsecPerSec = 1000;
+		internal const int OldSecPerMin = 60;
+		internal const int OldMinPerHour = 60;
+		internal const int OldHourPerDay = 24;
+		internal const int OldDayPerWeek = 7;
+		internal const int OldWeekPerSeason = 3;
+		internal const int OldSeasonPerYear = 4;
+
+		/* special units (vanilla) */
+		internal const int OldDayPerSeason = OldDayPerWeek * OldWeekPerSeason;
+		internal const int OldDayPerYear = OldDayPerSeason * OldSeasonPerYear;
 
 		/* ticks per unit (vanilla) */
-		public const long OldTickPerMsecL = 10L;
-		public const long OldTickPerSecL = OldMsecPerSec * OldTickPerMsecL;
-		public const long OldTickPerMinL = OldSecPerMin * OldTickPerSecL;
-		public const long OldTickPerHourL = OldMinPerHour * OldTickPerMinL;
-		public const long OldTickPerDayL = OldHourPerDay * OldTickPerHourL;
-		public const long OldTickPerWeekL = OldDayPerWeek * OldTickPerDayL;
-		public const long OldTickPerSeasonL = OldWeekPerSeason * OldTickPerWeekL;
-		public const long OldTickPerYearL = SeasonPerYear * OldTickPerSeasonL;
+		internal const long OldTickPerMsecL = 10L;
+		internal const long OldTickPerSecL = OldMsecPerSec * OldTickPerMsecL;
+		internal const long OldTickPerMinL = OldSecPerMin * OldTickPerSecL;
+		internal const long OldTickPerHourL = OldMinPerHour * OldTickPerMinL;
+		internal const long OldTickPerDayL = OldHourPerDay * OldTickPerHourL;
+		internal const long OldTickPerWeekL = OldDayPerWeek * OldTickPerDayL;
+		internal const long OldTickPerSeasonL = OldWeekPerSeason * OldTickPerWeekL;
+		internal const long OldTickPerYearL = SeasonPerYear * OldTickPerSeasonL;
 
 		/* double-precision floating-point ticks per unit (vanilla) */
-		public const double OldTickPerMsecD = OldTickPerMsecL;
-		public const double OldTickPerSecD = OldTickPerSecL;
-		public const double OldTickPerMinD = OldTickPerMinL;
-		public const double OldTickPerHourD = OldTickPerHourL;
-		public const double OldTickPerDayD = OldTickPerDayL;
-		public const double OldTickPerWeekD = OldTickPerWeekL;
-		public const double OldTickPerSeasonD = OldTickPerSeasonL;
-		public const double OldTickPerYearD = OldTickPerYearL;
+		internal const double OldTickPerMsecD = OldTickPerMsecL;
+		internal const double OldTickPerSecD = OldTickPerSecL;
+		internal const double OldTickPerMinD = OldTickPerMinL;
+		internal const double OldTickPerHourD = OldTickPerHourL;
+		internal const double OldTickPerDayD = OldTickPerDayL;
+		internal const double OldTickPerWeekD = OldTickPerWeekL;
+		internal const double OldTickPerSeasonD = OldTickPerSeasonL;
+		internal const double OldTickPerYearD = OldTickPerYearL;
 
 		/* single-precision floating-point ticks per unit (vanilla) */
-		public const float OldTickPerMsecF = OldTickPerMsecL;
-		public const float OldTickPerSecF = OldTickPerSecL;
-		public const float OldTickPerMinF = OldTickPerMinL;
-		public const float OldTickPerHourF = OldTickPerHourL;
-		public const float OldTickPerDayF = OldTickPerDayL;
-		public const float OldTickPerWeekF = OldTickPerWeekL;
-		public const float OldTickPerSeasonF = OldTickPerSeasonL;
-		public const float OldTickPerYearF = OldTickPerYearL;
+		internal const float OldTickPerMsecF = OldTickPerMsecL;
+		internal const float OldTickPerSecF = OldTickPerSecL;
+		internal const float OldTickPerMinF = OldTickPerMinL;
+		internal const float OldTickPerHourF = OldTickPerHourL;
+		internal const float OldTickPerDayF = OldTickPerDayL;
+		internal const float OldTickPerWeekF = OldTickPerWeekL;
+		internal const float OldTickPerSeasonF = OldTickPerSeasonL;
+		internal const float OldTickPerYearF = OldTickPerYearL;
 
 		/* ratios of old/vanilla to our ticks per unit (double-precision) */
-		public readonly double TickRatioSeasonD;
-		public readonly double TickRatioYearD;
+		internal readonly double TickRatioSeasonD;
+		internal readonly double TickRatioYearD;
 
 		/* ratios of old/vanilla to our ticks per unit (single-precision) */
-		public readonly float TickRatioSeasonF;
-		public readonly float TickRatioYearF;
+		internal readonly float TickRatioSeasonF;
+		internal readonly float TickRatioYearF;
 
-		public TimeParams(int daysPerSeason)
+		internal TimeParams(int daysPerSeason)
 		{
 			// set appropriate days/week and weeks/season to match requested days/season
 			DayPerSeason = daysPerSeason;
@@ -188,7 +192,7 @@ namespace Pacemaker
 				$"{nameof(TickPerYearL)}   = {TickPerYearL}",
 			}));
 
-			lines.AddRange(Indent(indent, --level, "Units (vanilla):"));
+			lines.AddRange(Indent(indent, --level, "Units (Vanilla):"));
 
 			lines.AddRange(Indent(indent, ++level, new List<string>
 			{
@@ -201,7 +205,7 @@ namespace Pacemaker
 				$"{nameof(OldSeasonPerYear)} = {OldSeasonPerYear}",
 			}));
 
-			lines.AddRange(Indent(indent, --level, "Ticks per Unit (vanilla):"));
+			lines.AddRange(Indent(indent, --level, "Ticks per Unit (Vanilla):"));
 
 			lines.AddRange(Indent(indent, ++level, new List<string>
 			{
@@ -215,7 +219,7 @@ namespace Pacemaker
 				$"{nameof(OldTickPerYearL)}   = {OldTickPerYearL}",
 			}));
 
-			lines.AddRange(Indent(indent, --level, "Ticks per Unit Ratio (vanilla to Pacemaker):"));
+			lines.AddRange(Indent(indent, --level, "Ticks per Unit Ratio (Vanilla to Pacemaker):"));
 
 			lines.AddRange(Indent(indent, ++level, new List<string>
 			{

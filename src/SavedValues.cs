@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.SaveSystem;
 
 namespace Pacemaker
@@ -6,28 +7,33 @@ namespace Pacemaker
 	class SavedValues
 	{
 		[SaveableProperty(1)]
-		internal int DaysPerSeason { get; set; } = 0;
+		public int DaysPerSeason { get; set; }
 
 		[SaveableProperty(2)]
-		internal float ScaledPregnancyDuration { get; set; } = 0f;
+		public float ScaledPregnancyDuration { get; set; }
+
+		public SavedValues() { }
 
 		internal void Snapshot()
 		{
-			DaysPerSeason = Main.Settings.DaysPerSeason;
+			if (DaysPerSeason == 0) // Only set this upon first save
+				DaysPerSeason = Main.TimeParam.DayPerSeason;
+
 			ScaledPregnancyDuration = Main.Settings.ScaledPregnancyDuration;
+
+			Main.ExternalSavedValues.Set(
+				Hero.MainHero.Name.ToString(),
+				Clan.PlayerClan.Name.ToString(),
+				this);
 		}
 
 		public override string ToString()
 		{
 			StringBuilder builder = new StringBuilder("{\n");
-
-			builder.AppendFormat("{0}{1} = {2}\n", Tab, nameof(DaysPerSeason), DaysPerSeason);
-			builder.AppendFormat("{0}{1} = {2}\n", Tab, nameof(ScaledPregnancyDuration), ScaledPregnancyDuration);
-
+			builder.AppendFormat("  {0} = {1}\n", nameof(DaysPerSeason), DaysPerSeason);
+			builder.AppendFormat("  {0} = {1}\n", nameof(ScaledPregnancyDuration), ScaledPregnancyDuration);
 			builder.Append("}");
 			return builder.ToString();
 		}
-
-		private const string Tab = "    ";
 	}
 }

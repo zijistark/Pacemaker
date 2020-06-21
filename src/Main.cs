@@ -12,9 +12,9 @@ namespace Pacemaker
 	{
 		/* Semantic Versioning (https://semver.org): */
 		public const int SemVerMajor = 0;
-		public const int SemVerMinor = 10;
+		public const int SemVerMinor = 11;
 		public const int SemVerPatch = 0;
-		public const string SemVerSpecial = null;
+		public const string SemVerSpecial = "rc1";
 		private static readonly string SemVerEnd = (SemVerSpecial != null) ? '-' + SemVerSpecial : string.Empty;
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{SemVerEnd}";
 
@@ -24,11 +24,12 @@ namespace Pacemaker
 
 		internal static readonly Color ImportantTextColor = Color.FromUint(0x00F16D26); // orange
 
-		internal static Settings Settings = null;
+		internal static Settings Settings;
 		internal static TimeParams TimeParam;
-		internal static Harmony Harmony = null;
+		internal static Harmony Harmony;
+		internal static ExternalSavedValues ExternalSavedValues;
 
-		internal bool EnableTickTracer = true;
+		private bool EnableTickTracer = false;
 
 		protected override void OnSubModuleLoad()
 		{
@@ -54,8 +55,7 @@ namespace Pacemaker
 				// register for settings property-changed events
 				Settings.PropertyChanged += Settings_OnPropertyChanged;
 
-				trace.Add(string.Empty);
-				trace.Add("Loaded Settings:");
+				trace.Add("\nLoaded Settings:");
 				trace.AddRange(Settings.ToStringLines(indentSize: 4));
 				trace.Add(string.Empty);
 
@@ -64,6 +64,7 @@ namespace Pacemaker
 
 			if (!_loaded)
 			{
+				ExternalSavedValues = new ExternalSavedValues(Name);
 				Harmony.PatchAll();
 
 				InformationManager.DisplayMessage(
@@ -106,7 +107,7 @@ namespace Pacemaker
 
 		internal static TimeParams SetTimeParams(TimeParams newParams, List<string> trace)
 		{
-			trace.Add("Setting time parameters...");
+			trace.Add($"Setting time parameters for {newParams.DayPerSeason} days/season...");
 
 			var oldParams = TimeParam;
 			TimeParam = newParams;

@@ -13,25 +13,28 @@ namespace Pacemaker
 		{
 			CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnNewGameCreated));
 			CampaignEvents.OnGameEarlyLoadedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnGameEarlyLoaded));
+			CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
 		}
 
 		public override void SyncData(IDataStore dataStore)
 		{
 			var trace = new List<string>();
 
-			if (!HasLoaded)
-				trace.Add("Loading saved data...");
-			else
+			if (HasLoaded)
 			{
 				trace.Add("Saving data...");
 				SavedValues.Snapshot();
 			}
+			else
+				trace.Add("Loading saved data...");
 
 			dataStore.SyncData($"{Main.Name}SavedValues", ref _savedValues);
 
 			trace.Add($"Stored values: {SavedValues}");
 
-			if (!HasLoaded)
+			if (HasLoaded)
+				Main.ExternalSavedValues.Serialize();
+			else
 				OnLoad(isVanilla: false, trace);
 
 			Util.EventTracer.Trace(trace);
@@ -57,42 +60,62 @@ namespace Pacemaker
 
 			Util.EventTracer.Trace(trace);
 		}
+		protected void OnSessionLaunched(CampaignGameStarter starter)
+		{
+			WarnDayPerSeasonMismatch();
+			Util.EventTracer.Trace();
+		}
 
 		protected void OnLoad(bool isVanilla, List<string> trace)
 		{
 			if (isVanilla)
+			{
 				trace.Add("Loading vanilla save...");
+				WasVanilla = true;
+			}
 
 			AdjustTimeParams(isVanilla, trace);
-			WarnDayPerSeasonMismatch(isVanilla);
 			AdjustPregnanciesOnLoad(trace);
 			HasLoaded = true;
 		}
 
 		protected void AdjustTimeParams(bool isVanilla, List<string> trace)
 		{
-			var neededDps = (isVanilla) ? 21 : SavedValues.DaysPerSeason;
+			var neededDps = isVanilla ? TimeParams.OldDayPerSeason : SavedValues.DaysPerSeason;
 
 			if (Main.TimeParam.DayPerSeason != neededDps)
 			{
-				trace.Add($"Time param DayPerSeason={Main.TimeParam.DayPerSeason} is incorrect for this campaign.");
+				trace.Add($"DayPerSeason={Main.TimeParam.DayPerSeason} is incorrect for this campaign. Fixing...\n");
 				Main.SetTimeParams(new TimeParams(neededDps), trace);
 			}
 		}
 
-		protected void WarnDayPerSeasonMismatch(bool isVanilla)
+		protected void WarnDayPerSeasonMismatch()
 		{
-			if (isVanilla && Main.Settings.DaysPerSeason != 21)
+			if (WasVanilla && Main.Settings.DaysPerSeason != TimeParams.OldDayPerSeason)
 			{
-				// special popup reminder re: days/season, will only happen when first loading a vanilla save
+				var inquiryData = new InquiryData(
+					$"{TimeParams.OldDayPerSeason} Days Per Season",
+					$"NOTE: Once a campaign has been started, its 'Days Per Season' setting cannot change thereafter. Since you are " +
+						$"loading a non-{Main.Name} save, your effective 'Days Per Season' setting for this campaign will be the " +
+						$"vanilla {TimeParams.OldDayPerSeason} days.\n\n\n\nAll other settings can be changed freely mid-campaign, " +
+						$"and new games will of course use whatever 'Days Per Season' you've configured when you start them. Now " +
+						$"go on, and get playing!",
+					true,
+					false,
+					GameTexts.FindText("str_ok", null).ToString(),
+					null,
+					delegate () { },
+					null);
+
+				InformationManager.ShowInquiry(inquiryData, false);
 			}
 
 			if (Main.Settings.DaysPerSeason != Main.TimeParam.DayPerSeason)
 			{
-				InformationManager.DisplayMessage(
-					new InformationMessage(
-						$"{Main.DisplayName}: Using {Main.TimeParam.DayPerSeason} Days/Season",
-						Main.ImportantTextColor));
+				InformationManager.DisplayMessage(new InformationMessage(
+					$"{Main.DisplayName}: Using {Main.TimeParam.DayPerSeason} Days Per Season (instead of {Main.Settings.DaysPerSeason})",
+					Main.ImportantTextColor));
 			}
 		}
 
@@ -111,8 +134,8 @@ namespace Pacemaker
 			if (!Util.NearEqual(pregModel.PregnancyDurationInDays, newDuration))
 			{
 				trace.Add($"Current PregnancyModel-derived type: {pregModel.GetType().FullName}");
-				trace.Add($"{Main.Name}'s pregnancy duration patch isn't in effect. Skipping auto-adjustment " +
-					"of in-progress pregnancy due dates.");
+				trace.Add($"{Main.DisplayName}'s pregnancy duration patch isn't in effect due to at least one other mod " +
+					"overriding our settings. Skipping auto-adjustment of in-progress pregnancy due dates.");
 				return;
 			}
 
@@ -182,8 +205,6 @@ namespace Pacemaker
 				trace.Add("No pregnancies are in-progress. Aborting.");
 				return;
 			}
-			else
-				trace.Add($"Pregnancies in-progress: {pregList.Count}");
 
 			var dueDateDeltaCT = CampaignTime.Days(dueDateDelta);
 			int nPregs = 0;
@@ -205,6 +226,7 @@ namespace Pacemaker
 		}
 
 		protected bool HasLoaded { get; set; }
+		protected bool WasVanilla { get; set; }
 
 		private SavedValues _savedValues = new SavedValues();
 		private const float VanillaPregnancyDuration = 36f;

@@ -138,10 +138,9 @@ namespace Pacemaker
 
 			Writer.NewLine = "\n";
 
-			var msg = new List<string>() {
+			var msg = new List<string>
+			{
 				$"{Module} created at: {DateTimeOffset.Now:yyyy/MM/dd H:mm zzz}",
-				$"Working Path: {Directory.GetCurrentDirectory()}",
-				$"Assembly:     {this.GetType().AssemblyQualifiedName}",
 			};
 
 			if (existed && !truncate)
