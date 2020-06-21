@@ -29,9 +29,9 @@ namespace Pacemaker
 		private const string EnableHealingTweaks_Hint = "Auto-calibrate hero & troop healing rate to the Time " +
 			"Multiplier in order to maintain vanilla pacing. [ Default: ON ]";
 
-		private const string HealingRateCalibrationFactor_Hint = "Inverse factor to apply to the Time Multiplier " +
-			"when auto-calibrating. Higher than 100% causes faster healing rates; lower will cause slower. " +
-			"[ Default: 100% ]";
+		private const string HealingRateAdjustmentFactor_Hint = "Additional factor to apply to healing rates " +
+			"if the default auto-calibration isn't quite right for you. Higher than 100% causes faster healing; " +
+			"lower will cause slower. [ Default: 100% ]";
 
 		[SettingPropertyFloatingInteger("Time Multiplier", 0.25f, 8f, HintText = TimeMultiplier_Hint, RequireRestart = false, Order = 0)]
 		[SettingPropertyGroup("General Settings", GroupOrder = 0)]
@@ -57,7 +57,7 @@ namespace Pacemaker
 		[SettingPropertyGroup("Healing Rate Auto-Calibration", GroupOrder = 2, IsMainToggle = true)]
 		public bool EnableHealingTweaks { get; set; } = true;
 
-		[SettingPropertyFloatingInteger("Healing Rate Auto-Calibration Factor", 0.25f, 2f, "#0%", HintText = HealingRateCalibrationFactor_Hint, RequireRestart = false, Order = 1)]
+		[SettingPropertyFloatingInteger("Healing Rate Adjustment Factor", 0.25f, 4f, "#0%", HintText = HealingRateAdjustmentFactor_Hint, RequireRestart = false, Order = 1)]
 		[SettingPropertyGroup("Healing Rate Auto-Calibration")]
 		public float HealingRateFactor { get; set; } = 1f;
 

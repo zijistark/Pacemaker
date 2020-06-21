@@ -4,10 +4,6 @@ We should address these issues / features / tests for Pacemaker in the relativel
 
 ### Now:
 
-- For the party healing rate tooltip, separately show the impact of the *Healing Rate Auto-Calibration Factor* setting if not equal to 100% from the impact of the *Time Multiplier* setting. In the tooltip, call them:
-  - Configured Healing Factor (Pacemaker): +2.46
-  - Time Multiplier Factor (Pacemaker): -6.01
-
 - Enable others to do translations / localisations of our [pretty small amount of] text
   - Use string keys / localisation keys for all text
     - ... and figure out how this works exactly:
