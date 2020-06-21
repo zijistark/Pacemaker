@@ -4,14 +4,7 @@ We should address these issues / features / tests for Pacemaker in the relativel
 
 ### Now:
 
-- Make the healing rate auto-calibration configurable via settings
-  - Allowing it to be enabled/disabled at least makes the feature visible
-  - More configurability than boolean is probably too complicated to explain in a simple MCM hint text
-
-- Find the tooltip for party & hero healing rate and ensure that our related patches aren't screwing up the tooltip
-
-- Ensure that the health auto-calibration patches have a very low Harmony priority (so that they will definitely execute last)
-
+- Test that the tooltips for party & hero healing rate now make sense
 
 ### Future:
 

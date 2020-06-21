@@ -26,6 +26,13 @@ namespace Pacemaker
 		private const string AdjustPregnancyDueDates_Hint = "Auto-adjust in-progress pregnancies' due dates to " +
 			"match settings upon load of a game. [ Default: ON ]";
 
+		private const string EnableHealingTweaks_Hint = "Auto-calibrate hero & troop healing rate to the Time " +
+			"Multiplier in order to maintain vanilla pacing. [ Default: ON ]";
+
+		private const string HealingRateCalibrationFactor_Hint = "Inverse factor to apply to the Time Multiplier " +
+			"when auto-calibrating. Higher than 100% causes faster healing rates; lower will cause slower. " +
+			"[ Default: 100% ]";
+
 		[SettingPropertyFloatingInteger("Time Multiplier", 0.25f, 8f, HintText = TimeMultiplier_Hint, RequireRestart = false, Order = 0)]
 		[SettingPropertyGroup("General Settings", GroupOrder = 0)]
 		public float TimeMultiplier { get; set; } = 2f;
@@ -46,6 +53,14 @@ namespace Pacemaker
 		[SettingPropertyGroup("Pregnancy Duration")]
 		public bool AdjustPregnancyDueDates { get; set; } = true;
 
+		[SettingPropertyBool("Healing Rate Auto-Calibration", HintText = EnableHealingTweaks_Hint, RequireRestart = false, Order = 0)]
+		[SettingPropertyGroup("Healing Rate Auto-Calibration", GroupOrder = 2, IsMainToggle = true)]
+		public bool EnableHealingTweaks { get; set; } = true;
+
+		[SettingPropertyFloatingInteger("Healing Rate Auto-Calibration Factor", 0.25f, 2f, "#0%", HintText = HealingRateCalibrationFactor_Hint, RequireRestart = false, Order = 1)]
+		[SettingPropertyGroup("Healing Rate Auto-Calibration")]
+		public float HealingRateFactor { get; set; } = 1f;
+
 		public List<string> ToStringLines(uint indentSize = 0)
 		{
 			string prefix = string.Empty;
@@ -60,6 +75,8 @@ namespace Pacemaker
 				$"{prefix}{nameof(EnablePregnancyTweaks)}   = {EnablePregnancyTweaks}",
 				$"{prefix}{nameof(ScaledPregnancyDuration)} = {ScaledPregnancyDuration}",
 				$"{prefix}{nameof(AdjustPregnancyDueDates)} = {AdjustPregnancyDueDates}",
+				$"{prefix}{nameof(EnableHealingTweaks)}     = {EnableHealingTweaks}",
+				$"{prefix}{nameof(HealingRateFactor)}       = {HealingRateFactor}",
 			};
 		}
 	}

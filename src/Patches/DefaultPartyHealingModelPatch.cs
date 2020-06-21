@@ -12,27 +12,39 @@ namespace Pacemaker.Patches
 		private static readonly TextObject AdjustmentExplanation = new TextObject(Main.DisplayName);
 
 		[HarmonyPostfix]
+		[HarmonyPriority(Priority.Last)]
 		[HarmonyPatch("GetDailyHealingForRegulars")]
 		static void GetDailyHealingForRegulars(MobileParty party, StatExplainer explanation, ref float __result)
 		{
-			if (Util.NearEqual(Main.Settings.TimeMultiplier, 1f, 1e-2))
+			if (!Main.Settings.EnableHealingTweaks)
 				return;
 
-			float newHealing = __result / Main.Settings.TimeMultiplier;
-			new ExplainedNumber(newHealing, explanation, AdjustmentExplanation);
+			float factor = Main.Settings.HealingRateFactor / Main.Settings.TimeMultiplier;
+
+			if (Util.NearEqual(factor, 1f, 1e-2f))
+				return;
+
+			float newHealing = __result * factor;
+			new ExplainedNumber(newHealing - __result, explanation, AdjustmentExplanation);
 			__result = (float)Math.Round(newHealing, 2);
 		}
 
 		[HarmonyPostfix]
+		[HarmonyPriority(Priority.Last)]
 		[HarmonyPatch("GetDailyHealingHpForHeroes")]
 		static void GetDailyHealingHpForHeroes(MobileParty party, StatExplainer explanation, ref float __result)
 		{
-			if (Util.NearEqual(Main.Settings.TimeMultiplier, 1f, 1e-2))
+			if (!Main.Settings.EnableHealingTweaks)
 				return;
 
-			float newHP = __result / Main.Settings.TimeMultiplier;
-			new ExplainedNumber(newHP, explanation, AdjustmentExplanation);
-			__result = newHP;
+			float factor = Main.Settings.HealingRateFactor / Main.Settings.TimeMultiplier;
+
+			if (Util.NearEqual(factor, 1f, 1e-2f))
+				return;
+
+			float newHealing = __result * factor;
+			new ExplainedNumber(newHealing - __result, explanation, AdjustmentExplanation);
+			__result = (float)Math.Round(newHealing, 2);
 		}
 	}
 }

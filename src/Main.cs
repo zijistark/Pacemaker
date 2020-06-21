@@ -14,7 +14,7 @@ namespace Pacemaker
 		public const int SemVerMajor = 0;
 		public const int SemVerMinor = 11;
 		public const int SemVerPatch = 0;
-		public const string SemVerSpecial = "rc1";
+		public const string SemVerSpecial = "rc2";
 		private static readonly string SemVerEnd = (SemVerSpecial != null) ? '-' + SemVerSpecial : string.Empty;
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{SemVerEnd}";
 
@@ -37,6 +37,7 @@ namespace Pacemaker
 			Util.EnableLog = true; // enable various debug logging
 			Util.EnableTracer = true; // enable code event tracing (requires enabled logging)
 			Harmony = new Harmony(HarmonyDomain);
+			ExternalSavedValues = new ExternalSavedValues(Name);
 		}
 
 		protected override void OnBeforeInitialModuleScreenSetAsRoot()
@@ -64,7 +65,6 @@ namespace Pacemaker
 
 			if (!_loaded)
 			{
-				ExternalSavedValues = new ExternalSavedValues(Name);
 				Harmony.PatchAll();
 
 				InformationManager.DisplayMessage(

@@ -3,6 +3,16 @@
 
 ### v0.11.0 [WIP]
 
+#### v0.11.0-rc2 [WIP]
+
+- Made Pacemaker's party healing rate auto-calibration to the *Time Multiplier* setting configurable
+  - Also added a slider for speeding up or slowing down the auto-calibrated rate
+
+- Hero healing rate and troop healing rate tooltips should now be more intuitive with the actual offset caused by auto-calibration to the *Time Multiplier* setting being shown rather than just redundantly showing the final result as if it were an offset
+
+- Addressed an issue with the method that actually heals heroes wherein it would always heal heroes at least 1 hit point per hour even if they should be healing much more slowly
+  - When they should indeed be healing more slowly, the hourly HP value in `(0, 1)` is reconsidered as the probability to heal at all within that hour. A minimum 2.5% chance per hour is enforced.
+
 #### v0.11.0-rc1
 
 - Tick tracing has again been disabled due to verification of correct behavior
