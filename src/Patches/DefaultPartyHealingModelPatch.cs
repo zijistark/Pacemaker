@@ -9,15 +9,24 @@ namespace Pacemaker.Patches
 	[HarmonyPatch(typeof(DefaultPartyHealingModel))]
 	class DefaultPartyHealingModelPatch
 	{
-		private static readonly TextObject ConfigAdjustmentExplanation = new TextObject($"{Main.DisplayName}: Adjustment Factor");
-		private static readonly TextObject TimeMultAdjustmentExplanation = new TextObject($"{Main.DisplayName}: Time Multiplier Calibration");
+		private static readonly TextObject TimeMultAdjustmentExplanation = new TextObject($"[{Main.DisplayName}] Time Multiplier");
+		private static readonly TextObject ConfigAdjustmentExplanation = new TextObject($"[{Main.DisplayName}] Adjustment Factor");
 
 		private static class Helpers
 		{
+			/* Both of the daily healing rate postfix patches have exactly the same body, so
+			 * this does all the work for them:
+			 */
 			internal static void GetDailyHealing(StatExplainer explanation, ref float __result)
 			{
+				if (!Main.Settings.EnableHealingTweaks || __result <= 0f)
+					return;
+
 				// Our factors to apply to baseNum
-				float timeMultFactor = 1f / Main.Settings.TimeMultiplier;
+				float timeMultFactor = (Main.Settings.TimeMultiplier <= 4f)
+					? 1f / Main.Settings.TimeMultiplier
+					: 0.25f;
+
 				float configFactor = Main.Settings.HealingRateFactor;
 
 				// Time Multiplier
@@ -47,23 +56,13 @@ namespace Pacemaker.Patches
 		[HarmonyPostfix]
 		[HarmonyPriority(Priority.Last)]
 		[HarmonyPatch("GetDailyHealingForRegulars")]
-		static void GetDailyHealingForRegularsPostfix(MobileParty party, StatExplainer explanation, ref float __result)
-		{
-			if (!Main.Settings.EnableHealingTweaks || __result <= 0f)
-				return;
-
+		static void GetDailyHealingForRegulars(MobileParty party, StatExplainer explanation, ref float __result) =>
 			Helpers.GetDailyHealing(explanation, ref __result);
-		}
 
 		[HarmonyPostfix]
 		[HarmonyPriority(Priority.Last)]
 		[HarmonyPatch("GetDailyHealingHpForHeroes")]
-		static void GetDailyHealingHpForHeroesPostfix(MobileParty party, StatExplainer explanation, ref float __result)
-		{
-			if (!Main.Settings.EnableHealingTweaks || __result <= 0f)
-				return;
-
+		static void GetDailyHealingHpForHeroes(MobileParty party, StatExplainer explanation, ref float __result) =>
 			Helpers.GetDailyHealing(explanation, ref __result);
-		}
 	}
 }

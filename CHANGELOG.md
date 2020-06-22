@@ -13,9 +13,11 @@
 - Addressed an issue with the method that actually heals heroes wherein it would always heal heroes at least 1 hit point per hour even if they should be healing much more slowly
   - When they should indeed be healing more slowly, the hourly HP value in `(0, 1)` is reconsidered as the probability to heal at all within that hour. A minimum of 5% healing chance per hour is enforced.
 
-- Since healing rate auto-calibration are supposed to apply raw factors to otherwise final result of healing rate calculations, ensured that their Harmony patch priority is minimally low (`Harmony.Priority.Last`) so that those postfix patches definitely run last.
+- Since healing rate auto-calibration are supposed to apply raw factors to the otherwise final result of healing rate calculations, ensured that their Harmony patch priority is minimally low (`Harmony.Priority.Last`) so that those postfix patches definitely run last.
 
-- Separated the healing rate tooltips into separate offsets due to *Time Multiplier* auto-calibration and the user's configured *Healing Rate Adjustment Factor*. Ensured that no zero-valued offsets would show up in the tooltip.
+- Separated the healing rate tooltips into separate offsets due to *Time Multiplier* auto-calibration and the user's [potentially] configured *Healing Rate Adjustment Factor*. Ensured that no zero-valued offsets would show up in the tooltip.
+
+- Made the healing rate correction factor function of the *Time Multiplier* setting stop decreasing for multipliers above 4. Otherwise the correction factor function is `1 / TimeMultiplier`, so values above 4 simply use a correction factor of 0.25.
 
 #### v0.11.0-rc1
 
