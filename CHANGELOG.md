@@ -3,7 +3,8 @@
 
 ### v0.11.0 [WIP]
 
-#### v0.11.0-rc2 [WIP]
+
+#### v0.11.0-rc2
 
 - Made Pacemaker's party healing rate auto-calibration to the *Time Multiplier* setting configurable
   - For users that feel the default auto-calibration isn't quite what they want, also added a slider for an additional, independent healing rate adjustment factor, predictably named the *Healing Rate Adjustment Factor*
@@ -13,11 +14,14 @@
 - Addressed an issue with the method that actually heals heroes wherein it would always heal heroes at least 1 hit point per hour even if they should be healing much more slowly
   - When they should indeed be healing more slowly, the hourly HP value in `(0, 1)` is reconsidered as the probability to heal at all within that hour. A minimum of 5% healing chance per hour is enforced.
 
-- Since healing rate auto-calibration are supposed to apply raw factors to the otherwise final result of healing rate calculations, ensured that their Harmony patch priority is minimally low (`Harmony.Priority.Last`) so that those postfix patches definitely run last.
+- Since healing rate auto-calibration is supposed to apply raw factors to the otherwise final result of healing rate calculations, ensured that the two related Harmony postfix patch priorities are minimally low (`Harmony.Priority.Last`) so that they definitely run last regardless of other possible patches.
 
 - Separated the healing rate tooltips into separate offsets due to *Time Multiplier* auto-calibration and the user's [potentially] configured *Healing Rate Adjustment Factor*. Ensured that no zero-valued offsets would show up in the tooltip.
 
 - Made the healing rate correction factor function of the *Time Multiplier* setting stop decreasing for multipliers above 4. Otherwise the correction factor function is `1 / TimeMultiplier`, so values above 4 simply use a correction factor of 0.25.
+
+- Restructured things so that in-progress pregnancy due date adjustment will also work even when our own *Year-Scaled Pregnancy Duration* setting is not in effect due to another mod overriding it. This way, the player still benefits from the auto-adjustment upon configuration changes -- in whatever module.
+
 
 #### v0.11.0-rc1
 

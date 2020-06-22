@@ -40,11 +40,7 @@ namespace Pacemaker
 			Util.EventTracer.Trace(trace);
 		}
 
-		protected void OnNewGameCreated(CampaignGameStarter starter)
-		{
-			HasLoaded = true;
-			Util.EventTracer.Trace();
-		}
+		protected void OnNewGameCreated(CampaignGameStarter starter) => HasLoaded = true;
 
 		/* OnGameEarlyLoaded is only present so that we can still initialize when adding the mod to a save
 		 * that didn't previously have it enabled (so-called "vanilla save"). This is because SyncData does
@@ -63,7 +59,6 @@ namespace Pacemaker
 		protected void OnSessionLaunched(CampaignGameStarter starter)
 		{
 			WarnDayPerSeasonMismatch();
-			Util.EventTracer.Trace();
 		}
 
 		protected void OnLoad(bool isVanilla, List<string> trace)
@@ -98,7 +93,7 @@ namespace Pacemaker
 					$"{TimeParams.OldDayPerSeason} Days Per Season",
 					$"NOTE: Once a campaign has been started, its 'Days Per Season' setting cannot change thereafter. Since you are " +
 						$"loading a non-{Main.Name} save, your effective 'Days Per Season' setting for this campaign will be the " +
-						$"vanilla {TimeParams.OldDayPerSeason} days.\n\n\n\nAll other settings can be changed freely mid-campaign, " +
+						$"vanilla {TimeParams.OldDayPerSeason} days.\\n\\nAll other settings can be changed freely mid-campaign, " +
 						$"and new games will of course use whatever 'Days Per Season' you've configured when you start them. Now " +
 						$"go on, and get playing!",
 					true,
@@ -114,43 +109,45 @@ namespace Pacemaker
 			if (Main.Settings.DaysPerSeason != Main.TimeParam.DayPerSeason)
 			{
 				InformationManager.DisplayMessage(new InformationMessage(
-					$"{Main.DisplayName}: Using {Main.TimeParam.DayPerSeason} Days Per Season (instead of {Main.Settings.DaysPerSeason})",
+					$"{Main.DisplayName}: Using {Main.TimeParam.DayPerSeason} Days Per Season (Instead of {Main.Settings.DaysPerSeason})",
 					Main.ImportantTextColor));
 			}
 		}
 
 		protected void AdjustPregnanciesOnLoad(List<string> trace)
 		{
-			if (!Main.Settings.EnablePregnancyTweaks || !Main.Settings.AdjustPregnancyDueDates)
+			if (!Main.Settings.EnablePregnancyTweaks ||
+				!Main.Settings.AdjustPregnancyDueDates ||
+				(SavedValues.PregnancyDuration == 0f && !WasVanilla))
 				return;
 
-			var newDuration = Main.Settings.ScaledPregnancyDuration * Main.TimeParam.DayPerYear;
+			var pregnancyModel = Campaign.Current.Models.PregnancyModel;
+			var newDuration = pregnancyModel.PregnancyDurationInDays;
+			var ourDuration = Main.Settings.ScaledPregnancyDuration * Main.TimeParam.DayPerYear;
+			var oldDuration = (SavedValues.PregnancyDuration != 0f)
+				? SavedValues.PregnancyDuration
+				: VanillaPregnancyDuration;
 
-			// Check whether our pregnancy duration is actually in force (i.e., no interference from other mods) before
-			// we do any auto-adjustment. Check whichever PregnanacyModel-derived class is currently in place and ask
-			// of it the pregnanacy duration.
-			var pregModel = Campaign.Current.Models.PregnancyModel;
+			// Check whether our pregnancy duration is actually in force (i.e., no interference from other mods).
 
-			if (!Util.NearEqual(pregModel.PregnancyDurationInDays, newDuration))
+			if (!Util.NearEqual(ourDuration, newDuration))
 			{
-				trace.Add($"Current PregnancyModel-derived type: {pregModel.GetType().FullName}");
-				trace.Add($"{Main.DisplayName}'s pregnancy duration patch isn't in effect due to at least one other mod " +
-					"overriding our settings. Skipping auto-adjustment of in-progress pregnancy due dates.");
-				return;
+				trace.Add($"WARNING: {Main.Name}'s pregnancy duration setting has no effect due to at least " +
+					"one other mod overriding the pregnancy model in a conflicting manner.");
+				trace.Add($"Type of pregnancy model: {pregnancyModel.GetType().AssemblyQualifiedName}");
 			}
 
-			var oldDuration = (SavedValues.DaysPerSeason != 0 && SavedValues.ScaledPregnancyDuration != 0f)
-				? SavedValues.ScaledPregnancyDuration * SavedValues.DaysPerSeason * TimeParams.SeasonPerYear
-				: VanillaPregnancyDuration;
 
 			// Don't bother if the effective old and new durations barely differ if at all.
 			if (Util.NearEqual(oldDuration, newDuration, 1e-3f))
 				return;
 
-			trace.Add("\nAuto-adjusting in-progress pregnancy due dates due to a change in pregnancy duration...\n");
+			trace.Add("\nAuto-adjusting in-progress pregnancy due dates due to change in pregnancy duration...\n");
 
 			var dueDateDelta = newDuration - oldDuration;
-			trace.Add($"Pregnancy due dates will be offset by {dueDateDelta:F3} days.");
+			trace.Add($"Prior pregnancy duration (days):   {oldDuration:F2}");
+			trace.Add($"Current pregnancy duration (days): {newDuration:F2}");
+			trace.Add($"Pregnancy due dates will change by {dueDateDelta:F2} days.");
 
 			// We need to iterate over the global List<PregnancyCampaignBehavior.Pregnancy> (Pregnancy is a private
 			// nested class) stored in that behavior's private instance field _heroPregnancies. We'll then need to
@@ -216,7 +213,7 @@ namespace Pacemaker
 				++nPregs;
 			}
 
-			trace.Add($"Processed {nPregs} in-progress pregnancies.");
+			trace.Add($"Adjusted {nPregs} in-progress pregnancies.");
 		}
 
 		protected SavedValues SavedValues

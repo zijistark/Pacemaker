@@ -9,8 +9,8 @@ namespace Pacemaker
 		[SaveableProperty(1)]
 		public int DaysPerSeason { get; set; }
 
-		[SaveableProperty(2)]
-		public float ScaledPregnancyDuration { get; set; }
+		[SaveableProperty(3)]
+		public float PregnancyDuration { get; set; }
 
 		public SavedValues() { }
 
@@ -19,7 +19,7 @@ namespace Pacemaker
 			if (DaysPerSeason == 0) // Only set this upon first save
 				DaysPerSeason = Main.TimeParam.DayPerSeason;
 
-			ScaledPregnancyDuration = Main.Settings.ScaledPregnancyDuration;
+			PregnancyDuration = Campaign.Current.Models.PregnancyModel.PregnancyDurationInDays;
 
 			Main.ExternalSavedValues.Set(
 				Hero.MainHero.Name.ToString(),
@@ -31,7 +31,7 @@ namespace Pacemaker
 		{
 			StringBuilder builder = new StringBuilder("{\n");
 			builder.AppendFormat("  {0} = {1}\n", nameof(DaysPerSeason), DaysPerSeason);
-			builder.AppendFormat("  {0} = {1}\n", nameof(ScaledPregnancyDuration), ScaledPregnancyDuration);
+			builder.AppendFormat("  {0} = {1}\n", nameof(PregnancyDuration), PregnancyDuration);
 			builder.Append("}");
 			return builder.ToString();
 		}

@@ -4,11 +4,6 @@ We should address these issues / features / tests for Pacemaker in the relativel
 
 ### Now:
 
-- Display warning text when another mod has overridden the pregnancy model in a way which conflicts with the *Year-Scaled Pregnancy Duration* setting.
-
-- Make in-progress pregnancy due date auto-adjustment work regardless of whether our configured pregnancy duration patch is in effect (due to potential mod conflicts).
-  - Add a `PregnancyDuration` field to our `SavedValues` and use that as the "old duration" while asking whatever pregnancy model is installed for the new duration directly instead of calculating it from the `ScaledPregnancyDuration` and the year length ourselves.
-  - The due date adjustment math will continue to work correctly (it only relies upon the old duration, the new duration, and the old due date).
 
 ### Future:
 
@@ -43,11 +38,7 @@ We should address these issues / features / tests for Pacemaker in the relativel
 
 ### Testing:
 
-
-- Test whether health regeneration rate is sped up by the time multiplier and adjust accordingly (applies to NPCs and party/troops)
-
-- Test whether aging works correctly
-  - FaceGen / aesthetic aging
+- Test loading a non-Pacemaker save with Pacemaker for the first time. Does the popup dialog text have a full blank line between the two paragraphs, or does it have what appear to be escape codes for a newline (`\n`)?
 
 ---
 
