@@ -1,7 +1,7 @@
 ﻿<Module>
   <Name value="Pacemaker"/>
   <Id value="Pacemaker"/>
-  <Version value="e0.11.0.1"/>
+  <Version value="e0.11.0.2"/>
   <SingleplayerModule value="true"/>
   <MultiplayerModule value="false"/>
   <Official value="false"/>
@@ -10,21 +10,13 @@
     <DependedModule Id="SandBoxCore"/>
     <DependedModule Id="Sandbox"/>
     <DependedModule Id="StoryMode" />
+    <DependedModule Id="Bannerlord.MBOptionScreen" />
   </DependedModules>
   <SubModules>
     <SubModule>
       <Name value="Pacemaker"/>
       <DLLName value="Pacemaker.dll"/>
       <SubModuleClassType value="Pacemaker.Main"/>
-      <Tags>
-        <Tag key="DedicatedServerType" value="none" />
-        <Tag key="IsNoRenderModeElement" value="false" />
-      </Tags>
-    </SubModule>
-    <SubModule>
-      <Name value="MCMv3 Integrated Loader"/>
-      <DLLName value="MCMv3.dll"/>
-      <SubModuleClassType value="MCM.IntegratedLoaderSubModule"/>
       <Tags>
         <Tag key="DedicatedServerType" value="none" />
         <Tag key="IsNoRenderModeElement" value="false" />

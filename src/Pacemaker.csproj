@@ -100,7 +100,7 @@
     <Content Include="SubModule.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Bannerlord.MCM.Integrated">
+    <PackageReference Include="Bannerlord.MCM">
       <Version>3.1.9</Version>
     </PackageReference>
     <PackageReference Include="Lib.Harmony">

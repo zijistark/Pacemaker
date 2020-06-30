@@ -13,9 +13,9 @@ namespace Pacemaker
 		public override string Format => "json";
 
 		private const string TimeMultiplier_Hint = "Multiplies the rate at which campaign time passes. " +
-			"Note that the same general pace is maintained: days simply pass more quickly/slowly. [ Default: 2 ]";
+			"Note that the same general pace is maintained: days simply pass more quickly/slowly. [ Default: 1.75 ]";
 
-		private const string DaysPerSeason_Hint = "Alters the length of a season (and thus a year). Vanilla uses " +
+		private const string DaysPerSeason_Hint = "Alters the length of a season (and a year). Vanilla uses " +
 			"21. NOTE: Once you start a game, this value is permanently set for that campaign. [ Default: 7 ]";
 
 		private const string EnablePregnancyTweaks_Hint = "Adjust the duration of pregnancies. [ Default: ON ]";
@@ -24,7 +24,8 @@ namespace Pacemaker
 			"year. [ Default: 75% ]";
 
 		private const string AdjustPregnancyDueDates_Hint = "Auto-adjust in-progress pregnancies' due dates to " +
-			"match settings upon load of a game. [ Default: ON ]";
+			"match settings upon load of a game. Still works correctly if another mod is overriding " +
+			"this mod's pregnancy duration setting. [ Default: ON ]";
 
 		private const string EnableHealingTweaks_Hint = "Auto-calibrate hero & troop healing rate to the Time " +
 			"Multiplier in order to maintain vanilla pacing. [ Default: ON ]";
@@ -35,7 +36,7 @@ namespace Pacemaker
 
 		[SettingPropertyFloatingInteger("Time Multiplier", 0.25f, 8f, HintText = TimeMultiplier_Hint, RequireRestart = false, Order = 0)]
 		[SettingPropertyGroup("General Settings", GroupOrder = 0)]
-		public float TimeMultiplier { get; set; } = 2f;
+		public float TimeMultiplier { get; set; } = 1.75f;
 
 		[SettingPropertyInteger("Days Per Season", 1, 30, HintText = DaysPerSeason_Hint, RequireRestart = false, Order = 1)]
 		[SettingPropertyGroup("General Settings")]

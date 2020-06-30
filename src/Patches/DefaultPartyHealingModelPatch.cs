@@ -22,22 +22,9 @@ namespace Pacemaker.Patches
 				if (!Main.Settings.EnableHealingTweaks || __result <= 0f)
 					return;
 
-				// Our factors to apply to baseNum
-				float timeMultFactor = (Main.Settings.TimeMultiplier <= 4f)
-					? 1f / Main.Settings.TimeMultiplier
-					: 0.25f;
-
+				// Our factors to apply to [hopefully] final values
 				float configFactor = Main.Settings.HealingRateFactor;
-
-				// Time Multiplier
-				float newHealFromTimeMult = __result * timeMultFactor;
-				float offsetFromTimeMult = newHealFromTimeMult - __result;
-
-				if (!Util.NearEqual(offsetFromTimeMult, 0f, 1e-2f))
-				{
-					new ExplainedNumber(offsetFromTimeMult, explanation, TimeMultAdjustmentExplanation);
-					__result += offsetFromTimeMult;
-				}
+				float timeMultFactor = 1f / (float)Math.Sqrt(Main.Settings.TimeMultiplier);
 
 				// Healing Rate Adjustment Factor
 				float newHealFromConfig = __result * configFactor;
@@ -47,6 +34,16 @@ namespace Pacemaker.Patches
 				{
 					new ExplainedNumber(offsetFromConfig, explanation, ConfigAdjustmentExplanation);
 					__result += offsetFromConfig;
+				}
+
+				// Time Multiplier
+				float newHealFromTimeMult = __result * timeMultFactor;
+				float offsetFromTimeMult = newHealFromTimeMult - __result;
+
+				if (!Util.NearEqual(offsetFromTimeMult, 0f, 1e-2f))
+				{
+					new ExplainedNumber(offsetFromTimeMult, explanation, TimeMultAdjustmentExplanation);
+					__result += offsetFromTimeMult;
 				}
 
 				__result = (float)Math.Round(__result, 2);

@@ -4,6 +4,20 @@
 ### v0.11.0 [WIP]
 
 
+#### v0.11.0-rc3 [WIP]
+
+- The healing rate correction/calibration factor function of the *Time Multiplier* setting is now `1 / sqrt(TimeMultiplier)` for all values of the setting.
+
+- The *Healing Rate Adjustment Factor* now applies before the auto-calibration due to *Time Multiplier* instead of the other way around, because this is more intuitive for those trying to use the setting.
+
+- Stopped using MCM.Integrated and switched to MCM standalone (Pacemaker now depends upon the central MCM library mod)
+  - Due to current game limitations with assembly resolving, this seems the safest overall in terms of any potential user headache, even though it means Pacemaker must depend explicitly upon MCM
+
+- The default value for the *Time Multiplier* setting changed to 1.75 from 2.0
+
+- Fixed the intended double line break in the dialog which pops up when loading a non-Pacemaker save
+
+
 #### v0.11.0-rc2
 
 - Made Pacemaker's party healing rate auto-calibration to the *Time Multiplier* setting configurable

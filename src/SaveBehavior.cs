@@ -28,14 +28,14 @@ namespace Pacemaker
 			else
 				trace.Add("Loading saved data...");
 
-			dataStore.SyncData($"{Main.Name}SavedValues", ref _savedValues);
+			dataStore.SyncData("PacemakerSavedValues", ref _savedValues);
 
 			trace.Add($"Stored values: {SavedValues}");
 
 			if (HasLoaded)
 				Main.ExternalSavedValues.Serialize();
 			else
-				OnLoad(isVanilla: false, trace);
+				OnLoad(isVanilla: false, trace); // Cannot be a vanilla save if SyncData was called on deserialization
 
 			Util.EventTracer.Trace(trace);
 		}
@@ -44,8 +44,7 @@ namespace Pacemaker
 
 		/* OnGameEarlyLoaded is only present so that we can still initialize when adding the mod to a save
 		 * that didn't previously have it enabled (so-called "vanilla save"). This is because SyncData does
-		 * not even get called during game loading for behaviors belonging to submodules that were previously
-		 * not part of the save.
+		 * not even get called during game loading for behaviors that were not previously not part of the save.
 		 */
 		protected void OnGameEarlyLoaded(CampaignGameStarter starter)
 		{
@@ -56,6 +55,10 @@ namespace Pacemaker
 
 			Util.EventTracer.Trace(trace);
 		}
+
+		/* We wait until the session fully launches before potentially printing any warning about days/season
+		 * mismatch (or the popup dialog for vanilla saves).
+		 */
 		protected void OnSessionLaunched(CampaignGameStarter starter)
 		{
 			WarnDayPerSeasonMismatch();
@@ -69,18 +72,18 @@ namespace Pacemaker
 				WasVanilla = true;
 			}
 
-			AdjustTimeParams(isVanilla, trace);
+			AdjustTimeParams(trace);
 			AdjustPregnanciesOnLoad(trace);
 			HasLoaded = true;
 		}
 
-		protected void AdjustTimeParams(bool isVanilla, List<string> trace)
+		protected void AdjustTimeParams(List<string> trace)
 		{
-			var neededDps = isVanilla ? TimeParams.OldDayPerSeason : SavedValues.DaysPerSeason;
+			var neededDps = WasVanilla ? TimeParams.OldDayPerSeason : SavedValues.DaysPerSeason;
 
 			if (Main.TimeParam.DayPerSeason != neededDps)
 			{
-				trace.Add($"DayPerSeason={Main.TimeParam.DayPerSeason} is incorrect for this campaign. Fixing...\n");
+				trace.Add($"DaysPerSeason of {Main.TimeParam.DayPerSeason} is incorrect for this campaign. Fixing...\n");
 				Main.SetTimeParams(new TimeParams(neededDps), trace);
 			}
 		}
@@ -90,10 +93,10 @@ namespace Pacemaker
 			if (WasVanilla && Main.Settings.DaysPerSeason != TimeParams.OldDayPerSeason)
 			{
 				var inquiryData = new InquiryData(
-					$"{TimeParams.OldDayPerSeason} Days Per Season",
+					$"{Main.DisplayName}: {TimeParams.OldDayPerSeason} Days Per Season",
 					$"NOTE: Once a campaign has been started, its 'Days Per Season' setting cannot change thereafter. Since you are " +
 						$"loading a non-{Main.Name} save, your effective 'Days Per Season' setting for this campaign will be the " +
-						$"vanilla {TimeParams.OldDayPerSeason} days.\\n\\nAll other settings can be changed freely mid-campaign, " +
+						$"vanilla {TimeParams.OldDayPerSeason} days.\n    \nAll other settings can be changed freely mid-campaign, " +
 						$"and new games will of course use whatever 'Days Per Season' you've configured when you start them. Now " +
 						$"go on, and get playing!",
 					true,
@@ -124,7 +127,7 @@ namespace Pacemaker
 			var pregnancyModel = Campaign.Current.Models.PregnancyModel;
 			var newDuration = pregnancyModel.PregnancyDurationInDays;
 			var ourDuration = Main.Settings.ScaledPregnancyDuration * Main.TimeParam.DayPerYear;
-			var oldDuration = (SavedValues.PregnancyDuration != 0f)
+			var oldDuration = (WasVanilla)
 				? SavedValues.PregnancyDuration
 				: VanillaPregnancyDuration;
 
@@ -136,7 +139,6 @@ namespace Pacemaker
 					"one other mod overriding the pregnancy model in a conflicting manner.");
 				trace.Add($"Type of pregnancy model: {pregnancyModel.GetType().AssemblyQualifiedName}");
 			}
-
 
 			// Don't bother if the effective old and new durations barely differ if at all.
 			if (Util.NearEqual(oldDuration, newDuration, 1e-3f))
