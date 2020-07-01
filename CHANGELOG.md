@@ -1,10 +1,10 @@
 ## Pacemaker: Changelog
 
 
-### v0.11.0 [WIP]
+### v0.11.0
 
 
-#### v0.11.0-rc3 [WIP]
+#### v0.11.0-rc3
 
 - The healing rate correction/calibration factor function of the *Time Multiplier* setting is now `1 / sqrt(TimeMultiplier)` for all values of the setting.
 
@@ -16,6 +16,8 @@
 - The default value for the *Time Multiplier* setting changed to 1.75 from 2.0
 
 - Fixed the intended double line break in the dialog which pops up when loading a non-Pacemaker save
+
+- Reversed the order of the *Time Multiplier* and *Days Per Season* settings so that the latter is the first setting. It's the most important.
 
 
 #### v0.11.0-rc2

@@ -34,13 +34,13 @@ namespace Pacemaker
 			"if the default auto-calibration isn't quite right for you. Higher than 100% causes faster healing; " +
 			"lower will cause slower. [ Default: 100% ]";
 
-		[SettingPropertyFloatingInteger("Time Multiplier", 0.25f, 8f, HintText = TimeMultiplier_Hint, RequireRestart = false, Order = 0)]
-		[SettingPropertyGroup("General Settings", GroupOrder = 0)]
-		public float TimeMultiplier { get; set; } = 1.75f;
-
-		[SettingPropertyInteger("Days Per Season", 1, 30, HintText = DaysPerSeason_Hint, RequireRestart = false, Order = 1)]
+		[SettingPropertyInteger("Days Per Season", 1, 30, HintText = DaysPerSeason_Hint, RequireRestart = false, Order = 0)]
 		[SettingPropertyGroup("General Settings")]
 		public int DaysPerSeason { get; set; } = 7;
+
+		[SettingPropertyFloatingInteger("Time Multiplier", 0.25f, 8f, HintText = TimeMultiplier_Hint, RequireRestart = false, Order = 1)]
+		[SettingPropertyGroup("General Settings", GroupOrder = 0)]
+		public float TimeMultiplier { get; set; } = 1.75f;
 
 		[SettingPropertyBool("Pregnancy Duration", HintText = EnablePregnancyTweaks_Hint, RequireRestart = false, Order = 0)]
 		[SettingPropertyGroup("Pregnancy Duration", GroupOrder = 1, IsMainToggle = true)]
