@@ -11,10 +11,10 @@ namespace Pacemaker
 	public class Main : MBSubModuleBase
 	{
 		/* Semantic Versioning (https://semver.org): */
-		public const int SemVerMajor = 0;
-		public const int SemVerMinor = 11;
+		public const int SemVerMajor = 1;
+		public const int SemVerMinor = 0;
 		public const int SemVerPatch = 0;
-		public const string SemVerSpecial = "rc3";
+		public const string SemVerSpecial = null;
 		private static readonly string SemVerEnd = (SemVerSpecial != null) ? '-' + SemVerSpecial : string.Empty;
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{SemVerEnd}";
 
