@@ -35,11 +35,11 @@ namespace Pacemaker
 			"lower will cause slower. [ Default: 100% ]";
 
 		[SettingPropertyInteger("Days Per Season", 1, 30, HintText = DaysPerSeason_Hint, RequireRestart = false, Order = 0)]
-		[SettingPropertyGroup("General Settings")]
+		[SettingPropertyGroup("General Settings", GroupOrder = 0)]
 		public int DaysPerSeason { get; set; } = 7;
 
 		[SettingPropertyFloatingInteger("Time Multiplier", 0.25f, 8f, HintText = TimeMultiplier_Hint, RequireRestart = false, Order = 1)]
-		[SettingPropertyGroup("General Settings", GroupOrder = 0)]
+		[SettingPropertyGroup("General Settings")]
 		public float TimeMultiplier { get; set; } = 1.75f;
 
 		[SettingPropertyBool("Pregnancy Duration", HintText = EnablePregnancyTweaks_Hint, RequireRestart = false, Order = 0)]
