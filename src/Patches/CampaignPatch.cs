@@ -106,7 +106,7 @@ namespace Pacemaker.Patches
 				Main.SetTimeParams(new TimeParams(saveDps), trace);
 			}
 			else
-				trace.Add("Current time parameters already seem appropriate for this campaign.");
+				trace.Add("Current time parameters already seem appropriate for this save.");
 
 			Util.EventTracer.Trace(trace);
 		}

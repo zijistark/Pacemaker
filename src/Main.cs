@@ -14,7 +14,7 @@ namespace Pacemaker
 		public const int SemVerMajor = 1;
 		public const int SemVerMinor = 0;
 		public const int SemVerPatch = 0;
-		public const string SemVerSpecial = null;
+		public const string SemVerSpecial = "rc1";
 		private static readonly string SemVerEnd = (SemVerSpecial != null) ? '-' + SemVerSpecial : string.Empty;
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{SemVerEnd}";
 
@@ -68,7 +68,7 @@ namespace Pacemaker
 				Harmony.PatchAll();
 
 				InformationManager.DisplayMessage(
-					new InformationMessage($"Loaded {DisplayName} v{Version}", ImportantTextColor));
+					new InformationMessage($"Loaded {DisplayName}", ImportantTextColor));
 
 				_loaded = true;
 			}
@@ -97,6 +97,9 @@ namespace Pacemaker
 		{
 			gameInitializer.AddBehavior(new SaveBehavior());
 			trace.Add($"Behavior added: {typeof(SaveBehavior).FullName}");
+
+			gameInitializer.AddBehavior(new FastAgingBehavior());
+			trace.Add($"Behavior added: {typeof(FastAgingBehavior).FullName}");
 
 			if (EnableTickTracer && Util.EnableTracer && Util.EnableLog)
 			{

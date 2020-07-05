@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
@@ -64,6 +65,9 @@ namespace Pacemaker
 			WarnDayPerSeasonMismatch();
 		}
 
+		/* Main entry point for everything we do when we've just loaded our data (or lack thereof)
+		 * from a savegame.
+		 */
 		protected void OnLoad(bool isVanilla, List<string> trace)
 		{
 			if (isVanilla)
@@ -128,11 +132,10 @@ namespace Pacemaker
 			var newDuration = pregnancyModel.PregnancyDurationInDays;
 			var ourDuration = Main.Settings.ScaledPregnancyDuration * Main.TimeParam.DayPerYear;
 			var oldDuration = (WasVanilla)
-				? SavedValues.PregnancyDuration
-				: VanillaPregnancyDuration;
+				? VanillaPregnancyDuration
+				: SavedValues.PregnancyDuration;
 
 			// Check whether our pregnancy duration is actually in force (i.e., no interference from other mods).
-
 			if (!Util.NearEqual(ourDuration, newDuration))
 			{
 				trace.Add($"WARNING: {Main.Name}'s pregnancy duration setting has no effect due to at least " +
@@ -156,7 +159,6 @@ namespace Pacemaker
 			// access the Pregnancy.DueDate, a private instance field, for all of those. So let's do some reflection.
 
 			var bindingFlags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
-
 			var pregListFI = typeof(PregnancyCampaignBehavior).GetField("_heroPregnancies", bindingFlags);
 
 			if (pregListFI == null)
@@ -191,9 +193,8 @@ namespace Pacemaker
 			}
 
 			// Now iterate over the pregnancy list:
-			var pregList = pregListFI.GetValue(pregBehavior) as IReadOnlyList<object>;
 
-			if (pregList == null)
+			if (!(pregListFI.GetValue(pregBehavior) is IReadOnlyList<object> pregList))
 			{
 				trace.Add($"Could not access {pregListFI.Name} as IReadOnlyList<object>! Aborting.");
 				return;

@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="CampaignTimeExt.cs" />
     <Compile Include="ExternalSavedValues.cs" />
+    <Compile Include="FastAgingBehavior.cs" />
     <Compile Include="GameLogBase.cs" />
     <Compile Include="Patches\AgingCampaignBehaviorPatch.cs" />
     <Compile Include="Patches\CampaignPatch.cs" />

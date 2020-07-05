@@ -18,10 +18,16 @@ namespace Pacemaker.Patches
 		[HarmonyPatch("DailyTick")]
 		static void DailyTick(ref AgingCampaignBehavior __instance)
 		{
-			int seasonsElapsed = (int)Campaign.Current.CampaignStartTime.ElapsedSeasonsUntilNow;
+			int daysElapsed = (int)Campaign.Current.CampaignStartTime.ElapsedDaysUntilNow;
+			int updatePeriod = (Util.NearEqual(Main.Settings.AgeFactor, 1f, 1e-2))
+				? Main.TimeParam.DayPerYear
+				: (int)(Main.TimeParam.DayPerYear / Main.Settings.AgeFactor);
 
-			// globally update death probabilities yearly
-			if ((seasonsElapsed % TimeParams.SeasonPerYear) == 0)
+			if (updatePeriod <= 0)
+				updatePeriod = 1;
+
+			// globally update death probabilities every year of accumulated age
+			if ((daysElapsed % updatePeriod) == 0)
 				UpdateHeroDeathProbabilitiesMI.Invoke(__instance, null);
 		}
 	}

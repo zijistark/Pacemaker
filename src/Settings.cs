@@ -12,11 +12,15 @@ namespace Pacemaker
 		public override string FolderName => Main.Name;
 		public override string Format => "json";
 
+		private const string DaysPerSeason_Hint = "Alters the length of a season (and a year). Vanilla uses " +
+			"21. NOTE: Once you start a game, this value is permanently set for that campaign. [ Default: 5 ]";
+
 		private const string TimeMultiplier_Hint = "Multiplies the rate at which campaign time passes. " +
 			"Note that the same general pace is maintained: days simply pass more quickly/slowly. [ Default: 1.75 ]";
 
-		private const string DaysPerSeason_Hint = "Alters the length of a season (and a year). Vanilla uses " +
-			"21. NOTE: Once you start a game, this value is permanently set for that campaign. [ Default: 7 ]";
+		private const string AgeFactor_Hint = "Multiplies the number of effective \"human years\" characters age " +
+			"in one calendar year. It's disabled at 100%, but at, e.g., 200%, all characters age twice as fast. " +
+			"[ Default: 100% ]";
 
 		private const string EnablePregnancyTweaks_Hint = "Adjust the duration of pregnancies. [ Default: ON ]";
 
@@ -36,11 +40,15 @@ namespace Pacemaker
 
 		[SettingPropertyInteger("Days Per Season", 1, 30, HintText = DaysPerSeason_Hint, RequireRestart = false, Order = 0)]
 		[SettingPropertyGroup("General Settings", GroupOrder = 0)]
-		public int DaysPerSeason { get; set; } = 7;
+		public int DaysPerSeason { get; set; } = 5;
 
 		[SettingPropertyFloatingInteger("Time Multiplier", 0.25f, 8f, HintText = TimeMultiplier_Hint, RequireRestart = false, Order = 1)]
 		[SettingPropertyGroup("General Settings")]
 		public float TimeMultiplier { get; set; } = 1.75f;
+
+		[SettingPropertyFloatingInteger("Accelerated Aging Factor", 1f, 15f, "#0%", HintText = AgeFactor_Hint, RequireRestart = false, Order = 2)]
+		[SettingPropertyGroup("General Settings")]
+		public float AgeFactor { get; set; } = 1f;
 
 		[SettingPropertyBool("Pregnancy Duration", HintText = EnablePregnancyTweaks_Hint, RequireRestart = false, Order = 0)]
 		[SettingPropertyGroup("Pregnancy Duration", GroupOrder = 1, IsMainToggle = true)]
@@ -71,8 +79,9 @@ namespace Pacemaker
 
 			return new List<string>
 			{
-				$"{prefix}{nameof(TimeMultiplier)}          = {TimeMultiplier}",
 				$"{prefix}{nameof(DaysPerSeason)}           = {DaysPerSeason}",
+				$"{prefix}{nameof(TimeMultiplier)}          = {TimeMultiplier}",
+				$"{prefix}{nameof(AgeFactor)}               = {AgeFactor}",
 				$"{prefix}{nameof(EnablePregnancyTweaks)}   = {EnablePregnancyTweaks}",
 				$"{prefix}{nameof(ScaledPregnancyDuration)} = {ScaledPregnancyDuration}",
 				$"{prefix}{nameof(AdjustPregnancyDueDates)} = {AdjustPregnancyDueDates}",

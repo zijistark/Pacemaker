@@ -1,6 +1,16 @@
 ## Pacemaker: Changelog
 
 
+### v1.0.0 [WIP]
+
+#### v1.0.0-rc1
+
+- Add *Accelerated Aging Factor* setting that will accelerate character aging to be faster than actual calendar years elapsed. This complements the other two campaign time settings well, although it is disabled by default simply because one ought to understand how it works before they decide to use it.
+  - NOTE: The setting to auto-calibrate pregnancy duration will still be calibrated to calendar years instead of the "human years" that result from accelerated aging. An option to calibrate to effective "human years" _might_ be offered in the future, but I don't really see the need right now.
+
+- Synchronized cosmetic age to real age. Only became an issue once *Accelerated Aging Factor* was in play, as [unknown to me] other aging code somehow keeps it synchronized with real age (accrued via campaign time passing), despite being a bare `float` rather than a smart object or having any getter / setter logic involved of any kind.
+
+
 ### v0.11.0
 
 
