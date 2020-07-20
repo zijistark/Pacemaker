@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using TaleWorlds.Core;
 
 namespace Pacemaker
@@ -32,9 +28,13 @@ namespace Pacemaker
 			{
 				hero.BirthDay -= birthdayDelta;
 
+				// And for good measure:
+				var bco = (BasicCharacterObject)hero.CharacterObject;
+				bco.Age = hero.Age;
+
 				// But wait! There's more. We need to keep the hero's cosmetic age synchronized too.
 				var dynBodyProperties = hero.DynamicBodyProperties;
-				dynBodyProperties.Age = hero.BirthDay.ElapsedYearsUntilNow;
+				dynBodyProperties.Age = hero.Age;
 				hero.DynamicBodyProperties = dynBodyProperties;
 			}
 		}

@@ -13,7 +13,7 @@ namespace Pacemaker
 		public override string Format => "json";
 
 		private const string DaysPerSeason_Hint = "Alters the length of a season (and a year). Vanilla uses " +
-			"21. NOTE: Once you start a game, this value is permanently set for that campaign. [ Default: 5 ]";
+			"21. NOTE: Once you start a game, this value is permanently set for that campaign. [ Default: 7 ]";
 
 		private const string TimeMultiplier_Hint = "Multiplies the rate at which campaign time passes. " +
 			"Note that the same general pace is maintained: days simply pass more quickly/slowly. [ Default: 1.75 ]";
@@ -40,7 +40,7 @@ namespace Pacemaker
 
 		[SettingPropertyInteger("Days Per Season", 1, 30, HintText = DaysPerSeason_Hint, RequireRestart = false, Order = 0)]
 		[SettingPropertyGroup("General Settings", GroupOrder = 0)]
-		public int DaysPerSeason { get; set; } = 5;
+		public int DaysPerSeason { get; set; } = 7;
 
 		[SettingPropertyFloatingInteger("Time Multiplier", 0.25f, 8f, HintText = TimeMultiplier_Hint, RequireRestart = false, Order = 1)]
 		[SettingPropertyGroup("General Settings")]
