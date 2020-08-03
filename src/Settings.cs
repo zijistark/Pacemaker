@@ -38,11 +38,15 @@ namespace Pacemaker
 			"if the default auto-calibration isn't quite right for you. Higher than 100% causes faster healing; " +
 			"lower will cause slower. [ Default: 100% ]";
 
+		private const string EnableFoodTweaks_Hint = "Auto-calibrate party food consumption rate to the Time " +
+			"Multiplier in order to maintain vanilla pacing. When the Time Multiplier is more than 1.0, as usual, " +
+			"parties can otherwise run out of food too quickly. [ Default: ON ]";
+
 		[SettingPropertyInteger("Days Per Season", 1, 30, HintText = DaysPerSeason_Hint, RequireRestart = false, Order = 0)]
 		[SettingPropertyGroup("General Settings", GroupOrder = 0)]
 		public int DaysPerSeason { get; set; } = 7;
 
-		[SettingPropertyFloatingInteger("Time Multiplier", 0.25f, 8f, HintText = TimeMultiplier_Hint, RequireRestart = false, Order = 1)]
+		[SettingPropertyFloatingInteger("Time Multiplier", 0.25f, 4f, HintText = TimeMultiplier_Hint, RequireRestart = false, Order = 1)]
 		[SettingPropertyGroup("General Settings")]
 		public float TimeMultiplier { get; set; } = 1.75f;
 
@@ -70,6 +74,10 @@ namespace Pacemaker
 		[SettingPropertyGroup("Healing Rate Auto-Calibration")]
 		public float HealingRateFactor { get; set; } = 1f;
 
+		[SettingPropertyBool("Food Consumption Auto-Calibration", HintText = EnableFoodTweaks_Hint, RequireRestart = false, Order = 0)]
+		[SettingPropertyGroup("Food Consumption Auto-Calibration", GroupOrder = 3, IsMainToggle = true)]
+		public bool EnableFoodTweaks { get; set; } = true;
+
 		public List<string> ToStringLines(uint indentSize = 0)
 		{
 			string prefix = string.Empty;
@@ -87,6 +95,7 @@ namespace Pacemaker
 				$"{prefix}{nameof(AdjustPregnancyDueDates)} = {AdjustPregnancyDueDates}",
 				$"{prefix}{nameof(EnableHealingTweaks)}     = {EnableHealingTweaks}",
 				$"{prefix}{nameof(HealingRateFactor)}       = {HealingRateFactor}",
+				$"{prefix}{nameof(EnableFoodTweaks)}        = {EnableFoodTweaks}",
 			};
 		}
 	}

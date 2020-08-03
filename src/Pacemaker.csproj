@@ -83,6 +83,7 @@
     <Compile Include="Patches\AgingCampaignBehaviorPatch.cs" />
     <Compile Include="Patches\CampaignPatch.cs" />
     <Compile Include="Patches\CampaignTimePatch.cs" />
+    <Compile Include="Patches\DefaultMobilePartyFoodConsumptionModelPatch.cs" />
     <Compile Include="Patches\DefaultPartyHealingModelPatch.cs" />
     <Compile Include="Patches\DefaultPregnancyModelPatch.cs" />
     <Compile Include="Patches\HeroHelperPatch.cs" />
