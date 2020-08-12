@@ -19,7 +19,7 @@ namespace Pacemaker.Patches
 			if (!Main.Settings.EnableFoodTweaks)
 				return;
 
-			float offset = __result / Main.Settings.TimeMultiplier - __result;
+			float offset = (__result / Main.Settings.TimeMultiplier) - __result;
 
 			if (!Util.NearEqual(offset, 0f, 1e-2f))
 			{
