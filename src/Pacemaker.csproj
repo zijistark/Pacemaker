@@ -25,6 +25,7 @@
   -->
   <PropertyGroup>
     <GameDir>$(MOUNT_AND_BLADE_DIR)</GameDir>
+    <!-- <GameDir>F:\bak\Mount &amp; Blade II Bannerlord</GameDir> -->
     <ModDir>$(GameDir)\Modules\$(RootNamespace)</ModDir>
   </PropertyGroup>
   <!-- Debug Configuration Properties -->
