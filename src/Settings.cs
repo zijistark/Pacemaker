@@ -20,7 +20,7 @@ namespace Pacemaker
 
 		private const string AgeFactor_Hint = "Multiplies the number of effective \"human years\" characters age " +
 			"in one calendar year. It's disabled at 100%, but at, e.g., 200%, all characters age twice as fast. " +
-			"[ Default: 100% ]";
+			"[ Default: 200% ]";
 
 		private const string EnablePregnancyTweaks_Hint = "Adjust the duration of pregnancies. [ Default: ON ]";
 
@@ -52,7 +52,7 @@ namespace Pacemaker
 
 		[SettingPropertyFloatingInteger("Accelerated Aging Factor", 1f, 15f, "#0%", HintText = AgeFactor_Hint, RequireRestart = false, Order = 2)]
 		[SettingPropertyGroup("General Settings")]
-		public float AgeFactor { get; set; } = 1f;
+		public float AgeFactor { get; set; } = 2f;
 
 		[SettingPropertyBool("Pregnancy Duration", HintText = EnablePregnancyTweaks_Hint, RequireRestart = false, Order = 0)]
 		[SettingPropertyGroup("Pregnancy Duration", GroupOrder = 1, IsMainToggle = true)]
