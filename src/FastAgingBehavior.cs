@@ -27,20 +27,7 @@ namespace Pacemaker
 			foreach (var hero in Hero.All.Where(h => h.IsAlive))
 			{
 				hero.BirthDay -= birthdayDelta;
-
-				// And for good measure:
-				var bco = (BasicCharacterObject)hero.CharacterObject;
-				bco.Age = hero.Age;
-
-				// But wait! There's more. We need to keep the hero's cosmetic age synchronized too.
-
-				/*
-				 * This should automatically synchronize to hero.Age in the 1.4.3 beta patch.
-				 *
-				var dynBodyProperties = hero.DynamicBodyProperties;
-				dynBodyProperties.Age = hero.Age;
-				hero.DynamicBodyProperties = dynBodyProperties;
-				*/
+				hero.CharacterObject.Age = hero.Age;
 			}
 		}
 	}
