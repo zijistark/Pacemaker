@@ -11,8 +11,6 @@ Note that this increased pace is the default behavior. Pacemaker is actually ful
 
 It accomplishes this through redefining, at runtime, the game's core time implementation via the magic of dynamic method patching via Harmony. This is both to change the speed of campaign time itself (i.e., what is reflected by the frequency of the visual day/night cycle) as well as to alter the structure of the game's calendar with the default goal of making years in Calradia shorter.
 
-Due to Pacemaker's approach, it doesn't need to perform hacks like timeshifting birthdays in order to age characters faster than calendar years permit or mess with any other jank: everything in the game reflects the altered notion of time naturally, because everything relies upon the modified core APIs for date/time calculations. There *are* a few things that appreciate further adjustment in order to work better with the configured time-scale, however. Pacemaker aims to take care of all of those things for you in a tightly-integrated fashion.
-
 I welcome any contributions in the form of GitHub pull requests, testing, and feedback. Shoot me an email at zijistark@gmail.com or connect with me on Discord as `zijistark#3021`. I have a Slack workspace specifically for discussing Bannerlord modding and mods-- mainly for Pacemaker at this time, but Slack workspaces are invite-only, so you'll need to first express interest.
 
 ---
