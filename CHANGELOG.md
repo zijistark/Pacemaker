@@ -1,5 +1,16 @@
 ## Pacemaker: Changelog
 
+### v1.0.2
+
+- Allowed *Days Per Season* to be configured to be as large as 90 days, effectively enabling an approximately 365-day year
+
+- Made the hero and troop healing rate auto-calibration function of the *Time Multiplier* more liberal (instead of `sqrt(TM)`, it's now `pow(TM, 0.35)`)
+
+
+### v1.0.1
+
+- Adapted to changes in Bannerlord e1.4.3
+
 
 ### v1.0.0
 
@@ -13,6 +24,8 @@
 - The default *Time Multiplier* is now 1.75 instead of 2.0.
 
 - Patched a method in `HeroHelper` which assumed that years always consisted of 84 days.
+
+- Upgraded Harmony to v2.0.2
 
 
 ### v0.11.0

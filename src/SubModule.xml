@@ -1,7 +1,7 @@
 ﻿<Module>
   <Name value="Pacemaker"/>
   <Id value="Pacemaker"/>
-  <Version value="v1.0.1"/>
+  <Version value="v1.0.2"/>
   <SingleplayerModule value="true"/>
   <MultiplayerModule value="false"/>
   <Official value="false"/>

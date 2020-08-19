@@ -42,7 +42,7 @@ namespace Pacemaker
 			"Multiplier in order to maintain vanilla pacing. When the Time Multiplier is more than 1.0, as usual, " +
 			"parties can otherwise run out of food too quickly. [ Default: ON ]";
 
-		[SettingPropertyInteger("Days Per Season", 1, 30, HintText = DaysPerSeason_Hint, RequireRestart = false, Order = 0)]
+		[SettingPropertyInteger("Days Per Season", 1, 90, HintText = DaysPerSeason_Hint, RequireRestart = false, Order = 0)]
 		[SettingPropertyGroup("General Settings", GroupOrder = 0)]
 		public int DaysPerSeason { get; set; } = 7;
 

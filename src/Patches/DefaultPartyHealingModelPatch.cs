@@ -24,7 +24,7 @@ namespace Pacemaker.Patches
 
 				// Our factors to apply to [hopefully] final values
 				float configFactor = Main.Settings.HealingRateFactor;
-				float timeMultFactor = 1f / (float)Math.Sqrt(Main.Settings.TimeMultiplier);
+				float timeMultFactor = 1f / (float)Math.Pow(Main.Settings.TimeMultiplier, 0.35);
 
 				// Healing Rate Adjustment Factor
 				float newHealFromConfig = __result * configFactor;
