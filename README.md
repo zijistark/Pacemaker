@@ -3,6 +3,8 @@
 	<a href="https://www.codefactor.io/repository/github/zijistark/pacemaker"><img src="https://www.codefactor.io/repository/github/zijistark/pacemaker/badge" alt="CodeFactor"/></a>
 </p>
 
+Nexus: https://www.nexusmods.com/mountandblade2bannerlord/mods/1902
+
 ## Pacemaker
 
 Pacemaker is a game mod for [Mount &amp; Blade II Bannerlord](https://www.taleworlds.com/en/Games/Bannerlord) whose goal is, by default, to increase the pace of the game's "campaign time" (also known as "map time"). The intention is to make it reasonable for decades of campaign time to pass during normal playthroughs so that nobles may actually age, die, have children, undergo succession, and so on while also adding a more realistic perspective upon the amount of real time which would be taken by all the fun things we do in the Bannerlord universe.
