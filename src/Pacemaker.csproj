@@ -78,6 +78,7 @@
   <!-- Files & Classes -->
   <ItemGroup>
     <Compile Include="CampaignTimeExt.cs" />
+    <Compile Include="Export.cs" />
     <Compile Include="ExternalSavedValues.cs" />
     <Compile Include="FastAgingBehavior.cs" />
     <Compile Include="GameLogBase.cs" />
