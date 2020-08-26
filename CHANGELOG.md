@@ -1,5 +1,11 @@
 ## Pacemaker: Changelog
 
+### v1.1.0
+
+- Added export API for retrieving critical Pacemaker settings
+  - You'll need to use reflection on the loaded Pacemaker assembly to access it
+  - Supports useful things like `GetDaysPerHumanYear` which accounts for both the *Days Per Season* setting and the *Accelerated Aging Factor* to return the number of days which must pass for a character to age by a year
+
 ### v1.0.2
 
 - Allowed *Days Per Season* to be configured to be as large as 90 days, effectively enabling an approximately 365-day year
