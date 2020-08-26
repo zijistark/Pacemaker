@@ -1,5 +1,4 @@
-﻿
-namespace Pacemaker
+﻿namespace Pacemaker
 {
 	/* Export
 	 *
