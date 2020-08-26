@@ -7,13 +7,13 @@ namespace Pacemaker
 	 * Simply intended to be used via reflection upon the Pacemaker assembly.
 	 * Subject to semantic versioning.
 	 */
-	public class Export
+	public static class Export
 	{
-		public int GetDaysPerSeason() => Main.TimeParam.DayPerSeason;
+		public static int GetDaysPerSeason() => Main.TimeParam.DayPerSeason;
 
-		public int GetDaysPerYear() => Main.TimeParam.DayPerYear;
+		public static int GetDaysPerYear() => Main.TimeParam.DayPerYear;
 
-		public float GetTimeMultiplier() => Main.Settings.TimeMultiplier;
+		public static float GetTimeMultiplier() => Main.Settings.TimeMultiplier;
 
 		/* GetDaysPerHumanYear
 		 *
@@ -27,10 +27,10 @@ namespace Pacemaker
 		 * children come of age / reach maturity and become active characters. For now,
 		 * it's the same answer regardless of age, but that should not be assumed.
 		 */
-		public float GetDaysPerHumanYear(bool isAdult)
+		public static float GetDaysPerHumanYear(bool isAdult)
 		{
 			_ = isAdult;
-			return Main.Settings.AgeFactor < 1.01
+			return Util.NearEqual(Main.Settings.AgeFactor, 1f, 1e-2)
 				? Main.TimeParam.DayPerYear
 				: Main.TimeParam.DayPerYear / Main.Settings.AgeFactor;
 		}

@@ -19,7 +19,7 @@ namespace Pacemaker.Patches
 		static void DailyTick(ref AgingCampaignBehavior __instance)
 		{
 			int daysElapsed = (int)Campaign.Current.CampaignStartTime.ElapsedDaysUntilNow;
-			int updatePeriod = (Util.NearEqual(Main.Settings.AgeFactor, 1f, 1e-2))
+			int updatePeriod = Util.NearEqual(Main.Settings.AgeFactor, 1f, 1e-2)
 				? Main.TimeParam.DayPerYear
 				: (int)(Main.TimeParam.DayPerYear / Main.Settings.AgeFactor);
 
