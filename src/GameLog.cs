@@ -9,7 +9,7 @@ using TaleWorlds.Library;
 
 namespace Pacemaker
 {
-	public class GameLog : GameLogBase
+	internal class GameLog : GameLogBase
 	{
 		private const string BeginMultiLine      = @"=======================================================================================================================\";
 		private const string BeginMultiLineDebug = @"===================================================   D E B U G   =====================================================\";

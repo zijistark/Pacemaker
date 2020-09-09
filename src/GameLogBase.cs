@@ -3,7 +3,7 @@ using TaleWorlds.Library;
 
 namespace Pacemaker
 {
-	public class GameLogBase
+	internal class GameLogBase
 	{
 		public virtual void Info(string s) { }
 		public virtual void Info(List<string> l) { }
