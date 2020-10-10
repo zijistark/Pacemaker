@@ -14,7 +14,7 @@ namespace Pacemaker
 		public const int SemVerMajor = 1;
 		public const int SemVerMinor = 1;
 		public const int SemVerPatch = 3;
-		public const string SemVerSpecial = "beta1";
+		public const string SemVerSpecial = null;
 		private static readonly string SemVerEnd = (SemVerSpecial != null) ? '-' + SemVerSpecial : string.Empty;
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{SemVerEnd}";
 
