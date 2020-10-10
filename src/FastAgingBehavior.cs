@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
-using Newtonsoft.Json;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.ObjectSystem;
 
 namespace Pacemaker
 {
@@ -18,7 +14,7 @@ namespace Pacemaker
 			CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
 		}
 
-		public override void SyncData(IDataStore dataStore) {}
+		public override void SyncData(IDataStore dataStore) { }
 
 		protected void OnSessionLaunched(CampaignGameStarter starter)
 		{
@@ -125,26 +121,6 @@ namespace Pacemaker
 		{
 			if (!hero.IsActive) // This extra check is inherited from the old vanilla code.
 				OnHeroComesOfAgeMI.Invoke(CampaignEventDispatcher.Instance, new object[] { hero });
-		}
-
-		protected enum GrowthStage
-		{
-			Infant = 0,
-			Child = 1,
-			Teen = 2,
-			Adult = 3,
-		}
-
-		protected GrowthStage AgeToGrowthStage(float age)
-		{
-			if ((int)age >= adultAge)
-				return GrowthStage.Adult;
-			else if ((int)age >= teenAge)
-				return GrowthStage.Teen;
-			else if ((int)age >= childAge)
-				return GrowthStage.Child;
-			else
-				return GrowthStage.Infant;
 		}
 
 		// Year thresholds:
