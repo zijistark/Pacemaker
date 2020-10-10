@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
@@ -42,7 +43,7 @@ namespace Pacemaker.Patches
 			/* Replace DailyTick implementation -- code is mostly as decompiled, minus
 			   child growth stage stuff. */
 
-			foreach (var hero in Hero.All)
+			foreach (var hero in Hero.All.ToList())
 			{
 				if (hero.IsAlive && !hero.IsOccupiedByAnEvent())
 				{
