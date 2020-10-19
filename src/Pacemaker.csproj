@@ -24,7 +24,7 @@
              Note that &amp; (HTML entity code for &) is required instead of the direct ampersand symbol.
   -->
   <PropertyGroup>
-    <GameDir>$(MOUNT_AND_BLADE_DIR)</GameDir>
+    <GameDir>$(BANNERLORD_GAME_DIR)</GameDir>
     <!-- <GameDir>F:\bak\Mount &amp; Blade II Bannerlord</GameDir> -->
     <ModDir>$(GameDir)\Modules\$(RootNamespace)</ModDir>
   </PropertyGroup>
