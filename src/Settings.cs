@@ -10,7 +10,7 @@ namespace Pacemaker
 		public override string Id => $"{Main.Name}_v1";
 		public override string DisplayName => Main.DisplayName;
 		public override string FolderName => Main.Name;
-		public override string Format => "json";
+		public override string FormatType => "json";
 
 		private const string DaysPerSeason_Hint = "Alters the length of a season (and a year). Vanilla uses " +
 			"21. NOTE: Once you start a game, this value is permanently set for that campaign. [ Default: 7 ]";
@@ -54,8 +54,8 @@ namespace Pacemaker
 		[SettingPropertyGroup("General Settings")]
 		public float AgeFactor { get; set; } = 2f;
 
-		[SettingPropertyBool("Pregnancy Duration", HintText = EnablePregnancyTweaks_Hint, RequireRestart = false, Order = 0)]
-		[SettingPropertyGroup("Pregnancy Duration", GroupOrder = 1, IsMainToggle = true)]
+		[SettingPropertyBool("Pregnancy Duration", HintText = EnablePregnancyTweaks_Hint, RequireRestart = false, IsToggle = true, Order = 0)]
+		[SettingPropertyGroup("Pregnancy Duration", GroupOrder = 1)]
 		public bool EnablePregnancyTweaks { get; set; } = true;
 
 		[SettingPropertyFloatingInteger("Year-Scaled Pregnancy Duration Factor", 0.2f, 4f, "#0%", HintText = ScaledPregnancyDuration_Hint, RequireRestart = false, Order = 1)]
@@ -66,16 +66,16 @@ namespace Pacemaker
 		[SettingPropertyGroup("Pregnancy Duration")]
 		public bool AdjustPregnancyDueDates { get; set; } = true;
 
-		[SettingPropertyBool("Healing Rate Auto-Calibration", HintText = EnableHealingTweaks_Hint, RequireRestart = false, Order = 0)]
-		[SettingPropertyGroup("Healing Rate Auto-Calibration", GroupOrder = 2, IsMainToggle = true)]
+		[SettingPropertyBool("Healing Rate Auto-Calibration", HintText = EnableHealingTweaks_Hint, RequireRestart = false, IsToggle = true, Order = 0)]
+		[SettingPropertyGroup("Healing Rate Auto-Calibration", GroupOrder = 2)]
 		public bool EnableHealingTweaks { get; set; } = true;
 
 		[SettingPropertyFloatingInteger("Healing Rate Adjustment Factor", 0.25f, 4f, "#0%", HintText = HealingRateAdjustmentFactor_Hint, RequireRestart = false, Order = 1)]
 		[SettingPropertyGroup("Healing Rate Auto-Calibration")]
 		public float HealingRateFactor { get; set; } = 1f;
 
-		[SettingPropertyBool("Food Consumption Auto-Calibration", HintText = EnableFoodTweaks_Hint, RequireRestart = false, Order = 0)]
-		[SettingPropertyGroup("Food Consumption Auto-Calibration", GroupOrder = 3, IsMainToggle = true)]
+		[SettingPropertyBool("Food Consumption Auto-Calibration", HintText = EnableFoodTweaks_Hint, RequireRestart = false, IsToggle = true, Order = 0)]
+		[SettingPropertyGroup("Food Consumption Auto-Calibration", GroupOrder = 3)]
 		public bool EnableFoodTweaks { get; set; } = true;
 
 		public List<string> ToStringLines(uint indentSize = 0)

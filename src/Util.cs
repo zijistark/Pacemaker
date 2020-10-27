@@ -85,7 +85,7 @@ namespace Pacemaker
 					{
 						msg.AddRange(new List<string>
 						{
-							String.Empty,
+							string.Empty,
 							"Stack Trace:",
 							stStr,
 						});
@@ -96,12 +96,12 @@ namespace Pacemaker
 				{
 					msg.AddRange(new List<string>
 					{
-						String.Empty,
+						string.Empty,
 						"Extra Information:",
 					});
 
 					if (extraInfo.Count > 1)
-						msg.Add(String.Empty);
+						msg.Add(string.Empty);
 
 					msg.AddRange(extraInfo);
 				}
