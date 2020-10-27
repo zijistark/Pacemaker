@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -100,12 +98,12 @@ namespace Pacemaker
 
 		public GameLog(string moduleName, bool truncate = false, string logName = null)
 		{
-			if (moduleName.IsStringNoneOrEmpty())
-				throw new ArgumentNullException(nameof(moduleName));
+			if (string.IsNullOrEmpty(moduleName))
+				throw new ArgumentException($"{nameof(moduleName)}: string cannot be null or empty");
 
 			var userDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mount and Blade II Bannerlord");
 
-			Module = $"{moduleName}.{this.GetType().Name}";
+			Module = $"{moduleName}.{GetType().Name}";
 
 			LogDir = Path.Combine(userDir, "Logs");
 

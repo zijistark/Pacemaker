@@ -15,18 +15,18 @@ namespace Pacemaker.Patches
 
 		[HarmonyPrefix]
 		[HarmonyPatch("ElapsedSeasonsUntilNow", MethodType.Getter)]
-		static bool ElapsedSeasonsUntilNow(ref CampaignTime __instance, ref float __result)
+		static bool ElapsedSeasonsUntilNow(ref float __result, long ____numTicks)
 		{
-			long dTicks = (long)CurrentTicksMI.Invoke(null, null) - __instance.GetTicks();
+			long dTicks = (long)CurrentTicksMI.Invoke(null, null) - ____numTicks;
 			__result = dTicks / Main.TimeParam.TickPerSeasonF;
 			return false;
 		}
 
 		[HarmonyPrefix]
 		[HarmonyPatch("ElapsedYearsUntilNow", MethodType.Getter)]
-		static bool ElapsedYearsUntilNow(ref CampaignTime __instance, ref float __result)
+		static bool ElapsedYearsUntilNow(ref float __result, long ____numTicks)
 		{
-			long dTicks = (long)CurrentTicksMI.Invoke(null, null) - __instance.GetTicks();
+			long dTicks = (long)CurrentTicksMI.Invoke(null, null) - ____numTicks;
 			__result = dTicks / Main.TimeParam.TickPerYearF;
 			return false;
 		}
@@ -36,18 +36,18 @@ namespace Pacemaker.Patches
 
 		[HarmonyPrefix]
 		[HarmonyPatch("RemainingSeasonsFromNow", MethodType.Getter)]
-		static bool RemainingSeasonsFromNow(ref CampaignTime __instance, ref float __result)
+		static bool RemainingSeasonsFromNow(ref float __result, long ____numTicks)
 		{
-			long dTicks = __instance.GetTicks() - (long)CurrentTicksMI.Invoke(null, null);
+			long dTicks = ____numTicks - (long)CurrentTicksMI.Invoke(null, null);
 			__result = dTicks / Main.TimeParam.TickPerSeasonF;
 			return false;
 		}
 
 		[HarmonyPrefix]
 		[HarmonyPatch("RemainingYearsFromNow", MethodType.Getter)]
-		static bool RemainingYearsFromNow(ref CampaignTime __instance, ref float __result)
+		static bool RemainingYearsFromNow(ref float __result, long ____numTicks)
 		{
-			long dTicks = __instance.GetTicks() - (long)CurrentTicksMI.Invoke(null, null);
+			long dTicks = ____numTicks - (long)CurrentTicksMI.Invoke(null, null);
 			__result = dTicks / Main.TimeParam.TickPerYearF;
 			return false;
 		}
@@ -57,17 +57,17 @@ namespace Pacemaker.Patches
 
 		[HarmonyPrefix]
 		[HarmonyPatch("ToSeasons", MethodType.Getter)]
-		static bool ToSeasons(ref CampaignTime __instance, ref double __result)
+		static bool ToSeasons(ref double __result, long ____numTicks)
 		{
-			__result = __instance.GetTicks() / Main.TimeParam.TickPerSeasonD;
+			__result = ____numTicks / Main.TimeParam.TickPerSeasonD;
 			return false;
 		}
 
 		[HarmonyPrefix]
 		[HarmonyPatch("ToYears", MethodType.Getter)]
-		static bool ToYears(ref CampaignTime __instance, ref double __result)
+		static bool ToYears(ref double __result, long ____numTicks)
 		{
-			__result = __instance.GetTicks() / Main.TimeParam.TickPerYearD;
+			__result = ____numTicks / Main.TimeParam.TickPerYearD;
 			return false;
 		}
 
@@ -76,44 +76,44 @@ namespace Pacemaker.Patches
 
 		[HarmonyPrefix]
 		[HarmonyPatch("GetDayOfSeason", MethodType.Getter)]
-		static bool GetDayOfSeason(ref CampaignTime __instance, ref int __result)
+		static bool GetDayOfSeason(ref int __result, long ____numTicks)
 		{
-			long nDay = __instance.GetTicks() / TimeParams.TickPerDayL;
+			long nDay = ____numTicks / TimeParams.TickPerDayL;
 			__result = (int)(nDay % Main.TimeParam.DayPerSeason);
 			return false;
 		}
 
 		[HarmonyPrefix]
 		[HarmonyPatch("GetDayOfYear", MethodType.Getter)]
-		static bool GetDayOfYear(ref CampaignTime __instance, ref int __result)
+		static bool GetDayOfYear(ref int __result, long ____numTicks)
 		{
-			long nDay = __instance.GetTicks() / TimeParams.TickPerDayL;
+			long nDay = ____numTicks / TimeParams.TickPerDayL;
 			__result = (int)(nDay % Main.TimeParam.DayPerYear);
 			return false;
 		}
 
 		//[HarmonyPrefix]
 		//[HarmonyPatch("GetWeekOfSeason", MethodType.Getter)]
-		//static bool GetWeekOfSeason(ref CampaignTime __instance, ref int __result)
+		//static bool GetWeekOfSeason(ref int __result, long ____numTicks)
 		//{
-		//	__result = (int)((__instance.GetTicks() / Main.TimeParam.TickPerWeekL) % Main.TimeParam.WeekPerSeasonL);
+		//	__result = (int)((____numTicks / Main.TimeParam.TickPerWeekL) % Main.TimeParam.WeekPerSeasonL);
 		//	return false;
 		//}
 
 		[HarmonyPrefix]
 		[HarmonyPatch("GetSeasonOfYear", MethodType.Getter)]
-		static bool GetSeasonOfYear(ref CampaignTime __instance, ref int __result)
+		static bool GetSeasonOfYear(ref int __result, long ____numTicks)
 		{
-			long nSeason = __instance.GetTicks() / Main.TimeParam.TickPerSeasonL;
+			long nSeason = ____numTicks / Main.TimeParam.TickPerSeasonL;
 			__result = (int)(nSeason % TimeParams.SeasonPerYear);
 			return false;
 		}
 
 		[HarmonyPrefix]
 		[HarmonyPatch("GetYear", MethodType.Getter)]
-		static bool GetYear(ref CampaignTime __instance, ref int __result)
+		static bool GetYear(ref int __result, long ____numTicks)
 		{
-			__result = (int)(__instance.GetTicks() / Main.TimeParam.TickPerYearL);
+			__result = (int)(____numTicks / Main.TimeParam.TickPerYearL);
 			return false;
 		}
 
@@ -122,18 +122,18 @@ namespace Pacemaker.Patches
 
 		[HarmonyPrefix]
 		[HarmonyPatch("GetDayOfSeasonf", MethodType.Getter)]
-		static bool GetDayOfSeasonf(ref CampaignTime __instance, ref float __result)
+		static bool GetDayOfSeasonf(ref float __result, long ____numTicks)
 		{
-			long nDay = __instance.GetTicks() / TimeParams.TickPerDayL;
+			long nDay = ____numTicks / TimeParams.TickPerDayL;
 			__result = (float)Math.IEEERemainder(nDay, Main.TimeParam.DayPerSeason);
 			return false;
 		}
 
 		[HarmonyPrefix]
 		[HarmonyPatch("GetSeasonOfYearf", MethodType.Getter)]
-		static bool GetSeasonOfYearf(ref CampaignTime __instance, ref float __result)
+		static bool GetSeasonOfYearf(ref float __result, long ____numTicks)
 		{
-			long nSeason = __instance.GetTicks() / Main.TimeParam.TickPerSeasonL;
+			long nSeason = ____numTicks / Main.TimeParam.TickPerSeasonL;
 			__result = (float)Math.IEEERemainder(nSeason, TimeParams.SeasonPerYear);
 			return false;
 		}

@@ -11,7 +11,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Pacemaker</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
+    <LangVersion>8.0</LangVersion>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <Nullable>enable</Nullable>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <!-- NOTE: An easy way to get many a BL VS/Rider project 100% working on your machine is to set the environment
@@ -51,7 +53,7 @@
   <PropertyGroup>
     <StartAction>Program</StartAction>
     <StartProgram>$(GameDir)\bin\Win64_Shipping_Client\Bannerlord.exe</StartProgram>
-    <StartArguments>/singleplayer _MODULES_*Native*SandBoxCore*SandBox*StoryMode*CustomBattle*Pacemaker*_MODULES_</StartArguments>
+    <StartArguments>/singleplayer _MODULES_*Bannerlord.Harmony*Bannerlord.ButterLib*Bannerlord.UIExtenderEx*Bannerlord.MBOptionScreen*Native*SandBoxCore*SandBox*StoryMode*CustomBattle*Pacemaker*_MODULES_</StartArguments>
     <StartWorkingDirectory>$(GameDir)\bin\Win64_Shipping_Client</StartWorkingDirectory>
   </PropertyGroup>
   <!-- Bannerlord Native Assemblies -->
@@ -105,7 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Bannerlord.MCM">
-      <Version>3.1.9</Version>
+      <Version>4.1.0.1</Version>
     </PackageReference>
     <PackageReference Include="Lib.Harmony">
       <Version>2.0.2</Version>
