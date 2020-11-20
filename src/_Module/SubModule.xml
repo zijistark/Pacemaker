@@ -1,26 +1,24 @@
 ﻿<Module>
   <Name value="Pacemaker"/>
   <Id value="Pacemaker"/>
-  <Version value="v1.1.5"/>
+  <Version value="v$version$"/>
   <SingleplayerModule value="true"/>
   <MultiplayerModule value="false"/>
   <Official value="false"/>
+  <Url value="https://www.nexusmods.com/mountandblade2bannerlord/mods/1902" />
   <DependedModules>
+    <DependedModule Id="Bannerlord.MBOptionScreen" />
     <DependedModule Id="Native"/>
     <DependedModule Id="SandBoxCore"/>
     <DependedModule Id="Sandbox"/>
     <DependedModule Id="StoryMode" />
-    <DependedModule Id="Bannerlord.MBOptionScreen" />
   </DependedModules>
   <SubModules>
     <SubModule>
       <Name value="Pacemaker"/>
       <DLLName value="Pacemaker.dll"/>
       <SubModuleClassType value="Pacemaker.Main"/>
-      <Tags>
-        <Tag key="DedicatedServerType" value="none" />
-        <Tag key="IsNoRenderModeElement" value="false" />
-      </Tags>
+      <Tags />
     </SubModule>
   </SubModules>
   <Xmls/>

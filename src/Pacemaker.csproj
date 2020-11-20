@@ -1,124 +1,54 @@
-﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <!-- Main Project Properties -->
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <PlatformTarget Condition=" '$(PlatformTarget)' == '' ">x64</PlatformTarget>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9A8ABAD2-10D6-49A6-8335-F62EADDE629F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pacemaker</RootNamespace>
-    <AssemblyName>$(RootNamespace)</AssemblyName>
-    <LangVersion>8.0</LangVersion>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <Nullable>enable</Nullable>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <!-- NOTE: An easy way to get many a BL VS/Rider project 100% working on your machine is to set the environment
              variable MOUNT_AND_BLADE_DIR equal to the path of your installed Bannerlord game folder.
 
              An easier way for just this project is to simply enter it within the following property tag. For example:
-               
+
              <GameDir>Z:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord</GameDir>
 
              Note that &amp; (HTML entity code for &) is required instead of the direct ampersand symbol.
   -->
+
   <PropertyGroup>
-    <GameDir>$(BANNERLORD_GAME_DIR)</GameDir>
-    <!-- <GameDir>F:\bak\Mount &amp; Blade II Bannerlord</GameDir> -->
-    <ModDir>$(GameDir)\Modules\$(RootNamespace)</ModDir>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
+
+    <Version>1.1.5</Version>
+    <GameFolder>$(BANNERLORD_GAME_DIR)</GameFolder>
+    <ModuleName>$(AssemblyName)</ModuleName>
   </PropertyGroup>
-  <!-- Debug Configuration Properties -->
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>$(ModDir)\bin\Win64_Shipping_Client</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <!-- Release Configuration Properties -->
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>$(ModDir)\bin\Win64_Shipping_Client</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <!-- Debugging Properties -->
-  <PropertyGroup>
-    <StartAction>Program</StartAction>
-    <StartProgram>$(GameDir)\bin\Win64_Shipping_Client\Bannerlord.exe</StartProgram>
-    <StartArguments>/singleplayer _MODULES_*Bannerlord.Harmony*Bannerlord.ButterLib*Bannerlord.UIExtenderEx*Bannerlord.MBOptionScreen*Native*SandBoxCore*SandBox*StoryMode*CustomBattle*Pacemaker*_MODULES_</StartArguments>
-    <StartWorkingDirectory>$(GameDir)\bin\Win64_Shipping_Client</StartWorkingDirectory>
-  </PropertyGroup>
+
+  <!--NuGet References-->
+  <ItemGroup>
+    <PackageReference Include="Bannerlord.BuildResources" Version="1.0.0.23">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Bannerlord.MCM" Version="4.1.2" IncludeAssets="compile" />
+    <PackageReference Include="Lib.Harmony" Version="2.0.2" IncludeAssets="compile" />
+  </ItemGroup>
+
   <!-- Bannerlord Native Assemblies -->
   <ItemGroup>
-    <Reference Include="$(GameDir)\bin\Win64_Shipping_Client\TaleWorlds*.dll">
+    <Reference Include="$(GameFolder)\bin\Win64_Shipping_Client\TaleWorlds*.dll">
       <HintPath>%(Identity)</HintPath>
       <Private>False</Private>
     </Reference>
     <!-- Bannerlord Module Assemblies  -->
-    <Reference Include="$(GameDir)\Modules\Native\bin\Win64_Shipping_Client\TaleWorlds*.dll">
+    <Reference Include="$(GameFolder)\Modules\Native\bin\Win64_Shipping_Client\TaleWorlds*.dll">
       <HintPath>%(Identity)</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="$(GameDir)\Modules\SandBox\bin\Win64_Shipping_Client\SandBox*.dll">
+    <Reference Include="$(GameFolder)\Modules\SandBox\bin\Win64_Shipping_Client\SandBox*.dll">
       <HintPath>%(Identity)</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="$(GameDir)\Modules\StoryMode\bin\Win64_Shipping_Client\StoryMode*.dll">
+    <Reference Include="$(GameFolder)\Modules\StoryMode\bin\Win64_Shipping_Client\StoryMode*.dll">
       <HintPath>%(Identity)</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System" />
   </ItemGroup>
-  <!-- Files & Classes -->
-  <ItemGroup>
-    <Compile Include="CampaignTimeExt.cs" />
-    <Compile Include="Export.cs" />
-    <Compile Include="ExternalSavedValues.cs" />
-    <Compile Include="FastAgingBehavior.cs" />
-    <Compile Include="GameLogBase.cs" />
-    <Compile Include="Patches\AgingCampaignBehaviorPatch.cs" />
-    <Compile Include="Patches\CampaignPatch.cs" />
-    <Compile Include="Patches\CampaignTimePatch.cs" />
-    <Compile Include="Patches\DefaultMobilePartyFoodConsumptionModelPatch.cs" />
-    <Compile Include="Patches\DefaultPartyHealingModelPatch.cs" />
-    <Compile Include="Patches\DefaultPregnancyModelPatch.cs" />
-    <Compile Include="Patches\HeroHelperPatch.cs" />
-    <Compile Include="Patches\MapTimeTrackerTickPatch.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CustomSaveableTypeDefiner.cs" />
-    <Compile Include="GameLog.cs" />
-    <Compile Include="Main.cs" />
-    <Compile Include="SaveBehavior.cs" />
-    <Compile Include="SavedValues.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="SimpleTime.cs" />
-    <Compile Include="TickTraceBehavior.cs" />
-    <Compile Include="TimeParams.cs" />
-    <Compile Include="Util.cs" />
-    <Content Include="SubModule.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Bannerlord.MCM">
-      <Version>4.1.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="Lib.Harmony">
-      <Version>2.0.2</Version>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.3</Version>
-    </PackageReference>
-  </ItemGroup>
-  <!-- Post-Build -->
-  <PropertyGroup>
-    <PostBuildEvent>xcopy /d /y "$(MSBuildProjectDirectory)\SubModule.xml" "$(ModDir)"</PostBuildEvent>
-  </PropertyGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>
