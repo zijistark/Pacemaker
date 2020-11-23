@@ -37,18 +37,10 @@ namespace Pacemaker
         private void OnDailyTick()
         {
             bool aafEnabled = !Util.NearEqual(Main.Settings!.AgeFactor, 1f, 1e-2);
+            PeriodicDeathProbabilityUpdate(aafEnabled);
 
-            /* Update Hero Death Probabilities */
-
-            int daysElapsed = (int)Campaign.Current.CampaignStartTime.ElapsedDaysUntilNow;
-            int updatePeriod = !aafEnabled ? Main.TimeParam.DayPerYear : (int)(Main.TimeParam.DayPerYear / Main.Settings.AgeFactor);
-
-            if (updatePeriod <= 0)
-                updatePeriod = 1;
-
-            // Globally update death probabilities every year of accumulated age
-            if (daysElapsed % updatePeriod == 0)
-                UpdateHeroDeathProbabilities!();
+            if (!CampaignOptions.IsLifeDeathCycleEnabled)
+                return;
 
             /* Send childhood growth stage transition events & perform AAF if enabled */
 
@@ -72,7 +64,7 @@ namespace Pacemaker
 
                 if (aafEnabled)
                 {
-                    hero.BirthDay -= birthDayDelta;
+                    hero.SetBirthDay(hero.BirthDay - birthDayDelta);
                     hero.CharacterObject.Age = hero.Age;
                 }
 
@@ -81,26 +73,41 @@ namespace Pacemaker
 
                 // Did a relevant transition in age(s) occur?
                 if (newAge > prevAge && prevAge < adultAge && !hero.IsTemplate)
-                {
-                    // Loop over the aged years (extremely aggressive Days Per Season + AAF
-                    // could make it multiple), and thus we need to be able to handle the
-                    // possibility of multiple growth stage events needing to be fired.
-
-                    for (int age = prevAge + 1; age <= Math.Min(newAge, adultAge); ++age)
-                    {
-                        // This replaces AgingCampaignBehavior.OnDailyTick's campaign event triggers:
-
-                        if (age == childAge)
-                            OnHeroGrowsOutOfInfancy(hero);
-
-                        if (age == teenAge)
-                            OnHeroReachesTeenAge(hero);
-
-                        if (age == adultAge && !hero.IsActive)
-                            OnHeroComesOfAge(hero);
-                    }
-                }
+                    ProcessAgeTransition(hero, prevAge, newAge);
             }
+        }
+
+        private void ProcessAgeTransition(Hero hero, int prevAge, int newAge)
+        {
+            // Loop over the aged years (extremely aggressive Days Per Season + AAF
+            // could make it multiple), and thus we need to be able to handle the
+            // possibility of multiple growth stage events needing to be fired.
+
+            for (int age = prevAge + 1; age <= Math.Min(newAge, adultAge); ++age)
+            {
+                // This replaces AgingCampaignBehavior.OnDailyTick's campaign event triggers:
+
+                if (age == childAge)
+                    OnHeroGrowsOutOfInfancy(hero);
+
+                if (age == teenAge)
+                    OnHeroReachesTeenAge(hero);
+
+                if (age == adultAge && !hero.IsActive)
+                    OnHeroComesOfAge(hero);
+            }
+        }
+
+        private void PeriodicDeathProbabilityUpdate(bool aafEnabled)
+        {
+            int daysElapsed = (int)Campaign.Current.CampaignStartTime.ElapsedDaysUntilNow;
+            int updatePeriod = Math.Max(1, !aafEnabled
+                ? Main.TimeParam.DayPerYear
+                : (int)(Main.TimeParam.DayPerYear / Main.Settings!.AgeFactor));
+
+            // Globally update death probabilities every year of accumulated age
+            if (daysElapsed % updatePeriod == 0)
+                UpdateHeroDeathProbabilities!();
         }
 
         // Year thresholds (cached):
@@ -108,6 +115,7 @@ namespace Pacemaker
         private int teenAge;
         private int childAge;
 
+        // Delegates, delegates, delegates...
         private delegate void UpdateHeroDeathProbabilitiesDelegate();
         private delegate void OnHeroComesOfAgeDelegate(Hero hero);
         private delegate void OnHeroReachesTeenAgeDelegate(Hero hero);
