@@ -1,6 +1,8 @@
-﻿using HarmonyLib;
-using System;
+﻿using System;
 using System.Reflection;
+
+using HarmonyLib;
+
 using TaleWorlds.CampaignSystem;
 
 namespace Pacemaker.Patches

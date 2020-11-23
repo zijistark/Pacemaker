@@ -24,20 +24,6 @@ namespace Pacemaker
                 MethodInfo = ResolveMethodInfo() ?? throw new MissingMethodException($"Failed to find {PrettyName} in type {Type.FullName}!");
             }
 
-            /*
-            public ReflectMethod(MethodInfo methodInfo)
-            {
-                if (methodInfo is null)
-                    throw new ArgumentNullException(nameof(methodInfo));
-
-                Type = methodInfo.DeclaringType;
-                Name = methodInfo.Name;
-                Parameters = methodInfo.GetParameters()?.Select(pi => pi.ParameterType).ToArray();
-                Generics = methodInfo.GetGenericArguments();
-                MethodInfo = methodInfo;
-            }
-            */
-
             public TDelegate GetDelegate<TDelegate>(object instance) where TDelegate : Delegate
             {
                 return instance is null

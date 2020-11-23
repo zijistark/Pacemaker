@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+
 using HarmonyLib;
+
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -97,9 +99,6 @@ namespace Pacemaker
 				gameInitializer.AddBehavior(new TickTraceBehavior());
 				trace.Add($"Behavior added: {typeof(TickTraceBehavior).FullName}");
 			}
-
-			gameInitializer.AddBehavior(new TestEducationBehavior());
-			trace.Add($"Behavior added: {typeof(TestEducationBehavior).FullName}");
 		}
 
 		internal static TimeParams SetTimeParams(TimeParams newParams, List<string> trace)

@@ -1,5 +1,7 @@
 ﻿using System;
+
 using HarmonyLib;
+
 using TaleWorlds.CampaignSystem;
 
 namespace Pacemaker.Patches

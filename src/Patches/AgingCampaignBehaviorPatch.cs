@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
+
 using HarmonyLib;
+
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
@@ -17,9 +18,10 @@ namespace Pacemaker.Patches
 
 		[HarmonyPrefix]
 		[HarmonyPatch("WeeklyTick")]
-		private static bool WeeklyTick() => false; // Disabled, as the death probability calculation is now triggered by FastAgingBehavior.OnDailyTick()
+		private static bool WeeklyTick() => false; // Disabled, as its work is now triggered by FastAgingBehavior.OnDailyTick()
 
 		[HarmonyPrefix]
+		[HarmonyPriority(Priority.High)]
 		[HarmonyPatch("DailyTick")]
 		private static bool DailyTick(AgingCampaignBehavior __instance, ref int ____extraLives)
 		{

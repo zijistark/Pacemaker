@@ -92,20 +92,23 @@ namespace Pacemaker
                     for (int age = prevAge + 1; age <= Math.Min(newAge, adultAge); ++age)
                     {
                         // Replacement for EducationCampaignBehavior.OnDailyTick()
+                        //
+                        // On e1.5.5, they've disabled the EducationCampaignBehavior, but I'm going to
+                        // continue calling DoEducation so long as the child isn't yet of age, because
+                        // that seems at worst harmless. What crashes (and not in e1.5.5 because they
+                        // removed all of the behavior's event listeners, which is what we'll do for
+                        // our e1.5.4 version) is when their OnHeroComesOfAge event listener runs.
                         if (hero.Clan == Clan.PlayerClan && GetChildAgeState(age) != ChildAgeState.Invalid)
                         {
                             DoEducation!(hero);
 
-                            // WTF is this doing after the DoEducation call? Magic, dnSpy fucking up, or TaleWorlds fucking up?
-                            new TextObject("{=Z5qYQV08}Your kin has reached the age of {CHILD.AGE} and needs your guidance on {?CHILD.GENDER}her{?}his{\\?} development.", null)
+                            // WTF is this doing after the DoEducation call? Magic, or TaleWorlds fucking up?
+                            new TextObject("{=Z5qYQV08}Your kin has reached the age of {CHILD.AGE} and needs your guidance on "
+                                + "{?CHILD.GENDER}her{?}his{\\?} development.", null)
                                 .SetCharacterProperties("CHILD", hero.CharacterObject, null, false);
                         }
 
-                        // This replaces AgingCampaignBehavior.OnDailyTick's campaign event emission:
-
-                        // These are not exclusive branches for a single age, because I simply
-                        // don't trust tweak mods to enforce at least a year apart from each stage
-                        // (but am trusting they're not out of order).
+                        // This replaces AgingCampaignBehavior.OnDailyTick's campaign event triggers:
 
                         if (age == childAge)
                             OnHeroGrowsOutOfInfancy(hero);
@@ -119,6 +122,7 @@ namespace Pacemaker
                 }
             }
         }
+
         private ChildAgeState GetChildAgeState(int age)
         {
             if (age <= 8)
@@ -171,7 +175,7 @@ namespace Pacemaker
         private readonly OnHeroReachesTeenAgeDelegate OnHeroReachesTeenAge;
         private readonly OnHeroGrowsOutOfInfancyDelegate OnHeroGrowsOutOfInfancy;
 
-        // Reflection to send these internal-access campaign events:
+        // Reflection for sending campaign events && triggering death probability update as well as an education stage:
         private static readonly Reflect.DeclaredMethod<EducationCampaignBehavior> DoEducationRM = new("DoEducation");
         private static readonly Reflect.DeclaredMethod<AgingCampaignBehavior> UpdateHeroDeathProbabilitiesRM = new("UpdateHeroDeathProbabilities");
         private static readonly Reflect.DeclaredMethod<CampaignEventDispatcher> OnHeroComesOfAgeRM = new("OnHeroComesOfAge");

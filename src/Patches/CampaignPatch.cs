@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+
 using HarmonyLib;
+
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
 using TaleWorlds.SaveSystem;
 
 namespace Pacemaker.Patches
