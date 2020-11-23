@@ -15,9 +15,8 @@ namespace Pacemaker.Patches
 		//////////////////////////////////////////////////////////////////////////////////////////
 
 		// Note that MapTimeTracker is an `internal` type, so we use the return type of its getter to resolve its ConstructorInfo
-		private static readonly MethodInfo MapTimeTrackerGetMI = AccessTools.PropertyGetter(typeof(Campaign), "MapTimeTracker");
 		private static readonly MethodInfo MapTimeTrackerSetMI = AccessTools.PropertySetter(typeof(Campaign), "MapTimeTracker");
-		private static readonly Type MapTimeTrackerT = MapTimeTrackerGetMI.ReturnType;
+		private static readonly Type MapTimeTrackerT = typeof(Campaign).Assembly.GetType("TaleWorlds.CampaignSystem.MapTimeTracker");
 		private static readonly ConstructorInfo MapTimeTrackerCtorCI = AccessTools.Constructor(MapTimeTrackerT, new[] { typeof(CampaignTime) });
 		private static readonly MethodInfo CampaignStartTimeSetMI = AccessTools.PropertySetter(typeof(Campaign), "CampaignStartTime");
 		private static readonly MethodInfo PlayerDefaultFactionGetMI = AccessTools.PropertyGetter(typeof(Campaign), "PlayerDefaultFaction");
@@ -45,8 +44,10 @@ namespace Pacemaker.Patches
 
 		[HarmonyPostfix]
 		[HarmonyPatch(MethodType.Constructor, new[] { typeof(CampaignGameMode) })]
-		internal static void CtorPostfix(ref Campaign __instance, CampaignGameMode gameMode)
+		internal static void CtorPostfix(Campaign __instance, CampaignGameMode gameMode)
 		{
+			_ = gameMode;
+
 			// Since vanilla uses 1084yr + 3wk + 9hr for the campaign start time and this implicitly
 			// assumes that seasons are 3 weeks long (which they most certainly are not for us),
 			// this patch cleans up the start time and current time after the main Campaign
@@ -60,7 +61,7 @@ namespace Pacemaker.Patches
 		[HarmonyPrefix]
 		[HarmonyPriority(Priority.VeryHigh)]
 		[HarmonyPatch("OnLoad")]
-		static void OnLoad(ref Campaign __instance, MetaData metaData)
+		static void OnLoad(Campaign __instance, MetaData metaData)
 		{
 			var trace = new List<string> { "Attempting to ensure the game loads with the correct time parameters for this save...\n" };
 
@@ -76,7 +77,7 @@ namespace Pacemaker.Patches
 			// Find the player character's clan's name
 			var clan = (Clan)PlayerDefaultFactionGetMI.Invoke(__instance, null);
 
-			if (clan == null || clan.Name == null)
+			if (clan is null || clan.Name is null)
 			{
 				trace.Add($"Could not find player clan name! Aborting.");
 				return;
@@ -90,9 +91,9 @@ namespace Pacemaker.Patches
 			// Determine what DayPerSeason-derived time parameters we should be using
 			int saveDps = TimeParams.OldDayPerSeason; // vanilla
 
-			if (esv == null)
+			if (esv is null)
 				trace.Add("Failed to find associated external saved values. Assuming vanilla savegame " +
-					"(but compromise of the external data store could also be the case).");
+					      "(but compromise of the external data store could also be the case).");
 			else
 			{
 				trace.Add($"Externally saved values: {esv}\n");

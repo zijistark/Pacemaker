@@ -4,7 +4,7 @@ using TaleWorlds.CampaignSystem;
 
 namespace Pacemaker
 {
-	public static class CampaignTimeExt
+	internal static class CampaignTimeExt
 	{
 		private static readonly ConstructorInfo CtorCI = AccessTools.Constructor(typeof(CampaignTime), new[] { typeof(long) });
 		private static readonly FieldInfo TicksFI = AccessTools.Field(typeof(CampaignTime), "_numTicks");

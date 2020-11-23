@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Pacemaker
 {
-	class TimeParams
+	internal sealed class TimeParams
 	{
 		/* units */
 		internal const int MsecPerSec = 1000;
@@ -98,7 +97,7 @@ namespace Pacemaker
 		internal readonly float TickRatioSeasonF;
 		internal readonly float TickRatioYearF;
 
-		internal TimeParams(int daysPerSeason)
+		internal TimeParams(int daysPerSeason = OldDayPerSeason)
 		{
 			// set appropriate days/week and weeks/season to match requested days/season
 			DayPerSeason = daysPerSeason;
@@ -129,13 +128,15 @@ namespace Pacemaker
 
 		private List<string> Indent(string unit, uint level, List<string> lines)
 		{
-			if (unit == null || level == 0) return lines;
+			if (unit is null || level == 0)
+				return lines;
 
-			var indent = String.Empty;
+			var indent = string.Empty;
+
 			for (uint i = 0; i < level; ++i)
 				indent += unit;
 
-			List<string> results = new List<string>();
+			List<string> results = new();
 
 			foreach (var line in lines)
 				results.Add(indent + line);
@@ -145,9 +146,11 @@ namespace Pacemaker
 
 		private List<string> Indent(string unit, uint level, string line)
 		{
-			if (unit == null || level == 0) return new List<string> { line };
+			if (unit is null || level == 0)
+				return new List<string> { line };
 
-			var indent = String.Empty;
+			var indent = string.Empty;
+
 			for (uint i = 0; i < level; ++i)
 				indent += unit;
 
@@ -156,7 +159,7 @@ namespace Pacemaker
 
 		public List<string> ToStringLines(uint indentSize = 0)
 		{
-			var indent = String.Empty;
+			var indent = string.Empty;
 
 			if (indentSize > 0)
 				for (int i = 0; i < indentSize; ++i)

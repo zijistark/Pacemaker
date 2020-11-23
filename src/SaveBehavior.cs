@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
+
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using TaleWorlds.Core;
 
 namespace Pacemaker
 {
-	class SaveBehavior : CampaignBehaviorBase
+	internal sealed class SaveBehavior : CampaignBehaviorBase
 	{
 		public override void RegisterEvents()
 		{
@@ -21,7 +21,7 @@ namespace Pacemaker
 		{
 			var trace = new List<string>();
 
-			if (HasLoaded)
+			if (dataStore.IsSaving)
 			{
 				trace.Add("Saving data...");
 				SavedValues.Snapshot();
@@ -30,24 +30,23 @@ namespace Pacemaker
 				trace.Add("Loading saved data...");
 
 			dataStore.SyncData("PacemakerSavedValues", ref _savedValues);
-
 			trace.Add($"Stored values: {SavedValues}");
 
-			if (HasLoaded)
+			if (dataStore.IsSaving)
 				Main.ExternalSavedValues.Serialize();
 			else
 				OnLoad(isVanilla: false, trace); // Cannot be a vanilla save if SyncData was called on deserialization
 
-			Util.EventTracer.Trace(trace);
+			Util.Log.ToFile(trace);
 		}
 
-		protected void OnNewGameCreated(CampaignGameStarter starter) => HasLoaded = true;
+		private void OnNewGameCreated(CampaignGameStarter starter) => HasLoaded = true;
 
 		/* OnGameEarlyLoaded is only present so that we can still initialize when adding the mod to a save
 		 * that didn't previously have it enabled (so-called "vanilla save"). This is because SyncData does
 		 * not even get called during game loading for behaviors that were not previously not part of the save.
 		 */
-		protected void OnGameEarlyLoaded(CampaignGameStarter starter)
+		private void OnGameEarlyLoaded(CampaignGameStarter starter)
 		{
 			var trace = new List<string>();
 
@@ -57,23 +56,21 @@ namespace Pacemaker
 			Util.EventTracer.Trace(trace);
 		}
 
-		/* We wait until the session fully launches before potentially printing any warning about days/season
+        /* We wait until the session fully launches before potentially printing any warning about days/season
 		 * mismatch (or the popup dialog for vanilla saves).
 		 */
-		protected void OnSessionLaunched(CampaignGameStarter starter)
-		{
-			WarnDayPerSeasonMismatch();
-		}
+        private void OnSessionLaunched(CampaignGameStarter starter) => WarnDayPerSeasonMismatch();
 
-		/* Main entry point for everything we do when we've just loaded our data (or lack thereof)
+        /* Main entry point for everything we do when we've just loaded our data (or lack thereof)
 		 * from a savegame.
 		 */
-		protected void OnLoad(bool isVanilla, List<string> trace)
+        private void OnLoad(bool isVanilla, List<string> trace)
 		{
 			if (isVanilla)
 			{
 				trace.Add("Loading vanilla save...");
 				WasVanilla = true;
+				// TODO: Let's check whether we have external saved values for this JIC.
 			}
 
 			AdjustTimeParams(trace);
@@ -81,28 +78,28 @@ namespace Pacemaker
 			HasLoaded = true;
 		}
 
-		protected void AdjustTimeParams(List<string> trace)
+		private void AdjustTimeParams(List<string> trace)
 		{
 			var neededDps = WasVanilla ? TimeParams.OldDayPerSeason : SavedValues.DaysPerSeason;
 
 			if (Main.TimeParam.DayPerSeason != neededDps)
 			{
 				trace.Add($"DaysPerSeason of {Main.TimeParam.DayPerSeason} is incorrect for this campaign. Fixing...\n");
-				Main.SetTimeParams(new TimeParams(neededDps), trace);
+				Main.SetTimeParams(new(neededDps), trace);
 			}
 		}
 
-		protected void WarnDayPerSeasonMismatch()
+		private void WarnDayPerSeasonMismatch()
 		{
-			if (WasVanilla && Main.Settings.DaysPerSeason != TimeParams.OldDayPerSeason)
+			if (WasVanilla && Main.Settings!.DaysPerSeason != TimeParams.OldDayPerSeason)
 			{
 				var inquiryData = new InquiryData(
 					$"{Main.DisplayName}: {TimeParams.OldDayPerSeason} Days Per Season",
 					$"NOTE: Once a campaign has been started, its 'Days Per Season' setting cannot change thereafter. Since you are " +
-						$"loading a non-{Main.Name} save, your effective 'Days Per Season' setting for this campaign will be the " +
-						$"vanilla {TimeParams.OldDayPerSeason} days.\n    \nAll other settings can be changed freely mid-campaign, " +
-						$"and new games will of course use whatever 'Days Per Season' you've configured when you start them. Now " +
-						$"go on, and get playing!",
+					$"loading a non-{Main.Name} save, your effective 'Days Per Season' setting for this campaign will be the " +
+					$"vanilla {TimeParams.OldDayPerSeason} days.\n    \nAll other settings can be changed freely mid-campaign, " +
+					$"and new games will of course use whatever 'Days Per Season' you've configured when you start them. Now " +
+					$"go on, and get playing!",
 					true,
 					false,
 					GameTexts.FindText("str_ok", null).ToString(),
@@ -113,7 +110,7 @@ namespace Pacemaker
 				InformationManager.ShowInquiry(inquiryData, false);
 			}
 
-			if (Main.Settings.DaysPerSeason != Main.TimeParam.DayPerSeason)
+			if (Main.Settings!.DaysPerSeason != Main.TimeParam.DayPerSeason)
 			{
 				InformationManager.DisplayMessage(new InformationMessage(
 					$"{Main.DisplayName}: Using {Main.TimeParam.DayPerSeason} Days Per Season (Instead of {Main.Settings.DaysPerSeason})",
@@ -121,19 +118,17 @@ namespace Pacemaker
 			}
 		}
 
-		protected void AdjustPregnanciesOnLoad(List<string> trace)
+		private void AdjustPregnanciesOnLoad(List<string> trace)
 		{
-			if (!Main.Settings.EnablePregnancyTweaks ||
+			if (!Main.Settings!.EnablePregnancyTweaks ||
 				!Main.Settings.AdjustPregnancyDueDates ||
-				(SavedValues.PregnancyDuration == 0f && !WasVanilla))
+				SavedValues.PregnancyDuration == default && !WasVanilla)
 				return;
 
 			var pregnancyModel = Campaign.Current.Models.PregnancyModel;
 			var newDuration = pregnancyModel.PregnancyDurationInDays;
 			var ourDuration = Main.Settings.ScaledPregnancyDuration * Main.TimeParam.DayPerYear;
-			var oldDuration = (WasVanilla)
-				? VanillaPregnancyDuration
-				: SavedValues.PregnancyDuration;
+			var oldDuration = WasVanilla ? VanillaPregnancyDuration : SavedValues.PregnancyDuration;
 
 			// Check whether our pregnancy duration is actually in force (i.e., no interference from other mods).
 			if (!Util.NearEqual(ourDuration, newDuration))
@@ -161,7 +156,7 @@ namespace Pacemaker
 			var bindingFlags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
 			var pregListFI = typeof(PregnancyCampaignBehavior).GetField("_heroPregnancies", bindingFlags);
 
-			if (pregListFI == null)
+			if (pregListFI is null)
 			{
 				trace.Add($"Could not resolve {typeof(PregnancyCampaignBehavior).FullName}._heroPregnancies field! Aborting.");
 				return;
@@ -169,7 +164,7 @@ namespace Pacemaker
 
 			var pregT = typeof(PregnancyCampaignBehavior).GetNestedType("Pregnancy", bindingFlags);
 
-			if (pregT == null)
+			if (pregT is null)
 			{
 				trace.Add($"Could not resolve {typeof(PregnancyCampaignBehavior).FullName}.Pregnancy type! Aborting.");
 				return;
@@ -177,7 +172,7 @@ namespace Pacemaker
 
 			var pregDueDateFI = pregT.GetField("DueDate", bindingFlags);
 
-			if (pregDueDateFI == null)
+			if (pregDueDateFI is null)
 			{
 				trace.Add($"Could not resolve {pregT.FullName}.DueDate field! Aborting.");
 				return;
@@ -186,15 +181,13 @@ namespace Pacemaker
 			// OK, done setting up reflection info. Start by grabbing the instance of the behavior (gee, a public API!):
 			var pregBehavior = GetCampaignBehavior<PregnancyCampaignBehavior>();
 
-			if (pregBehavior == null)
+			if (pregBehavior is null)
 			{
 				trace.Add($"Could not find campaign behavior {typeof(PregnancyCampaignBehavior).FullName}! Aborting.");
 				return;
 			}
 
-			// Now iterate over the pregnancy list:
-
-			if (!(pregListFI.GetValue(pregBehavior) is IReadOnlyList<object> pregList))
+			if (pregListFI.GetValue(pregBehavior) is not IReadOnlyList<object> pregList)
 			{
 				trace.Add($"Could not access {pregListFI.Name} as IReadOnlyList<object>! Aborting.");
 				return;
@@ -207,11 +200,11 @@ namespace Pacemaker
 			}
 
 			var dueDateDeltaCT = CampaignTime.Days(dueDateDelta);
-			int nPregs = 0;
+			uint nPregs = 0;
 
 			foreach (var preg in pregList)
 			{
-				CampaignTime dueDateCT = (CampaignTime)pregDueDateFI.GetValue(preg);
+				var dueDateCT = (CampaignTime)pregDueDateFI.GetValue(preg);
 				pregDueDateFI.SetValue(preg, dueDateCT + dueDateDeltaCT);
 				++nPregs;
 			}
@@ -219,16 +212,22 @@ namespace Pacemaker
 			trace.Add($"Adjusted {nPregs} in-progress pregnancies.");
 		}
 
-		protected SavedValues SavedValues
+		private SavedValues SavedValues
 		{
 			get => _savedValues;
 			set => _savedValues = value;
 		}
 
-		protected bool HasLoaded { get; set; }
-		protected bool WasVanilla { get; set; }
+		private bool HasLoaded { get; set; }
 
-		private SavedValues _savedValues = new SavedValues();
+		private bool WasVanilla
+		{
+			get => _wasVanilla;
+			set => _wasVanilla = value;
+		}
+
+		private bool _wasVanilla;
+		private SavedValues _savedValues = new();
 		private const float VanillaPregnancyDuration = 36f;
 	}
 }

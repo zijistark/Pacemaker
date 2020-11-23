@@ -9,37 +9,20 @@ using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 namespace Pacemaker.Patches
 {
 	[HarmonyPatch(typeof(AgingCampaignBehavior))]
-	class AgingCampaignBehaviorPatch
+	internal static class AgingCampaignBehaviorPatch
 	{
-		private static readonly MethodInfo UpdateHeroDeathProbabilitiesMI = AccessTools.Method(typeof(AgingCampaignBehavior), "UpdateHeroDeathProbabilities");
-		private static readonly MethodInfo IsItTimeOfDeathMI = AccessTools.Method(typeof(AgingCampaignBehavior), "IsItTimeOfDeath");
-
-		///////
+		private delegate void IsItTimeOfDeathDelegate(AgingCampaignBehavior instance, Hero hero);
+		private static readonly Reflect.DeclaredMethod<AgingCampaignBehavior> IsItTimeOfDeathRM = new("IsItTimeOfDeath");
+		private static readonly IsItTimeOfDeathDelegate IsItTimeOfDeath = IsItTimeOfDeathRM.GetOpenDelegate<IsItTimeOfDeathDelegate>();
 
 		[HarmonyPrefix]
 		[HarmonyPatch("WeeklyTick")]
-		static bool WeeklyTick() => false; // not in use now, as the meager and yet now correct calculation has been moved to a DailyTick prefix
-
-		//////
+		private static bool WeeklyTick() => false; // Disabled, as the death probability calculation is now triggered by FastAgingBehavior.OnDailyTick()
 
 		[HarmonyPrefix]
 		[HarmonyPatch("DailyTick")]
-		static bool DailyTick(ref AgingCampaignBehavior __instance, ref int ____extraLives)
+		private static bool DailyTick(AgingCampaignBehavior __instance, ref int ____extraLives)
 		{
-			/* Update Hero Death Probabilities */
-
-			int daysElapsed = (int)Campaign.Current.CampaignStartTime.ElapsedDaysUntilNow;
-			int updatePeriod = Util.NearEqual(Main.Settings.AgeFactor, 1f, 1e-2)
-				? Main.TimeParam.DayPerYear
-				: (int)(Main.TimeParam.DayPerYear / Main.Settings.AgeFactor);
-
-			if (updatePeriod <= 0)
-				updatePeriod = 1;
-
-			// Globally update death probabilities every year of accumulated age
-			if ((daysElapsed % updatePeriod) == 0)
-				UpdateHeroDeathProbabilitiesMI.Invoke(__instance, null);
-
 			/* Replace DailyTick implementation -- code is mostly as decompiled, minus
 			   child growth stage stuff. */
 
@@ -47,18 +30,16 @@ namespace Pacemaker.Patches
 			{
 				if (hero.IsAlive && !hero.IsOccupiedByAnEvent())
 				{
-					if (hero.DeathMark != KillCharacterAction.KillCharacterActionDetail.None &&
-						(hero.PartyBelongedTo == null ||
-						(hero.PartyBelongedTo.MapEvent == null && hero.PartyBelongedTo.SiegeEvent == null)))
-					{
+					if (hero.DeathMark != KillCharacterAction.KillCharacterActionDetail.None
+						&& (hero.PartyBelongedTo is null || hero.PartyBelongedTo.MapEvent is null && hero.PartyBelongedTo.SiegeEvent is null))
 						KillCharacterAction.ApplyByDeathMark(hero, false);
-					}
 					else
-						IsItTimeOfDeathMI.Invoke(__instance, new object[] { hero });
+						IsItTimeOfDeath(__instance, hero);
 				}
 
-				// Mainly, we've removed the whole section on detecting transitions in child
-				// growth stages and firing associated campaign events from here.
+				// Mainly, we've removed the whole section on detecting transitions in childhood
+				// growth stages and firing associated campaign events from here. The improved logic
+				// is now in FastAgingBehavior.OnDailyTick(), which also fires the events.
 			}
 
 			if (Hero.IsMainHeroIll && Hero.MainHero.HeroState != Hero.CharacterStates.Dead)
@@ -67,8 +48,7 @@ namespace Pacemaker.Patches
 
 				if (Campaign.Current.MainHeroIllDays > 3)
 				{
-					Hero.MainHero.HitPoints -= (int)Math.Ceiling(
-						Hero.MainHero.HitPoints * (0.05f * Campaign.Current.MainHeroIllDays));
+					Hero.MainHero.HitPoints -= (int)Math.Ceiling(Hero.MainHero.HitPoints * (0.05f * Campaign.Current.MainHeroIllDays));
 
 					if (Hero.MainHero.HitPoints <= 1)
 					{

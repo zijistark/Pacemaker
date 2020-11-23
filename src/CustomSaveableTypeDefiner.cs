@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using TaleWorlds.SaveSystem;
+﻿using TaleWorlds.SaveSystem;
 
 namespace Pacemaker
 {
-    public class CustomSaveableTypeDefiner : SaveableTypeDefiner
+    internal sealed class CustomSaveableTypeDefiner : SaveableTypeDefiner
     {
         public const int SaveBaseId_zijistark0 = 198_411_190; // zijistark's 0th allocated range is 198411190 through 198411199
         public const int SaveBaseId = SaveBaseId_zijistark0 + 0;

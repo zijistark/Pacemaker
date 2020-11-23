@@ -12,7 +12,7 @@
 
 		public static int GetDaysPerYear() => Main.TimeParam.DayPerYear;
 
-		public static float GetTimeMultiplier() => Main.Settings.TimeMultiplier;
+		public static float GetTimeMultiplier() => Main.Settings!.TimeMultiplier;
 
 		/* GetDaysPerHumanYear
 		 *
@@ -29,7 +29,7 @@
 		public static float GetDaysPerHumanYear(bool isAdult)
 		{
 			_ = isAdult;
-			return Util.NearEqual(Main.Settings.AgeFactor, 1f, 1e-2)
+			return Util.NearEqual(Main.Settings!.AgeFactor, 1f, 1e-2)
 				? Main.TimeParam.DayPerYear
 				: Main.TimeParam.DayPerYear / Main.Settings.AgeFactor;
 		}

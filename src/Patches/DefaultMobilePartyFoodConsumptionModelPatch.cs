@@ -7,16 +7,16 @@ using TaleWorlds.Localization;
 namespace Pacemaker.Patches
 {
 	[HarmonyPatch(typeof(DefaultMobilePartyFoodConsumptionModel))]
-	class DefaultMobilePartyFoodConsumptionModelPatch
+	internal static class DefaultMobilePartyFoodConsumptionModelPatch
 	{
-		private static readonly TextObject Explanation = new TextObject($"[{Main.DisplayName}] Time Multiplier");
+		private static readonly TextObject Explanation = new($"[{Main.DisplayName}] Time Multiplier");
 
 		[HarmonyPostfix]
 		[HarmonyPriority(Priority.Last)]
 		[HarmonyPatch("CalculateDailyFoodConsumptionf")]
-		static void CalculateDailyFoodConsumptionf(MobileParty party, StatExplainer explainer, ref float __result)
+		private static void CalculateDailyFoodConsumptionf(MobileParty party, StatExplainer explainer, ref float __result)
 		{
-			if (!Main.Settings.EnableFoodTweaks)
+			if (!Main.Settings!.EnableFoodTweaks)
 				return;
 
 			float offset = (__result / Main.Settings.TimeMultiplier) - __result;

@@ -11,11 +11,11 @@ namespace Pacemaker
 	public class Main : MBSubModuleBase
 	{
 		/* Semantic Versioning (https://semver.org): */
-		public const int SemVerMajor = 1;
-		public const int SemVerMinor = 1;
-		public const int SemVerPatch = 5;
-		public const string SemVerSpecial = null;
-		private static readonly string SemVerEnd = (SemVerSpecial != null) ? '-' + SemVerSpecial : string.Empty;
+		public static readonly int SemVerMajor = 1;
+		public static readonly int SemVerMinor = 1;
+		public static readonly int SemVerPatch = 6;
+		public static readonly string? SemVerSpecial = null;
+		private static readonly string SemVerEnd = (SemVerSpecial is not null) ? "-" + SemVerSpecial : string.Empty;
 		public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{SemVerEnd}";
 
 		public static readonly string Name = typeof(Main).Namespace;
@@ -24,20 +24,18 @@ namespace Pacemaker
 
 		internal static readonly Color ImportantTextColor = Color.FromUint(0x00F16D26); // orange
 
-		internal static Settings Settings;
-		internal static TimeParams TimeParam;
-		internal static Harmony Harmony;
-		internal static ExternalSavedValues ExternalSavedValues;
+		internal static Settings? Settings;
+		internal static TimeParams TimeParam = new();
+		internal static ExternalSavedValues ExternalSavedValues = new(Name);
 
 		private readonly bool EnableTickTracer = false;
 
 		protected override void OnSubModuleLoad()
 		{
 			base.OnSubModuleLoad();
+			new Harmony(HarmonyDomain).PatchAll();
 			Util.EnableLog = true; // enable various debug logging
 			Util.EnableTracer = true; // enable code event tracing (requires enabled logging)
-			Harmony = new Harmony(HarmonyDomain);
-			ExternalSavedValues = new ExternalSavedValues(Name);
 		}
 
 		protected override void OnBeforeInitialModuleScreenSetAsRoot()
@@ -49,7 +47,7 @@ namespace Pacemaker
 			else
 				trace.Add("Module is loading for the first time...");
 
-			if (Settings.Instance != null && Settings.Instance != Settings)
+			if (Settings.Instance is not null && Settings.Instance != Settings)
 			{
 				Settings = Settings.Instance;
 
@@ -65,35 +63,28 @@ namespace Pacemaker
 
 			if (!_loaded)
 			{
-				Harmony.PatchAll();
-
-				InformationManager.DisplayMessage(
-					new InformationMessage($"Loaded {DisplayName}", ImportantTextColor));
-
+				InformationManager.DisplayMessage(new InformationMessage($"Loaded {DisplayName}", ImportantTextColor));
 				_loaded = true;
 			}
 
-			if (Util.EnableTracer)
-				Util.EventTracer.Trace(trace);
-			else
-				Util.Log.ToFile(trace);
+			Util.Log.ToFile(trace);
 		}
 
 		protected override void OnGameStart(Game game, IGameStarter starterObject)
 		{
 			base.OnGameStart(game, starterObject);
-			var trace = new List<string> { $"Game type: [{game.GameType.GetType().Name}] {game.GameType}" };
+			var trace = new List<string>();
 
 			if (game.GameType is Campaign)
 			{
-				CampaignGameStarter initializer = (CampaignGameStarter)starterObject;
+				var initializer = (CampaignGameStarter)starterObject;
 				AddBehaviors(initializer, trace);
 			}
 
 			Util.EventTracer.Trace(trace);
 		}
 
-		protected void AddBehaviors(CampaignGameStarter gameInitializer, List<string> trace)
+		private void AddBehaviors(CampaignGameStarter gameInitializer, List<string> trace)
 		{
 			gameInitializer.AddBehavior(new SaveBehavior());
 			trace.Add($"Behavior added: {typeof(SaveBehavior).FullName}");
@@ -106,6 +97,9 @@ namespace Pacemaker
 				gameInitializer.AddBehavior(new TickTraceBehavior());
 				trace.Add($"Behavior added: {typeof(TickTraceBehavior).FullName}");
 			}
+
+			gameInitializer.AddBehavior(new TestEducationBehavior());
+			trace.Add($"Behavior added: {typeof(TestEducationBehavior).FullName}");
 		}
 
 		internal static TimeParams SetTimeParams(TimeParams newParams, List<string> trace)
@@ -123,18 +117,18 @@ namespace Pacemaker
 
 		protected static void Settings_OnPropertyChanged(object sender, PropertyChangedEventArgs args)
 		{
-			if (sender is Settings && args.PropertyName == Settings.SaveTriggered)
+			if (sender is Settings settings && args.PropertyName == Settings.SaveTriggered)
 			{
 				var trace = new List<string> { "Received save-triggered event from Settings..." };
 				trace.Add(string.Empty);
 				trace.Add("New Settings:");
-				trace.AddRange(Settings.ToStringLines(indentSize: 4));
+				trace.AddRange(settings.ToStringLines(indentSize: 4));
 				trace.Add(string.Empty);
-				SetTimeParams(new TimeParams(Settings.DaysPerSeason), trace);
+				SetTimeParams(new TimeParams(settings.DaysPerSeason), trace);
 				Util.EventTracer.Trace(trace);
 			}
 		}
 
-		private bool _loaded = false;
+		private bool _loaded;
 	}
 }

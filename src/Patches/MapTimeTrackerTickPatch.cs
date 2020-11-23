@@ -6,13 +6,13 @@ using TaleWorlds.CampaignSystem;
 namespace Pacemaker.Patches
 {
 	[HarmonyPatch]
-	class MapTimeTrackerTickPatch
+	internal sealed class MapTimeTrackerTickPatch
 	{
-		private static readonly Type MapTimeTrackerT = AccessTools.PropertyGetter(typeof(Campaign), "MapTimeTracker").ReturnType;
-		private static readonly MethodInfo TargetMI = AccessTools.Method(MapTimeTrackerT, "Tick");
+		private static readonly Type MapTimeTrackerT = typeof(Campaign).Assembly.GetType("TaleWorlds.CampaignSystem.MapTimeTracker");
+		private static readonly MethodInfo TargetMI = AccessTools.DeclaredMethod(MapTimeTrackerT, "Tick");
 
-		static MethodBase TargetMethod() => TargetMI;
+		private static MethodBase TargetMethod() => TargetMI;
 
-		static void Prefix(ref float seconds) => seconds *= Main.Settings.TimeMultiplier;
+		private static void Prefix(ref float seconds) => seconds *= Main.Settings!.TimeMultiplier;
 	}
 }

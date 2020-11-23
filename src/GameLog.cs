@@ -7,7 +7,7 @@ using TaleWorlds.Library;
 
 namespace Pacemaker
 {
-	internal class GameLog : GameLogBase
+	internal sealed class GameLog : GameLogBase
 	{
 		private const string BeginMultiLine      = @"=======================================================================================================================\";
 		private const string BeginMultiLineDebug = @"===================================================   D E B U G   =====================================================\";
@@ -19,32 +19,25 @@ namespace Pacemaker
 		public readonly string LogPath;
 
 		private bool _lastMsgWasMultiLine = false;
-		private TextWriter _fileWriter;
 
-		protected TextWriter Writer { get => _fileWriter; set => _fileWriter = value; }
+		private TextWriter Writer { get; set; }
 
-		private static readonly Color colorWhite = Color.FromUint(0x00FFFFFF);
-		private static readonly Color colorMagenta = Color.FromUint(0x00FF007F);
-		private static readonly Color colorRed = Color.FromUint(0x00FF0000);
-		private static readonly Color colorSkyBlue = Color.FromUint(0x00007CD7);
-		private static readonly Color colorForestGreen = Color.FromUint(0x00FF007F);
+		public static Color ColorWhite { get; } = Color.FromUint(0x00FFFFFF);
+		public static Color ColorMagenta { get; } = Color.FromUint(0x00FF007F);
+		public static Color ColorRed { get; } = Color.FromUint(0x00FF0000);
+		public static Color ColorSkyBlue { get; } = Color.FromUint(0x00007CD7);
+		public static Color ColorForestGreen { get; } = Color.FromUint(0x00FF007F);
 
-		public static Color ColorWhite => colorWhite;
-		public static Color ColorMagenta => colorMagenta;
-		public static Color ColorRed => colorRed;
-		public static Color ColorSkyBlue => colorSkyBlue;
-		public static Color ColorForestGreen => colorForestGreen;
-
-		public override void Info(string text)                { Print(text, ColorWhite); }
-		public override void Info(List<string> text)          { Print(text, ColorWhite); }
-		public override void Debug(string text)               { Print(text, ColorMagenta, true); }
-		public override void Debug(List<string> text)         { Print(text, ColorMagenta, true); }
-		public override void NotifyBad(string text)           { Print(text, ColorRed); }
-		public override void NotifyBad(List<string> text)     { Print(text, ColorRed); }
-		public override void NotifyNeutral(string text)       { Print(text, ColorSkyBlue); }
-		public override void NotifyNeutral(List<string> text) { Print(text, ColorSkyBlue); }
-		public override void NotifyGood(string text)          { Print(text, ColorForestGreen); }
-		public override void NotifyGood(List<string> text)    { Print(text, ColorForestGreen); }
+		public override void Info(string text) => Print(text, ColorWhite);
+		public override void Info(List<string> text) => Print(text, ColorWhite);
+		public override void Debug(string text) => Print(text, ColorMagenta, true);
+		public override void Debug(List<string> text) => Print(text, ColorMagenta, true);
+		public override void NotifyBad(string text) => Print(text, ColorRed);
+		public override void NotifyBad(List<string> text) => Print(text, ColorRed);
+		public override void NotifyNeutral(string text) => Print(text, ColorSkyBlue);
+		public override void NotifyNeutral(List<string> text) => Print(text, ColorSkyBlue);
+		public override void NotifyGood(string text) => Print(text, ColorForestGreen);
+		public override void NotifyGood(List<string> text) => Print(text, ColorForestGreen);
 
 		public override void Print(string text, Color color, bool isDebug = false, bool onlyDisplay = false)
 		{
@@ -65,7 +58,7 @@ namespace Pacemaker
 
 		public override /* async */ void ToFile(string line, bool isDebug = false)
 		{
-			if (Writer == null) return;
+			if (Writer is null) return;
 
 			_lastMsgWasMultiLine = false;
 			Writer.WriteLine(isDebug ? $">> {line}" : line);
@@ -75,7 +68,7 @@ namespace Pacemaker
 
 		public override /* async */ void ToFile(List<string> lines, bool isDebug = false)
 		{
-			if (Writer == null || lines.Count == 0) return;
+			if (Writer is null || lines.Count == 0) return;
 
 			if (lines.Count == 1)
 			{
@@ -96,7 +89,7 @@ namespace Pacemaker
 			Writer.Flush();
 		}
 
-		public GameLog(string moduleName, bool truncate = false, string logName = null)
+		public GameLog(string moduleName, bool truncate = false, string? logName = null)
 		{
 			if (string.IsNullOrEmpty(moduleName))
 				throw new ArgumentException($"{nameof(moduleName)}: string cannot be null or empty");
@@ -104,22 +97,16 @@ namespace Pacemaker
 			var userDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mount and Blade II Bannerlord");
 
 			Module = $"{moduleName}.{GetType().Name}";
-
-			LogDir = Path.Combine(userDir, "Logs");
-
-			if (logName.IsStringNoneOrEmpty())
-				LogFile = $"{moduleName}.log";
-			else
-				LogFile = $"{moduleName}.{logName}.log";
-
+			LogDir = Path.Combine(userDir, "Configs", "ModLogs");
+			LogFile = string.IsNullOrEmpty(logName) ? $"{moduleName}.log" : $"{moduleName}.{logName}.log";
 			LogPath = Path.Combine(LogDir, LogFile);
+
 			Directory.CreateDirectory(LogDir);
 			var existed = File.Exists(LogPath);
 
 			try
 			{
-				// Give it a 64KiB buffer so that it will essentially never block on interim WriteLine calls before asynchronously flushing to disk:
-				Writer = TextWriter.Synchronized( new StreamWriter(LogPath, !truncate, Encoding.UTF8, (1 << 16)) );
+				Writer = TextWriter.Synchronized( new StreamWriter(LogPath, !truncate, Encoding.UTF8, (1 << 15)) );
 			}
 			catch (Exception e)
 			{
@@ -143,24 +130,11 @@ namespace Pacemaker
 
 			if (existed && !truncate)
 			{
-				Writer.WriteLine();
-				Writer.WriteLine();
+				Writer.WriteLine("\n");
 				msg.Add("NOTE: Any prior log messages in this file may have no relation to this session.");
 			}
 
 			ToFile(msg, true);
-		}
-
-		~GameLog()
-		{
-			try
-			{
-				Writer.Dispose();
-			}
-			catch (Exception)
-			{
-				// at least we tried.
-			}
 		}
 	}
 }

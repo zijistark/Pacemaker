@@ -5,11 +5,11 @@ namespace Pacemaker.Patches
 {
 	[HarmonyPriority(Priority.HigherThanNormal)]
 	[HarmonyPatch(typeof(DefaultPregnancyModel), "PregnancyDurationInDays", MethodType.Getter)]
-	class DefaultPregnancyModelPatch
+	internal static class DefaultPregnancyModelPatch
 	{
-		static bool Prefix(ref float __result)
+		private static bool Prefix(ref float __result)
 		{
-			if (!Main.Settings.EnablePregnancyTweaks)
+			if (!Main.Settings!.EnablePregnancyTweaks)
 				return true;
 
 			__result = Main.Settings.ScaledPregnancyDuration * Main.TimeParam.DayPerYear;

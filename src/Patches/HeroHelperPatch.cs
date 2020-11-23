@@ -6,11 +6,11 @@ using TaleWorlds.Core;
 namespace Pacemaker.Patches
 {
 	[HarmonyPatch(typeof(HeroHelper))]
-	class HeroHelperPatch
+	internal static class HeroHelperPatch
 	{
 		[HarmonyPrefix]
 		[HarmonyPatch("GetRandomBirthDayForAge")]
-		static bool GetRandomBirthDayForAge(float age, ref CampaignTime __result)
+		private static bool GetRandomBirthDayForAge(float age, ref CampaignTime __result)
 		{
 			var now = CampaignTime.Now;
 			float birthYear = now.GetYear - age;
