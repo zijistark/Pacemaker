@@ -25,9 +25,6 @@ namespace Pacemaker
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
-            var educationBehavior = Campaign.Current.CampaignBehaviorManager.GetBehavior<EducationCampaignBehavior>();
-            DoEducation = DoEducationRM.GetDelegate<DoEducationDelegate>(educationBehavior);
-
             var agingBehavior = Campaign.Current.CampaignBehaviorManager.GetBehavior<AgingCampaignBehavior>();
             UpdateHeroDeathProbabilities = UpdateHeroDeathProbabilitiesRM.GetDelegate<UpdateHeroDeathProbabilitiesDelegate>(agingBehavior);
 
@@ -88,23 +85,6 @@ namespace Pacemaker
 
             for (int age = prevAge + 1; age <= Math.Min(newAge, adultAge); ++age)
             {
-                // Replacement for EducationCampaignBehavior.OnDailyTick()
-                //
-                // On e1.5.5, they've disabled the EducationCampaignBehavior, but I'm going to
-                // continue calling DoEducation so long as the child isn't yet of age, because
-                // that seems at worst harmless. What crashes (and not in e1.5.5 because they
-                // removed all of the behavior's event listeners, which is what we'll do for
-                // our e1.5.4 version) is when their OnHeroComesOfAge event listener runs.
-                if (hero.Clan == Clan.PlayerClan && GetChildAgeState(age) != ChildAgeState.Invalid)
-                {
-                    DoEducation!(hero);
-
-                    // WTF is this doing after the DoEducation call? Magic, or TaleWorlds fucking up?
-                    new TextObject("{=Z5qYQV08}Your kin has reached the age of {CHILD.AGE} and needs your guidance on "
-                                   + "{?CHILD.GENDER}her{?}his{\\?} development.", null)
-                        .SetCharacterProperties("CHILD", hero.CharacterObject, null, false);
-                }
-
                 // This replaces AgingCampaignBehavior.OnDailyTick's campaign event triggers:
 
                 if (age == childAge)
@@ -130,51 +110,23 @@ namespace Pacemaker
                 UpdateHeroDeathProbabilities!();
         }
 
-        private ChildAgeState GetChildAgeState(int age)
-        {
-            return age switch
-            {
-                2  => ChildAgeState.Year2,
-                5  => ChildAgeState.Year5,
-                8  => ChildAgeState.Year8,
-                12 => ChildAgeState.Year12,
-                15 => ChildAgeState.Year15,
-                17 => ChildAgeState.Year17,
-                _  => ChildAgeState.Invalid,
-            };
-        }
-
-        private enum ChildAgeState
-        {
-            Invalid = -1,
-            Year2,
-            Year5,
-            Year8,
-            Year12,
-            Year15,
-            Year17
-        }
-
         // Year thresholds (cached):
         private int adultAge;
         private int teenAge;
         private int childAge;
 
         // Delegates, delegates, delegates...
-        private delegate void DoEducationDelegate(Hero child);
         private delegate void UpdateHeroDeathProbabilitiesDelegate();
         private delegate void OnHeroComesOfAgeDelegate(Hero hero);
         private delegate void OnHeroReachesTeenAgeDelegate(Hero hero);
         private delegate void OnHeroGrowsOutOfInfancyDelegate(Hero hero);
 
-        private DoEducationDelegate? DoEducation;
         private UpdateHeroDeathProbabilitiesDelegate? UpdateHeroDeathProbabilities;
         private readonly OnHeroComesOfAgeDelegate OnHeroComesOfAge;
         private readonly OnHeroReachesTeenAgeDelegate OnHeroReachesTeenAge;
         private readonly OnHeroGrowsOutOfInfancyDelegate OnHeroGrowsOutOfInfancy;
 
         // Reflection for triggering campaign events & death probability updates & childhood education stage processing:
-        private static readonly Reflect.DeclaredMethod<EducationCampaignBehavior> DoEducationRM = new("DoEducation");
         private static readonly Reflect.DeclaredMethod<AgingCampaignBehavior> UpdateHeroDeathProbabilitiesRM = new("UpdateHeroDeathProbabilities");
         private static readonly Reflect.DeclaredMethod<CampaignEventDispatcher> OnHeroComesOfAgeRM = new("OnHeroComesOfAge");
         private static readonly Reflect.DeclaredMethod<CampaignEventDispatcher> OnHeroReachesTeenAgeRM = new("OnHeroReachesTeenAge");
