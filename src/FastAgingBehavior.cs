@@ -126,7 +126,7 @@ namespace Pacemaker
         private readonly OnHeroReachesTeenAgeDelegate OnHeroReachesTeenAge;
         private readonly OnHeroGrowsOutOfInfancyDelegate OnHeroGrowsOutOfInfancy;
 
-        // Reflection for sending campaign events && triggering death probability update:
+        // Reflection for sending campaign events & triggering death probability updates:
         private static readonly Reflect.DeclaredMethod<AgingCampaignBehavior> UpdateHeroDeathProbabilitiesRM = new("UpdateHeroDeathProbabilities");
         private static readonly Reflect.DeclaredMethod<CampaignEventDispatcher> OnHeroComesOfAgeRM = new("OnHeroComesOfAge");
         private static readonly Reflect.DeclaredMethod<CampaignEventDispatcher> OnHeroReachesTeenAgeRM = new("OnHeroReachesTeenAge");
