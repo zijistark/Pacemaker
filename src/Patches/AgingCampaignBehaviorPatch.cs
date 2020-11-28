@@ -28,7 +28,7 @@ namespace Pacemaker.Patches
             /* Replace DailyTick implementation -- code is mostly as decompiled, minus
                child growth stage stuff. */
 
-            if (CampaignOptions.IsLifeDeathCycleEnabled)
+            if (!CampaignOptions.IsLifeDeathCycleDisabled)
             {
                 if (hero.IsAlive && !hero.IsOccupiedByAnEvent())
                 {
