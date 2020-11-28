@@ -39,7 +39,7 @@ namespace Pacemaker
             bool aafEnabled = !Util.NearEqual(Main.Settings!.AgeFactor, 1f, 1e-2);
             PeriodicDeathProbabilityUpdate(aafEnabled);
 
-            if (!CampaignOptions.IsLifeDeathCycleEnabled)
+            if (CampaignOptions.IsLifeDeathCycleDisabled)
                 return;
 
             /* Send childhood growth stage transition events & perform AAF if enabled */
