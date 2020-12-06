@@ -24,7 +24,7 @@ namespace Pacemaker
                 return;
 
             _map = JsonConvert.DeserializeObject<Dictionary<string, SavedValues>>(File.ReadAllText(DataStorePath),
-                                                                                  new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace });
+                                                                                  new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace }) ?? new();
         }
 
         internal void Set(string charName, string clanName, SavedValues savedValues) =>
