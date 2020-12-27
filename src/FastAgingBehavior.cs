@@ -2,7 +2,6 @@
 
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
-using TaleWorlds.Localization;
 
 namespace Pacemaker
 {
