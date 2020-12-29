@@ -19,8 +19,12 @@ namespace Pacemaker
         private const string TimeMultiplier_Hint = "Multiplies the rate at which campaign time passes. " +
             "Note that the same general pace is maintained: days simply pass more quickly/slowly. [ Default: 1.75 ]";
 
-        private const string AgeFactor_Hint = "Multiplies the number of effective \"human years\" characters age " +
-            "in one calendar year. It's disabled at 100%, but at, e.g., 200%, all characters age twice as fast. " +
+        private const string AdultAgeFactor_Hint = "Multiplies the number of effective \"human years\" ADULTS age " +
+            "in one calendar year. It's disabled at 100%, but at, e.g., 200%, all ADULT characters age twice as fast. " +
+            "[ Default: 200% ]";
+
+        private const string ChildAgeFactor_Hint = "Same as the Adult Accelerated Aging Factor, but it " +
+            "applies to children instead. Some might use this to, e.g., make children age faster than adults. " +
             "[ Default: 200% ]";
 
         private const string EnablePregnancyTweaks_Hint = "Adjust the duration of pregnancies. [ Default: ON ]";
@@ -47,13 +51,17 @@ namespace Pacemaker
         [SettingPropertyGroup("General Settings", GroupOrder = 0)]
         public int DaysPerSeason { get; set; } = 7;
 
-        [SettingPropertyFloatingInteger("Time Multiplier", 0.25f, 4f, HintText = TimeMultiplier_Hint, RequireRestart = false, Order = 1)]
+        [SettingPropertyFloatingInteger("Time Multiplier", 0.3f, 6f, HintText = TimeMultiplier_Hint, RequireRestart = false, Order = 1)]
         [SettingPropertyGroup("General Settings")]
         public float TimeMultiplier { get; set; } = 1.75f;
 
-        [SettingPropertyFloatingInteger("Accelerated Aging Factor", 1f, 15f, "#0%", HintText = AgeFactor_Hint, RequireRestart = false, Order = 2)]
+        [SettingPropertyFloatingInteger("Accelerated Aging Factor (Adults)", 1f, 15f, "#0%", HintText = AdultAgeFactor_Hint, RequireRestart = false, Order = 2)]
         [SettingPropertyGroup("General Settings")]
-        public float AgeFactor { get; set; } = 2f;
+        public float AdultAgeFactor { get; set; } = 2f;
+
+        [SettingPropertyFloatingInteger("Accelerated Aging Factor (Children)", 1f, 15f, "#0%", HintText = ChildAgeFactor_Hint, RequireRestart = false, Order = 3)]
+        [SettingPropertyGroup("General Settings")]
+        public float ChildAgeFactor { get; set; } = 2f;
 
         [SettingPropertyBool("Pregnancy Duration", HintText = EnablePregnancyTweaks_Hint, RequireRestart = false, IsToggle = true, Order = 0)]
         [SettingPropertyGroup("Pregnancy Duration", GroupOrder = 1)]
@@ -90,7 +98,8 @@ namespace Pacemaker
             {
                 $"{prefix}{nameof(DaysPerSeason)}           = {DaysPerSeason}",
                 $"{prefix}{nameof(TimeMultiplier)}          = {TimeMultiplier}",
-                $"{prefix}{nameof(AgeFactor)}               = {AgeFactor}",
+                $"{prefix}{nameof(AdultAgeFactor)}          = {AdultAgeFactor}",
+                $"{prefix}{nameof(ChildAgeFactor)}          = {ChildAgeFactor}",
                 $"{prefix}{nameof(EnablePregnancyTweaks)}   = {EnablePregnancyTweaks}",
                 $"{prefix}{nameof(ScaledPregnancyDuration)} = {ScaledPregnancyDuration}",
                 $"{prefix}{nameof(AdjustPregnancyDueDates)} = {AdjustPregnancyDueDates}",

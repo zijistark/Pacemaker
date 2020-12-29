@@ -6,7 +6,7 @@
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
 
-    <Version>1.1.8</Version>
+    <Version>1.2.0</Version>
     <GameFolder>$(BANNERLORD_GAME_DIR)</GameFolder>
     <ModuleName>$(AssemblyName)</ModuleName>
   </PropertyGroup>

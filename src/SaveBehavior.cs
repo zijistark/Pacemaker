@@ -30,6 +30,8 @@ namespace Pacemaker
                 trace.Add("Loading saved data...");
 
             dataStore.SyncData("PacemakerSavedValues", ref _savedValues);
+            _savedValues ??= new SavedValues();
+
             trace.Add($"Stored values: {SavedValues}");
 
             if (dataStore.IsSaving)
