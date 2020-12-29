@@ -35,19 +35,21 @@ namespace Pacemaker
 
         private void OnDailyTick()
         {
-            bool aafEnabled = !Util.NearEqual(Main.Settings!.AgeFactor, 1f, 1e-2);
-            PeriodicDeathProbabilityUpdate(aafEnabled);
+            bool adultAafEnabled = !Util.NearEqual(Main.Settings!.AdultAgeFactor, 1f, 1e-2);
+            bool childAafEnabled = !Util.NearEqual(Main.Settings!.ChildAgeFactor, 1f, 1e-2);
 
             if (CampaignOptions.IsLifeDeathCycleDisabled)
                 return;
+
+            PeriodicDeathProbabilityUpdate(adultAafEnabled);
 
             /* Send childhood growth stage transition events & perform AAF if enabled */
 
             // Subtract 1 for the daily tick's implicitly-aged day & the rest is
             // explicit, incremental age to add.
-            var birthDayDelta = CampaignTime.Days(Main.Settings.AgeFactor - 1f);
+            var adultAgeDelta = CampaignTime.Days(Main.Settings.AdultAgeFactor - 1f);
+            var childAgeDelta = CampaignTime.Days(Main.Settings.ChildAgeFactor - 1f);
 
-            // And this is just hoisted.
             var oneDay = CampaignTime.Days(1f);
 
             foreach (var hero in Hero.All)
@@ -61,11 +63,12 @@ namespace Pacemaker
                 // were as if we were one day younger than our current BirthDay.
                 int prevAge = (int)(hero.BirthDay + oneDay).ElapsedYearsUntilNow;
 
-                if (aafEnabled)
-                {
-                    hero.SetBirthDay(hero.BirthDay - birthDayDelta);
-                    hero.CharacterObject.Age = hero.Age;
-                }
+                if (adultAafEnabled && !hero.IsChild)
+                    hero.SetBirthDay(hero.BirthDay - adultAgeDelta);
+                else if (childAafEnabled && hero.IsChild)
+                    hero.SetBirthDay(hero.BirthDay - childAgeDelta);
+
+                hero.CharacterObject.Age = hero.Age;
 
                 // And our new age, if different.
                 int newAge = (int)hero.Age;
@@ -102,7 +105,7 @@ namespace Pacemaker
             int daysElapsed = (int)Campaign.Current.CampaignStartTime.ElapsedDaysUntilNow;
             int updatePeriod = Math.Max(1, !aafEnabled
                 ? Main.TimeParam.DayPerYear
-                : (int)(Main.TimeParam.DayPerYear / Main.Settings!.AgeFactor));
+                : (int)(Main.TimeParam.DayPerYear / Main.Settings!.AdultAgeFactor)); // Only adults have valid death probabilities
 
             // Globally update death probabilities every year of accumulated age
             if (daysElapsed % updatePeriod == 0)
@@ -125,7 +128,7 @@ namespace Pacemaker
         private readonly OnHeroReachesTeenAgeDelegate OnHeroReachesTeenAge;
         private readonly OnHeroGrowsOutOfInfancyDelegate OnHeroGrowsOutOfInfancy;
 
-        // Reflection for sending campaign events & triggering death probability updates:
+        // Reflection for triggering campaign events & death probability updates & childhood education stage processing:
         private static readonly Reflect.DeclaredMethod<AgingCampaignBehavior> UpdateHeroDeathProbabilitiesRM = new("UpdateHeroDeathProbabilities");
         private static readonly Reflect.DeclaredMethod<CampaignEventDispatcher> OnHeroComesOfAgeRM = new("OnHeroComesOfAge");
         private static readonly Reflect.DeclaredMethod<CampaignEventDispatcher> OnHeroReachesTeenAgeRM = new("OnHeroReachesTeenAge");
