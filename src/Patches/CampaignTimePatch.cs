@@ -77,7 +77,7 @@ namespace Pacemaker.Patches
         [HarmonyPatch("GetDayOfSeason", MethodType.Getter)]
         static bool GetDayOfSeason(ref int __result, long ____numTicks)
         {
-            __result = (int)(____numTicks / TimeParams.TickPerDayL % Main.TimeParam.DayPerSeason);
+            __result = (int)((____numTicks / TimeParams.TickPerDayL) % Main.TimeParam.DayPerSeason);
             return false;
         }
 
@@ -85,7 +85,7 @@ namespace Pacemaker.Patches
         [HarmonyPatch("GetDayOfYear", MethodType.Getter)]
         static bool GetDayOfYear(ref int __result, long ____numTicks)
         {
-            __result = (int)(____numTicks / TimeParams.TickPerDayL % Main.TimeParam.DayPerYear);
+            __result = (int)((____numTicks / TimeParams.TickPerDayL) % Main.TimeParam.DayPerYear);
             return false;
         }
 
