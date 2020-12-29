@@ -2,7 +2,6 @@
 
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
-using TaleWorlds.Localization;
 
 namespace Pacemaker
 {
@@ -37,10 +36,11 @@ namespace Pacemaker
         private void OnDailyTick()
         {
             bool aafEnabled = !Util.NearEqual(Main.Settings!.AgeFactor, 1f, 1e-2);
-            PeriodicDeathProbabilityUpdate(aafEnabled);
 
             if (CampaignOptions.IsLifeDeathCycleDisabled)
                 return;
+
+            PeriodicDeathProbabilityUpdate(aafEnabled);
 
             /* Send childhood growth stage transition events & perform AAF if enabled */
 
