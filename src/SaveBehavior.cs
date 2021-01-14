@@ -124,8 +124,10 @@ namespace Pacemaker
         {
             if (!Main.Settings!.EnablePregnancyTweaks ||
                 !Main.Settings.AdjustPregnancyDueDates ||
-                SavedValues.PregnancyDuration == default && !WasVanilla)
+                (SavedValues.PregnancyDuration == default && !WasVanilla))
+            {
                 return;
+            }
 
             var pregnancyModel = Campaign.Current.Models.PregnancyModel;
             var newDuration = pregnancyModel.PregnancyDurationInDays;
@@ -222,14 +224,10 @@ namespace Pacemaker
 
         private bool HasLoaded { get; set; }
 
-        private bool WasVanilla
-        {
-            get => _wasVanilla;
-            set => _wasVanilla = value;
-        }
+        private bool WasVanilla { get; set; }
 
-        private bool _wasVanilla;
         private SavedValues _savedValues = new();
+
         private const float VanillaPregnancyDuration = 36f;
     }
 }
