@@ -1,11 +1,12 @@
-﻿<Module>
-  <Name value="Pacemaker"/>
-  <Id value="Pacemaker"/>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <Name value="$modulename$"/>
+  <Id value="$modulename$"/>
   <Version value="v$version$"/>
+  <Url value="https://www.nexusmods.com/mountandblade2bannerlord/mods/1902" />
   <SingleplayerModule value="true"/>
   <MultiplayerModule value="false"/>
   <Official value="false"/>
-  <Url value="https://www.nexusmods.com/mountandblade2bannerlord/mods/1902" />
   <DependedModules>
     <DependedModule Id="Bannerlord.MBOptionScreen" />
     <DependedModule Id="Native"/>
@@ -13,11 +14,19 @@
     <DependedModule Id="Sandbox"/>
     <DependedModule Id="StoryMode" />
   </DependedModules>
+  <DependedModuleMetadatas>
+    <DependedModuleMetadata id="Bannerlord.MBOptionScreen" order="LoadBeforeThis" version="v$mcmversion$" />
+    <DependedModuleMetadata id="Native" order="LoadBeforeThis" version="e$gameversion$.*" />
+    <DependedModuleMetadata id="SandBoxCore" order="LoadBeforeThis" version="e$gameversion$.*" />
+    <DependedModuleMetadata id="Sandbox" order="LoadBeforeThis" version="e$gameversion$.*" />
+    <DependedModuleMetadata id="StoryMode" order="LoadBeforeThis" version="e$gameversion$.*" />
+    <DependedModuleMetadata id="CustomBattle" order="LoadBeforeThis" version="e$gameversion$.*" optional="true" />
+  </DependedModuleMetadatas>
   <SubModules>
     <SubModule>
-      <Name value="Pacemaker"/>
-      <DLLName value="Pacemaker.dll"/>
-      <SubModuleClassType value="Pacemaker.Main"/>
+      <Name value="$modulename$"/>
+      <DLLName value="$modulename$.dll"/>
+      <SubModuleClassType value="$modulename$.Main"/>
       <Tags />
     </SubModule>
   </SubModules>
