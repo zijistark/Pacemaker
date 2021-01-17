@@ -6,20 +6,24 @@ using TaleWorlds.Localization;
 
 namespace Pacemaker.Patches
 {
-    [HarmonyPatch(typeof(DefaultMobilePartyFoodConsumptionModel))]
-    internal static class DefaultMobilePartyFoodConsumptionModelPatch
+    internal sealed class DefaultMobilePartyFoodConsumptionModelPatch : Patch
     {
+        internal DefaultMobilePartyFoodConsumptionModelPatch()
+            : base(Type.Postfix, TargetMethod, PatchMethod, Priority.Last) { }
+
+        private static readonly Reflect.Method<DefaultMobilePartyFoodConsumptionModel> TargetMethod = new("CalculateDailyFoodConsumptionf");
+        private static readonly Reflect.Method<DefaultMobilePartyFoodConsumptionModelPatch> PatchMethod = new(nameof(CalculateDailyFoodConsumptionf));
         private static readonly TextObject Explanation = new($"[{Main.DisplayName}] Time Multiplier");
 
-        [HarmonyPostfix]
-        [HarmonyPriority(Priority.Last)]
-        [HarmonyPatch("CalculateDailyFoodConsumptionf")]
+#if STABLE
         private static void CalculateDailyFoodConsumptionf(MobileParty party, StatExplainer explainer, ref float __result)
         {
+            _ = party;
+
             if (!Main.Settings!.EnableFoodTweaks)
                 return;
 
-            float offset = (__result / Main.Settings.TimeMultiplier) - __result;
+            var offset = (__result / Main.Settings.TimeMultiplier) - __result;
 
             if (!Util.NearEqual(offset, 0f, 1e-2f))
             {
@@ -27,5 +31,19 @@ namespace Pacemaker.Patches
                 __result += offset;
             }
         }
+#else
+        private static void CalculateDailyFoodConsumptionf(MobileParty party, bool includeDescription, ref ExplainedNumber __result)
+        {
+            _ = (party, includeDescription);
+
+            if (!Main.Settings!.EnableFoodTweaks)
+                return;
+
+            var offset = (__result.ResultNumber / Main.Settings.TimeMultiplier) - __result.ResultNumber;
+
+            if (!Util.NearEqual(offset, 0f, 1e-2f))
+                __result.Add(offset, Explanation);
+        }
+#endif
     }
 }
