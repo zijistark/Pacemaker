@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 
 using HarmonyLib;
@@ -9,18 +10,23 @@ namespace Pacemaker
     {
         public class Method
         {
-            protected readonly Type Type;
-            protected readonly string Name;
+            protected readonly Type RequestedType;
+            protected readonly string RequestedName;
             protected readonly Type[]? Parameters;
             protected readonly Type[]? Generics;
-            protected readonly MethodInfo MethodInfo;
 
-            public Method(Type? type, string name, Type[]? parameters = null, Type[]? generics = null)
+            public MethodInfo MethodInfo { get; init; }
+
+            public string Name => MethodInfo is null ? RequestedName : MethodInfo.Name;
+
+            public Type Type => MethodInfo is MethodInfo mi && mi.DeclaringType is Type dt ? dt : RequestedType;
+
+            public Method(Type type, string name, Type[]? parameters = null, Type[]? generics = null)
             {
-                Name = name;
+                RequestedName = name;
                 Parameters = parameters;
                 Generics = generics;
-                Type = type ?? throw new ArgumentNullException($"Null type given when reflecting {PrettyName}!", nameof(type));
+                RequestedType = type ?? throw new ArgumentNullException($"Null type given when reflecting {PrettyName}!", nameof(type));
                 MethodInfo = ResolveMethodInfo() ?? throw new MissingMethodException($"Failed to find {PrettyName} in type {Type.FullName}!");
             }
 
@@ -36,57 +42,61 @@ namespace Pacemaker
             public TDelegate GetOpenDelegate<TDelegate>() where TDelegate : Delegate
             {
                 return Delegate.CreateDelegate(typeof(TDelegate), null, MethodInfo) is not TDelegate @delegate
-                    ? throw new InvalidOperationException($"Failed to bind open delegate to {PrettyName} of type {MethodInfo.DeclaringType.FullName}!")
+                    ? throw new InvalidOperationException($"Failed to bind open delegate to {PrettyName} of type {Type.FullName}!")
                     : @delegate;
             }
 
             public TDelegate GetDelegate<TDelegate>() where TDelegate : Delegate
             {
                 return Delegate.CreateDelegate(typeof(TDelegate), MethodInfo) is not TDelegate @delegate
-                    ? throw new InvalidOperationException($"Failed to bind closed delegate to {PrettyName} of type {MethodInfo.DeclaringType.FullName}!")
+                    ? throw new InvalidOperationException($"Failed to bind closed delegate to {PrettyName} of type {Type.FullName}!")
                     : @delegate;
             }
 
-            protected string ParametersString => Parameters is null || Parameters.Length == 0 ? string.Empty : $"({string.Join<Type>(", ", Parameters)})";
+            protected string ParametersString => Parameters is null || Parameters.Length == 0
+                ? string.Empty
+                : $"({string.Join(", ", Parameters.Select(t => t.Name))})";
 
-            protected string GenericsString => Generics is null || Generics.Length == 0 ? string.Empty : $"<{string.Join<Type>(",", Generics)}>";
+            protected string GenericsString => Generics is null || Generics.Length == 0
+                ? string.Empty
+                : $"<{string.Join(",", Generics.Select(t => t.Name))}>";
 
             protected virtual string MethodType => "method";
 
-            protected virtual string PrettyName => $"{MethodType} {(MethodInfo is null ? Name : MethodInfo.Name)}{GenericsString}{ParametersString}";
+            public virtual string PrettyName => $"{MethodType} {Name}{GenericsString}{ParametersString}";
 
             protected virtual MethodInfo? ResolveMethodInfo() => AccessTools.Method(Type, Name, Parameters, Generics);
         }
 
         public class DeclaredMethod : Method
         {
-            public DeclaredMethod(Type? type, string name, Type[]? parameters = null, Type[]? generics = null) : base(type, name, parameters, generics) { }
+            public DeclaredMethod(Type type, string name, Type[]? parameters = null, Type[]? generics = null) : base(type, name, parameters, generics) { }
             protected override MethodInfo? ResolveMethodInfo() => AccessTools.DeclaredMethod(Type, Name, Parameters, Generics);
         }
 
         public class Getter : Method
         {
-            public Getter(Type? type, string name) : base(type, name) { }
+            public Getter(Type type, string name) : base(type, name) { }
             protected override MethodInfo? ResolveMethodInfo() => AccessTools.PropertyGetter(Type, Name);
             protected override string MethodType => "property getter";
         }
 
         public class DeclaredGetter : Getter
         {
-            public DeclaredGetter(Type? type, string name) : base(type, name) { }
+            public DeclaredGetter(Type type, string name) : base(type, name) { }
             protected override MethodInfo? ResolveMethodInfo() => AccessTools.DeclaredPropertyGetter(Type, Name);
         }
 
         public class Setter : Method
         {
-            public Setter(Type? type, string name) : base(type, name) { }
+            public Setter(Type type, string name) : base(type, name) { }
             protected override MethodInfo? ResolveMethodInfo() => AccessTools.PropertySetter(Type, Name);
             protected override string MethodType => "property setter";
         }
 
         public class DeclaredSetter : Setter
         {
-            public DeclaredSetter(Type? type, string name) : base(type, name) { }
+            public DeclaredSetter(Type type, string name) : base(type, name) { }
             protected override MethodInfo? ResolveMethodInfo() => AccessTools.DeclaredPropertySetter(Type, Name);
         }
 
