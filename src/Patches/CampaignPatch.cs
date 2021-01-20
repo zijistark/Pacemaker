@@ -15,7 +15,6 @@ namespace Pacemaker.Patches
         // PRE-CALCULATED REFLECTION
         //////////////////////////////////////////////////////////////////////////////////////////
 
-        // Note that MapTimeTracker is an `internal` type, so we use the return type of its getter to resolve its ConstructorInfo
         private static readonly MethodInfo MapTimeTrackerSetMI = AccessTools.PropertySetter(typeof(Campaign), "MapTimeTracker");
         private static readonly Type MapTimeTrackerT = typeof(Campaign).Assembly.GetType("TaleWorlds.CampaignSystem.MapTimeTracker");
         private static readonly ConstructorInfo MapTimeTrackerCtorCI = AccessTools.Constructor(MapTimeTrackerT, new[] { typeof(CampaignTime) });

@@ -19,8 +19,8 @@ namespace Pacemaker.Patches
             internal static void DailyTickHero() => AgingCampaignBehaviorPatch.DailyTickHero(null!, null!, null!);
         }
 
+        private static readonly Reflect.Method<AgingCampaignBehavior> IsItTimeOfDeathRM = new("IsItTimeOfDeath");
         private delegate void IsItTimeOfDeathDelegate(AgingCampaignBehavior instance, Hero hero);
-        private static readonly Reflect.DeclaredMethod<AgingCampaignBehavior> IsItTimeOfDeathRM = new("IsItTimeOfDeath");
         private static readonly IsItTimeOfDeathDelegate IsItTimeOfDeath = IsItTimeOfDeathRM.GetOpenDelegate<IsItTimeOfDeathDelegate>();
 
         [HarmonyPrefix]
@@ -55,7 +55,7 @@ namespace Pacemaker.Patches
             // growth stages and firing associated campaign events from here. The improved logic
             // is now in FastAgingBehavior.OnDailyTick(), which also fires the events.
 
-            if (Hero.IsMainHeroIll && Hero.MainHero.HeroState != Hero.CharacterStates.Dead)
+            if (hero == Hero.MainHero && Hero.IsMainHeroIll && Hero.MainHero.HeroState != Hero.CharacterStates.Dead)
             {
                 Campaign.Current.MainHeroIllDays++;
 
@@ -63,7 +63,7 @@ namespace Pacemaker.Patches
                 {
                     Hero.MainHero.HitPoints -= (int)Math.Ceiling(Hero.MainHero.HitPoints * (0.05f * Campaign.Current.MainHeroIllDays));
 
-                    if (Hero.MainHero.HitPoints <= 1)
+                    if (Hero.MainHero.HitPoints <= 1 && Hero.MainHero.DeathMark == KillCharacterAction.KillCharacterActionDetail.None)
                     {
                         if (____extraLivesContainer.TryGetValue(Hero.MainHero, out int extraLives) && extraLives > 0)
                         {

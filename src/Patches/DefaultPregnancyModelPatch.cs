@@ -4,11 +4,15 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 
 namespace Pacemaker.Patches
 {
-    [HarmonyPriority(Priority.HigherThanNormal)]
-    [HarmonyPatch(typeof(DefaultPregnancyModel), "PregnancyDurationInDays", MethodType.Getter)]
-    internal static class DefaultPregnancyModelPatch
+    internal sealed class DefaultPregnancyModelPatch : Patch
     {
-        private static bool Prefix(ref float __result)
+        internal DefaultPregnancyModelPatch()
+            : base(Type.Prefix,
+                  new Reflect.Getter<DefaultPregnancyModel>("PregnancyDurationInDays"),
+                  new Reflect.Method<DefaultPregnancyModelPatch>(nameof(PregnancyDurationInDays)),
+                  Priority.HigherThanNormal) { }
+
+        private static bool PregnancyDurationInDays(ref float __result)
         {
             if (!Main.Settings!.EnablePregnancyTweaks)
                 return true;

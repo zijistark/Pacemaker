@@ -15,14 +15,8 @@ namespace Pacemaker
         /* Semantic Versioning (https://semver.org): */
         public static readonly int SemVerMajor = 1;
         public static readonly int SemVerMinor = 2;
-#if STABLE
-        public static readonly int SemVerPatch = 0;
-        public static readonly string? SemVerSpecial = null;
-#else
         public static readonly int SemVerPatch = 1;
-        public static readonly string? SemVerSpecial = "beta1";
-#endif
-
+        public static readonly string? SemVerSpecial = null;
         private static readonly string SemVerEnd = (SemVerSpecial is not null) ? "-" + SemVerSpecial : string.Empty;
         public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{SemVerEnd}";
 
@@ -38,12 +32,34 @@ namespace Pacemaker
 
         private readonly bool EnableTickTracer = false;
 
+        // Started converting annotated Harmony patches to manual patches, but
+        // I haven't got very far yet. Need an elegant way to collect multiple
+        // patches from a single patch class.
+        private static readonly Patch[] HarmonyPatches = new Patch[]
+        {
+            new Patches.DefaultMobilePartyFoodConsumptionModelPatch(),
+            new Patches.DefaultPregnancyModelPatch(),
+        };
+
         protected override void OnSubModuleLoad()
         {
             base.OnSubModuleLoad();
             new Harmony(HarmonyDomain).PatchAll();
             Util.EnableLog = true; // enable various debug logging
             Util.EnableTracer = true; // enable code event tracing (requires enabled logging)
+
+            Util.Log.ToFile("Applying manual Harmony patches...");
+            var harmony = new Harmony(HarmonyDomain);
+
+            foreach (var patch in HarmonyPatches)
+            {
+                Util.Log.ToFile($"Applying: {patch}");
+                patch.Apply(harmony);
+            }
+
+            Util.Log.ToFile("\nApplying standard Harmony patches in bulk...");
+            harmony.PatchAll();
+            Util.Log.ToFile("Done.");
         }
 
         protected override void OnBeforeInitialModuleScreenSetAsRoot()
@@ -51,9 +67,9 @@ namespace Pacemaker
             var trace = new List<string>();
 
             if (_loaded)
-                trace.Add("Module was already loaded.");
+                trace.Add("\nModule was already loaded.");
             else
-                trace.Add("Module is loading for the first time...");
+                trace.Add("\nModule is loading for the first time...");
 
             if (Settings.Instance is not null && Settings.Instance != Settings)
             {
