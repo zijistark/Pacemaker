@@ -28,7 +28,7 @@ namespace Pacemaker
                                    _type == Type.Postfix ? harmonyMethod : null);
 
             if (mi is null)
-                throw new Exception($"Harmony failed: {this}!");
+                throw new Exception($"Harmony patching failed: {this}!");
         }
 
         public override string ToString() => $"{Enum.GetName(typeof(Type), _type)} patch of "
