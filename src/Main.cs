@@ -39,12 +39,12 @@ namespace Pacemaker
         {
             new Patches.DefaultMobilePartyFoodConsumptionModelPatch(),
             new Patches.DefaultPregnancyModelPatch(),
+            new Patches.EducationCampaignBehaviorPatch(),
         };
 
         protected override void OnSubModuleLoad()
         {
             base.OnSubModuleLoad();
-            new Harmony(HarmonyDomain).PatchAll();
             Util.EnableLog = true; // enable various debug logging
             Util.EnableTracer = true; // enable code event tracing (requires enabled logging)
 

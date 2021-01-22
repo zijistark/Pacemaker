@@ -36,7 +36,7 @@ namespace Pacemaker.Patches
                 CampaignStartTimeSetMI.Invoke(campaign, new object[] { StandardStartTime });
 
             internal static CampaignTime StandardStartTime =>
-                CampaignTimeExt.YearsD(1084) + CampaignTimeExt.SeasonsD(1) + CampaignTimeExt.HoursD(9);
+                CampaignTimeExtensions.YearsD(1084) + CampaignTimeExtensions.SeasonsD(1) + CampaignTimeExtensions.HoursD(9);
         }
 
         // PATCHES

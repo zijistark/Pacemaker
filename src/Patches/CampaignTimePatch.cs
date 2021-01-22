@@ -140,7 +140,7 @@ namespace Pacemaker.Patches
         [HarmonyPatch("Seasons")]
         static bool Seasons(float valueInSeasons, ref CampaignTime __result)
         {
-            __result = CampaignTimeExt.Ticks((long)(valueInSeasons * Main.TimeParam.TickPerSeasonF));
+            __result = CampaignTimeExtensions.Ticks((long)(valueInSeasons * Main.TimeParam.TickPerSeasonF));
             return false;
         }
 
@@ -148,7 +148,7 @@ namespace Pacemaker.Patches
         [HarmonyPatch("Years")]
         static bool Years(float valueInYears, ref CampaignTime __result)
         {
-            __result = CampaignTimeExt.Ticks((long)(valueInYears * Main.TimeParam.TickPerYearF));
+            __result = CampaignTimeExtensions.Ticks((long)(valueInYears * Main.TimeParam.TickPerYearF));
             return false;
         }
 
@@ -161,7 +161,7 @@ namespace Pacemaker.Patches
         [HarmonyPatch("YearsFromNow")]
         static bool YearsFromNow(float valueInYears, ref CampaignTime __result)
         {
-            __result = CampaignTimeExt.Ticks(CurrentTicks() + (long)(valueInYears * Main.TimeParam.TickPerYearF));
+            __result = CampaignTimeExtensions.Ticks(CurrentTicks() + (long)(valueInYears * Main.TimeParam.TickPerYearF));
             return false;
         }
     }

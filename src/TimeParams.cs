@@ -100,7 +100,7 @@ namespace Pacemaker
         internal TimeParams(int daysPerSeason = OldDayPerSeason)
         {
             // set appropriate days/week and weeks/season to match requested days/season
-            DayPerSeason = daysPerSeason;
+            DayPerSeason = daysPerSeason == 0 ? OldDayPerSeason : daysPerSeason;
 
             /* special units */
             DayPerYear = DayPerSeason * SeasonPerYear;

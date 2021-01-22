@@ -11,19 +11,17 @@ namespace Pacemaker
         public class Method
         {
             protected readonly Type RequestedType;
-            protected readonly string RequestedName;
+            protected readonly string Name;
             protected readonly Type[]? Parameters;
             protected readonly Type[]? Generics;
 
             public MethodInfo MethodInfo { get; init; }
 
-            public string Name => MethodInfo is null ? RequestedName : MethodInfo.Name;
-
             public Type Type => MethodInfo is MethodInfo mi && mi.DeclaringType is Type dt ? dt : RequestedType;
 
             public Method(Type type, string name, Type[]? parameters = null, Type[]? generics = null)
             {
-                RequestedName = name;
+                Name = name;
                 Parameters = parameters;
                 Generics = generics;
                 RequestedType = type ?? throw new ArgumentNullException($"Null type given when reflecting {PrettyName}!", nameof(type));

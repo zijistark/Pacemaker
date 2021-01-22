@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
+using TaleWorlds.Core;
 
 namespace Pacemaker
 {
@@ -54,7 +56,7 @@ namespace Pacemaker
 
             foreach (var hero in Hero.All)
             {
-                if (hero.IsDead)
+                if (!hero.IsAlive)
                     continue;
 
                 // When calculating the prevAge, we must take care to include the day
@@ -87,6 +89,11 @@ namespace Pacemaker
 
             for (int age = prevAge + 1; age <= Math.Min(newAge, adultAge); ++age)
             {
+                // This is a makeshift replacement for the interactive EducationCampaignBehavior,
+                // but it applies to all children-- not just the player clan's:
+                if (age == adultAge || GetChildAgeState(age) != ChildAgeState.Invalid)
+                    ChildhoodSkillGrowth(hero);
+
                 // This replaces AgingCampaignBehavior.OnDailyTick's campaign event triggers:
 
                 if (age == childAge)
@@ -110,6 +117,47 @@ namespace Pacemaker
             // Globally update death probabilities every year of accumulated age
             if (daysElapsed % updatePeriod == 0)
                 UpdateHeroDeathProbabilities!();
+        }
+
+        private void ChildhoodSkillGrowth(Hero child)
+        {
+            var skill = SkillObject.All
+                .Where(s => child.GetAttributeValue(s.CharacterAttributeEnum) < 3)
+                .GetRandomElement();
+
+            if (skill is null)
+                return;
+
+            child.HeroDeveloper.ChangeSkillLevel(skill, MBRandom.RandomInt(4, 7), false);
+            child.HeroDeveloper.AddAttribute(skill.CharacterAttributeEnum, 1, false);
+            child.HeroDeveloper.UnspentFocusPoints++;
+
+            if (child.HeroDeveloper.CanAddFocusToSkill(skill))
+                child.HeroDeveloper.AddFocus(skill, 1, true);
+        }
+        private static ChildAgeState GetChildAgeState(int age) => age switch
+        {
+            2  => ChildAgeState.Year2,
+            5  => ChildAgeState.Year5,
+            8  => ChildAgeState.Year8,
+            11 => ChildAgeState.Year11,
+            14 => ChildAgeState.Year14,
+            16 => ChildAgeState.Year16,
+            _  => ChildAgeState.Invalid
+        };
+
+        private enum ChildAgeState : short
+        {
+            Invalid = -1,
+            Year2,
+            Year5,
+            Year8,
+            Year11,
+            Year14,
+            Year16,
+            Count,
+            First = 0,
+            Last = 5
         }
 
         // Year thresholds (cached):

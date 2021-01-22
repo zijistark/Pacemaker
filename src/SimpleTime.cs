@@ -40,7 +40,7 @@ namespace Pacemaker
         public override string ToString()
         {
             // only intended for debugging
-            var ct = CampaignTimeExt.DaysD(FractionalDay);
+            var ct = CampaignTimeExtensions.DaysD(FractionalDay);
             var hour = (int)ct.ToHours;
             var min = (int)ct.ToMinutes % TimeParams.MinPerHour;
             var sec = (int)ct.ToSeconds % TimeParams.SecPerMin;
