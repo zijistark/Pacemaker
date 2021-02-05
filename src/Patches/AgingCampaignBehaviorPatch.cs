@@ -19,8 +19,8 @@ namespace Pacemaker.Patches
             internal static void DailyTickHero() => AgingCampaignBehaviorPatch.DailyTickHero(null!, null!, null!);
         }
 
-        private static readonly Reflect.Method<AgingCampaignBehavior> IsItTimeOfDeathRM = new("IsItTimeOfDeath");
         private delegate void IsItTimeOfDeathDelegate(AgingCampaignBehavior instance, Hero hero);
+        private static readonly Reflect.Method<AgingCampaignBehavior> IsItTimeOfDeathRM = new("IsItTimeOfDeath");
         private static readonly IsItTimeOfDeathDelegate IsItTimeOfDeath = IsItTimeOfDeathRM.GetOpenDelegate<IsItTimeOfDeathDelegate>();
 
         [HarmonyPrefix]
@@ -31,6 +31,7 @@ namespace Pacemaker.Patches
         [HarmonyPrefix]
         [HarmonyPriority(Priority.High)]
         [HarmonyPatch("DailyTickHero")]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         private static bool DailyTickHero(Hero hero, AgingCampaignBehavior __instance, Dictionary<Hero, int> ____extraLivesContainer)
         {
             /* Replace DailyTick implementation -- code is mostly as decompiled, minus

@@ -1,16 +1,20 @@
-﻿using HarmonyLib;
+﻿using System.Runtime.CompilerServices;
 
 using Helpers;
+
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 
 namespace Pacemaker.Patches
 {
-    [HarmonyPatch(typeof(HeroHelper))]
-    internal static class HeroHelperPatch
+    internal sealed class HeroHelperPatch : Patch
     {
-        [HarmonyPrefix]
-        [HarmonyPatch("GetRandomBirthDayForAge")]
+        private static readonly Reflect.Method TargetMethod = new(typeof(HeroHelper), "GetRandomBirthDayForAge");
+        private static readonly Reflect.Method<HeroHelperPatch> PatchMethod = new(nameof(GetRandomBirthDayForAge));
+
+        internal HeroHelperPatch() : base(Type.Prefix, TargetMethod, PatchMethod) { }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
         private static bool GetRandomBirthDayForAge(float age, ref CampaignTime __result)
         {
             var now = CampaignTime.Now;

@@ -37,8 +37,8 @@ namespace Pacemaker
 
         private void OnDailyTick()
         {
-            bool adultAafEnabled = !Util.NearEqual(Main.Settings!.AdultAgeFactor, 1f, 1e-2);
-            bool childAafEnabled = !Util.NearEqual(Main.Settings!.ChildAgeFactor, 1f, 1e-2);
+            bool adultAafEnabled = Main.Settings!.AdultAgeFactor > 1.01f;
+            bool childAafEnabled = Main.Settings!.ChildAgeFactor > 1.01f;
 
             if (CampaignOptions.IsLifeDeathCycleDisabled)
                 return;

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.2.2</Version>
+    <Version>1.2.3</Version>
     <ModuleName>$(MSBuildProjectName)</ModuleName>
   </PropertyGroup>
   
@@ -22,8 +22,8 @@
 
   <!-- Game Versions for Stable and Beta -->
   <PropertyGroup>
-    <GameVersion Condition="$(IsStable) == 'true'">1.5.6</GameVersion>
-    <GameVersion Condition="$(IsBeta) == 'true'">1.5.7</GameVersion>
+    <GameVersion Condition="$(IsStable) == 'true'">1.5.7</GameVersion>
+    <GameVersion Condition="$(IsBeta) == 'true'">1.5.8</GameVersion>
   </PropertyGroup>
 
   <!-- Game Folder(s) -->
@@ -50,9 +50,9 @@
     <GameFolder Condition="!Exists($(GameFolder)) AND $(OS) == 'Unix'">~/.steam/root/steamapps/common/Mount &amp; Blade II Bannerlord</GameFolder>
   </PropertyGroup>
 
-  <!-- STABLE, BETA, and e.g., GAMEVER_E156 Constants Defined in Code -->
+  <!-- STABLE, BETA, and e.g., e156 Constants Defined in Code -->
   <PropertyGroup>
-    <GameVersionConstant>GAMEVER_E$([System.String]::Copy('$(GameVersion)').Replace('.',''))</GameVersionConstant>
+    <GameVersionConstant>e$([System.String]::Copy('$(GameVersion)').Replace('.',''))</GameVersionConstant>
     <DefineConstants>$(DefineConstants);$(GameVersionConstant)</DefineConstants>
   </PropertyGroup>
 

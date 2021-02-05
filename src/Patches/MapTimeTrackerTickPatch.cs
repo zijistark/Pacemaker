@@ -1,20 +1,18 @@
-﻿using System;
-using System.Reflection;
-
-using HarmonyLib;
+﻿using System.Runtime.CompilerServices;
 
 using TaleWorlds.CampaignSystem;
 
 namespace Pacemaker.Patches
 {
-    [HarmonyPatch]
-    internal sealed class MapTimeTrackerTickPatch
+    internal sealed class MapTimeTrackerTickPatch : Patch
     {
-        private static readonly Type MapTimeTrackerT = typeof(Campaign).Assembly.GetType("TaleWorlds.CampaignSystem.MapTimeTracker");
-        private static readonly MethodInfo TargetMI = AccessTools.DeclaredMethod(MapTimeTrackerT, "Tick");
+        private static readonly System.Type MapTimeTrackerT = typeof(Campaign).Assembly.GetType("TaleWorlds.CampaignSystem.MapTimeTracker");
+        private static readonly Reflect.Method TargetRM = new(MapTimeTrackerT, "Tick");
+        private static readonly Reflect.Method<MapTimeTrackerTickPatch> PatchRM = new(nameof(TickPrefix));
 
-        private static MethodBase TargetMethod() => TargetMI;
+        internal MapTimeTrackerTickPatch() : base(Type.Prefix, TargetRM, PatchRM) { }
 
-        private static void Prefix(ref float seconds) => seconds *= Main.Settings!.TimeMultiplier;
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static void TickPrefix(ref float seconds) => seconds *= Main.Settings!.TimeMultiplier;
     }
 }

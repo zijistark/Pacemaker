@@ -44,10 +44,8 @@ namespace Pacemaker.Patches
 
         [HarmonyPostfix]
         [HarmonyPatch(MethodType.Constructor, new[] { typeof(CampaignGameMode) })]
-        internal static void CtorPostfix(Campaign __instance, CampaignGameMode gameMode)
+        internal static void CtorPostfix(Campaign __instance)
         {
-            _ = gameMode;
-
             // Since vanilla uses 1084yr + 3wk + 9hr for the campaign start time and this implicitly
             // assumes that seasons are 3 weeks long (which they most certainly are not for us),
             // this patch cleans up the start time and current time after the main Campaign

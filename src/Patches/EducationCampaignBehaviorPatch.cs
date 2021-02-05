@@ -1,4 +1,6 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using System.Runtime.CompilerServices;
+
+using TaleWorlds.CampaignSystem;
 
 namespace Pacemaker.Patches
 {
@@ -9,6 +11,7 @@ namespace Pacemaker.Patches
         private static readonly Reflect.Method<EducationCampaignBehavior> _targetRM = new("RegisterEvents");
         private static readonly Reflect.Method<EducationCampaignBehaviorPatch> _patchRM = new(nameof(RegisterEventsDisabled));
 
+        [MethodImpl(MethodImplOptions.NoOptimization)]
         private static bool RegisterEventsDisabled() => false;
     }
 }
