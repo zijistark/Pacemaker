@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using Pacemaker.Extensions;
+
+using HarmonyLib;
 
 using System;
 

@@ -55,13 +55,12 @@ namespace Pacemaker
         [SettingPropertyGroup("General Settings")]
         public float TimeMultiplier { get; set; } = 1.75f;
 
-        [SettingPropertyFloatingInteger("Accelerated Aging Factor (Adults)", 1f, 15f, "#0%", HintText = AdultAgeFactor_Hint, RequireRestart = false, Order = 2)]
+        [SettingPropertyFloatingInteger("Accelerated Aging Factor (Adults)", 1f, 10f, "#0%", HintText = AdultAgeFactor_Hint, RequireRestart = false, Order = 2)]
         [SettingPropertyGroup("General Settings")]
         public float AdultAgeFactor { get; set; } = 2f;
 
-        [SettingPropertyFloatingInteger("Accelerated Aging Factor (Children)", 1f, 15f, "#0%", HintText = ChildAgeFactor_Hint, RequireRestart = false, Order = 3)]
+        [SettingPropertyFloatingInteger("Accelerated Aging Factor (Children)", 1f, 10f, "#0%", HintText = ChildAgeFactor_Hint, RequireRestart = false, Order = 3)]
         [SettingPropertyGroup("General Settings")]
-        public float AgeFactor { get; set; } = 2f;
         public float ChildAgeFactor { get; set; } = 2f;
 
         [SettingPropertyBool("Pregnancy Duration", HintText = EnablePregnancyTweaks_Hint, RequireRestart = false, IsToggle = true, Order = 0)]

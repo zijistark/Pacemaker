@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Pacemaker.Extensions;
+
+using System;
 
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.SaveSystem;

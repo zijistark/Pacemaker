@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Pacemaker.Extensions;
+
+using System;
 using System.Linq;
 
 using TaleWorlds.CampaignSystem;
@@ -37,8 +39,8 @@ namespace Pacemaker
 
         private void OnDailyTick()
         {
-            bool adultAafEnabled = Main.Settings!.AdultAgeFactor > 1.01f;
-            bool childAafEnabled = Main.Settings!.ChildAgeFactor > 1.01f;
+            bool adultAafEnabled = Main.Settings!.AdultAgeFactor > 1.02f;
+            bool childAafEnabled = Main.Settings!.ChildAgeFactor > 1.02f;
 
             if (CampaignOptions.IsLifeDeathCycleDisabled)
                 return;
@@ -123,18 +125,18 @@ namespace Pacemaker
         {
             var skill = SkillObject.All
                 .Where(s => child.GetAttributeValue(s.CharacterAttributeEnum) < 3)
-                .GetRandomElement();
+                .RandomPick();
 
             if (skill is null)
                 return;
 
-            child.HeroDeveloper.ChangeSkillLevel(skill, MBRandom.RandomInt(4, 7), false);
+            child.HeroDeveloper.ChangeSkillLevel(skill, MBRandom.RandomInt(4, 6), false);
             child.HeroDeveloper.AddAttribute(skill.CharacterAttributeEnum, 1, false);
-            child.HeroDeveloper.UnspentFocusPoints++;
 
             if (child.HeroDeveloper.CanAddFocusToSkill(skill))
-                child.HeroDeveloper.AddFocus(skill, 1, true);
+                child.HeroDeveloper.AddFocus(skill, 1, false);
         }
+
         private static ChildAgeState GetChildAgeState(int age) => age switch
         {
             2  => ChildAgeState.Year2,
@@ -177,9 +179,9 @@ namespace Pacemaker
         private readonly OnHeroGrowsOutOfInfancyDelegate OnHeroGrowsOutOfInfancy;
 
         // Reflection for triggering campaign events & death probability updates & childhood education stage processing:
-        private static readonly Reflect.DeclaredMethod<AgingCampaignBehavior> UpdateHeroDeathProbabilitiesRM = new("UpdateHeroDeathProbabilities");
-        private static readonly Reflect.DeclaredMethod<CampaignEventDispatcher> OnHeroComesOfAgeRM = new("OnHeroComesOfAge");
-        private static readonly Reflect.DeclaredMethod<CampaignEventDispatcher> OnHeroReachesTeenAgeRM = new("OnHeroReachesTeenAge");
-        private static readonly Reflect.DeclaredMethod<CampaignEventDispatcher> OnHeroGrowsOutOfInfancyRM = new("OnHeroGrowsOutOfInfancy");
+        private static readonly Reflect.Method<AgingCampaignBehavior> UpdateHeroDeathProbabilitiesRM = new("UpdateHeroDeathProbabilities");
+        private static readonly Reflect.Method<CampaignEventDispatcher> OnHeroComesOfAgeRM = new("OnHeroComesOfAge");
+        private static readonly Reflect.Method<CampaignEventDispatcher> OnHeroReachesTeenAgeRM = new("OnHeroReachesTeenAge");
+        private static readonly Reflect.Method<CampaignEventDispatcher> OnHeroGrowsOutOfInfancyRM = new("OnHeroGrowsOutOfInfancy");
     }
 }

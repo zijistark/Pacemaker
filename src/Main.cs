@@ -15,7 +15,7 @@ namespace Pacemaker
         /* Semantic Versioning (https://semver.org): */
         public static readonly int SemVerMajor = 1;
         public static readonly int SemVerMinor = 2;
-        public static readonly int SemVerPatch = 3;
+        public static readonly int SemVerPatch = 4;
         public static readonly string? SemVerSpecial = null;
         private static readonly string SemVerEnd = (SemVerSpecial is not null) ? "-" + SemVerSpecial : string.Empty;
         public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{SemVerEnd}";
@@ -34,7 +34,8 @@ namespace Pacemaker
 
         // Started converting annotated Harmony patches to manual patches, but
         // I haven't got very far yet. Need an elegant way to collect multiple
-        // patches from a single patch class.
+        // patches from a single patch class. I have a rather involved prototype
+        // for Diplomacy, but I'm not ready to try it in production yet.
         private static readonly Patch[] HarmonyPatches = new Patch[]
         {
             new Patches.DefaultMobilePartyFoodConsumptionModelPatch(),
