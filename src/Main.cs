@@ -15,7 +15,7 @@ namespace Pacemaker
         /* Semantic Versioning (https://semver.org): */
         public static readonly int SemVerMajor = 1;
         public static readonly int SemVerMinor = 2;
-        public static readonly int SemVerPatch = 4;
+        public static readonly int SemVerPatch = 5;
         public static readonly string? SemVerSpecial = null;
         private static readonly string SemVerEnd = (SemVerSpecial is not null) ? "-" + SemVerSpecial : string.Empty;
         public static readonly string Version = $"{SemVerMajor}.{SemVerMinor}.{SemVerPatch}{SemVerEnd}";
