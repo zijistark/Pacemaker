@@ -40,7 +40,7 @@ namespace Pacemaker.Patches
             if (CampaignOptions.IsLifeDeathCycleDisabled)
                 return false;
 
-            if (hero.IsAlive && !hero.IsOccupiedByAnEvent())
+            if (hero.IsAlive && !hero.IsHeroOccupied(Hero.EventRestrictionFlags.Default))
             {
                 if (hero.DeathMark != KillCharacterAction.KillCharacterActionDetail.None
                     && (hero.PartyBelongedTo is null
