@@ -16,7 +16,7 @@ namespace Pacemaker.Patches
         internal static class ForOptimizer
         {
             internal static void WeeklyTick() => AgingCampaignBehaviorPatch.WeeklyTick();
-            internal static void DailyTickHero() => AgingCampaignBehaviorPatch.DailyTickHero(null!, null!, null!);
+            internal static void DailyTickHero() => AgingCampaignBehaviorPatch.DailyTickHero(null!, null!, null!, null!);
         }
 
         private delegate void IsItTimeOfDeathDelegate(AgingCampaignBehavior instance, Hero hero);
@@ -32,7 +32,10 @@ namespace Pacemaker.Patches
         [HarmonyPriority(Priority.High)]
         [HarmonyPatch("DailyTickHero")]
         [MethodImpl(MethodImplOptions.NoInlining)]
-        private static bool DailyTickHero(Hero hero, AgingCampaignBehavior __instance, Dictionary<Hero, int> ____extraLivesContainer)
+        private static bool DailyTickHero(Hero hero,
+                                          AgingCampaignBehavior __instance,
+                                          Dictionary<Hero, int> ____extraLivesContainer,
+                                          Dictionary<Hero, int> ____heroesYoungerThanHeroComesOfAge)
         {
             /* Replace DailyTick implementation -- code is mostly as decompiled, minus
                child growth stage stuff. */
@@ -40,7 +43,11 @@ namespace Pacemaker.Patches
             if (CampaignOptions.IsLifeDeathCycleDisabled)
                 return false;
 
+#if STABLE
             if (hero.IsAlive && !hero.IsOccupiedByAnEvent())
+#else
+            if (hero.IsAlive && !hero.IsHeroOccupied(Hero.EventRestrictionFlags.CantDie))
+#endif
             {
                 if (hero.DeathMark != KillCharacterAction.KillCharacterActionDetail.None
                     && (hero.PartyBelongedTo is null
@@ -55,6 +62,16 @@ namespace Pacemaker.Patches
             // Mainly, we've removed the whole section on detecting transitions in childhood
             // growth stages and firing associated campaign events from here. The improved logic
             // is now in FastAgingBehavior.OnDailyTick(), which also fires the events.
+
+            int age = (int)hero.Age;
+
+            if (____heroesYoungerThanHeroComesOfAge.TryGetValue(hero, out var storedAge) && storedAge != age)
+            {
+                if (age >= Campaign.Current.Models.AgeModel.HeroComesOfAge)
+                    ____heroesYoungerThanHeroComesOfAge.Remove(hero);
+                else
+                    ____heroesYoungerThanHeroComesOfAge[hero] = age;
+            }
 
             if (hero == Hero.MainHero && Hero.IsMainHeroIll && Hero.MainHero.HeroState != Hero.CharacterStates.Dead)
             {
