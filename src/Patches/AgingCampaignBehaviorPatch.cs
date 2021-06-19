@@ -46,7 +46,7 @@ namespace Pacemaker.Patches
 #if STABLE
             if (hero.IsAlive && !hero.IsOccupiedByAnEvent())
 #else
-            if (hero.IsAlive && !hero.IsHeroOccupied(Hero.EventRestrictionFlags.CantDie))
+            if (hero.IsAlive && hero.CanDie())
 #endif
             {
                 if (hero.DeathMark != KillCharacterAction.KillCharacterActionDetail.None
