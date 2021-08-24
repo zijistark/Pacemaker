@@ -56,16 +56,8 @@ namespace Pacemaker
 
             var oneDay = CampaignTime.Days(1f);
 
-#if STABLE
-            foreach (var hero in Hero.All)
-            {
-                if (!hero.IsAlive)
-                    continue;
-#else
             foreach (var hero in Hero.AllAliveHeroes)
             {
-#endif
-
                 // When calculating the prevAge, we must take care to include the day
                 // which the daily tick implicitly aged us since we last did this, or
                 // else we could miss age transitions. Ergo, prevAge is the age we
@@ -128,25 +120,16 @@ namespace Pacemaker
 
         private void ChildhoodSkillGrowth(Hero child)
         {
-#if STABLE
-            var skill = SkillObject.All
-                .Where(s => child.GetAttributeValue(s.CharacterAttributeEnum) < 3)
-                .RandomPick();
-#else
             var skill = Skills.All
                 .Where(s => child.GetAttributeValue(s.CharacterAttribute) < 3)
                 .RandomPick();
-#endif
 
             if (skill is null)
                 return;
 
             child.HeroDeveloper.ChangeSkillLevel(skill, MBRandom.RandomInt(4, 6), false);
-#if STABLE
-            child.HeroDeveloper.AddAttribute(skill.CharacterAttributeEnum, 1, false);
-#else
             child.HeroDeveloper.AddAttribute(skill.CharacterAttribute, 1, false);
-#endif
+
             if (child.HeroDeveloper.CanAddFocusToSkill(skill))
                 child.HeroDeveloper.AddFocus(skill, 1, false);
         }

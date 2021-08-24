@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.2.7</Version>
+    <Version>1.2.8.0</Version>
     <ModuleName>$(MSBuildProjectName)</ModuleName>
   </PropertyGroup>
   
@@ -15,15 +15,15 @@
 
   <!-- Versions of Major Dependencies (For Package References & SubModule.xml Substitution) -->
   <PropertyGroup>
-    <BuildResourcesVersion>1.0.0.33</BuildResourcesVersion>
-    <HarmonyVersion>2.0.4</HarmonyVersion>
+    <BuildResourcesVersion>1.0.0.39</BuildResourcesVersion>
+    <HarmonyVersion>2.1.1</HarmonyVersion>
     <MCMVersion>4.3.10</MCMVersion>
   </PropertyGroup>
 
   <!-- Game Versions for Stable and Beta -->
   <PropertyGroup>
-    <GameVersion Condition="$(IsStable) == 'true'">1.5.9</GameVersion>
-    <GameVersion Condition="$(IsBeta) == 'true'">1.6.0</GameVersion>
+    <GameVersion Condition="$(IsStable) == 'true'">1.6.1</GameVersion>
+    <GameVersion Condition="$(IsBeta) == 'true'">1.6.2</GameVersion>
   </PropertyGroup>
 
   <!-- Game Folder(s) -->
@@ -74,7 +74,7 @@
     <PackageReference Include="Lib.Harmony" Version="$(HarmonyVersion)" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" IncludeAssets="compile" />
     <!-- Enable NET5 Features on NET472 -->
-    <PackageReference Include="IsExternalInit" Version="1.0.0">
+    <PackageReference Include="IsExternalInit" Version="1.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

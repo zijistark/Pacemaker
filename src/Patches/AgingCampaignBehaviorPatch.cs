@@ -43,11 +43,7 @@ namespace Pacemaker.Patches
             if (CampaignOptions.IsLifeDeathCycleDisabled)
                 return false;
 
-#if STABLE
-            if (hero.IsAlive && !hero.IsOccupiedByAnEvent())
-#else
             if (hero.IsAlive && hero.CanDie())
-#endif
             {
                 if (hero.DeathMark != KillCharacterAction.KillCharacterActionDetail.None
                     && (hero.PartyBelongedTo is null
